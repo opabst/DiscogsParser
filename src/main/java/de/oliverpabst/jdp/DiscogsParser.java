@@ -19,7 +19,5 @@ public class DiscogsParser {
             System.out.println("Arguments could not be parsed.");
             formatter.printHelp("DiscogsParser", options);
         }
-
-        
     }
 }
