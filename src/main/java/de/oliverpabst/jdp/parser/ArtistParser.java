@@ -55,7 +55,7 @@ public class ArtistParser {
         }
     }
 
-    public void parse(File _artistFile) throws XMLStreamException {
+    private void parse(File _artistFile) throws XMLStreamException {
         InputStream is = null;
 
         XMLInputFactory inFactory = null;
@@ -92,6 +92,7 @@ public class ArtistParser {
                     // Namespaces are not used in this project => do nothing
                     break;
                 case XMLStreamConstants.START_ELEMENT:
+                    String curLN = xmlParser.getLocalName();
                     if(xmlParser.getLocalName().equals("artist")) {
                         ae = new ArtistEntity();
                     } else if (xmlParser.getLocalName().equals("images")) {
@@ -124,7 +125,6 @@ public class ArtistParser {
                         aliases = true;
                         aa = new ArtistAlias();
                     }
-                    System.out.println(xmlParser.getLocalName());
                     break;
                 case XMLStreamConstants.CHARACTERS:
                     if(id) {
@@ -149,16 +149,18 @@ public class ArtistParser {
                         aa.setAlias(xmlParser.getText());
                     }
                 case XMLStreamConstants.END_ELEMENT:
-                    if(xmlParser.getLocalName().equals("namevariations")) {
+                    /*if(namevariations) {
                         namevariations = false;
-                    } else if (xmlParser.getLocalName().equals("aliases")) {
+                    } else if (aliases) {
                         aliases = false;
-                    }
+                    } else if (images)*/
+                    // TODO: add closing of enclosing tags
                     // further process ArtistEntityObject (add to db)
                     break;
                 default:
                     break;
             }
+            xmlParser.next();
         }
     }
 }

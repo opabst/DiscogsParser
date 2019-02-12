@@ -7,8 +7,17 @@ public class Image {
     private ImageType type;
 
     public Image(String _height, String _width, String _uri, String _type) {
-        height = Integer.parseInt(_height);
-        width = Integer.parseInt(_width);
+        if(_height.length() > 0) {
+            height = Integer.parseInt(_height);
+        } else {
+            height = 0;
+        }
+
+        if(_width.length() > 0) {
+            width = Integer.parseInt(_width);
+        } else {
+            width = 0;
+        }
         uri = _uri;
 
         if(_type.equals("primary")) {
