@@ -38,6 +38,8 @@ import java.io.InputStream;
  */
 
 public class ArtistParser {
+    private boolean artists = false;
+    private boolean artist = false;
     private boolean images = false; // at the moment unnecassary because images only contain more image objects
     private boolean id = false;
     private boolean name = false; // triple allocation: if namevariations/aliases is set, name will be a name variation or an alias
@@ -92,8 +94,11 @@ public class ArtistParser {
                     // Namespaces are not used in this project => do nothing
                     break;
                 case XMLStreamConstants.START_ELEMENT:
-                    String curLN = xmlParser.getLocalName();
-                    if(xmlParser.getLocalName().equals("artist")) {
+                    String startElem = xmlParser.getLocalName();
+                    if(xmlParser.getLocalName().equals("artists")) {
+                        artists = true;
+                    } else if(xmlParser.getLocalName().equals("artist")) {
+                        artist = true;
                         ae = new ArtistEntity();
                     } else if (xmlParser.getLocalName().equals("images")) {
                         images = true;
@@ -127,6 +132,7 @@ public class ArtistParser {
                     }
                     break;
                 case XMLStreamConstants.CHARACTERS:
+                    String chars = xmlParser.getText();
                     if(id) {
                         ae.setId(Integer.parseInt(xmlParser.getText()));
                         id = false;
@@ -148,12 +154,19 @@ public class ArtistParser {
                     } else if (name && !namevariations && aliases) {
                         aa.setAlias(xmlParser.getText());
                     }
+                    break;
                 case XMLStreamConstants.END_ELEMENT:
-                    /*if(namevariations) {
+                    String endElem = xmlParser.getLocalName();
+                    if(xmlParser.getLocalName().equals("artist")) {
+                        artist = false;
+                        // TODO: add further processing of the read artist object
+                    } else if(xmlParser.getLocalName().equals("images")) {
+                        images = false;
+                    } else if(xmlParser.getLocalName().equals("namevariations")) {
                         namevariations = false;
-                    } else if (aliases) {
+                    } else if(xmlParser.getLocalName().equals("aliases")) {
                         aliases = false;
-                    } else if (images)*/
+                    }
                     // TODO: add closing of enclosing tags
                     // further process ArtistEntityObject (add to db)
                     break;
