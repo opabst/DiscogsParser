@@ -28,4 +28,14 @@ public class ArtistAlias {
     public void setAliasID(Integer _aliasId) {
         aliasID = _aliasId;
     }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Alias: ");
+        sb.append(" id: " + aliasID);
+        sb.append(" name: " + aliasName);
+
+        return sb.toString();
+    }
 }

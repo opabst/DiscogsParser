@@ -2,7 +2,7 @@ package de.oliverpabst.jdp.parser;
 
 import de.oliverpabst.jdp.model.ArtistAlias;
 import de.oliverpabst.jdp.model.ArtistEntity;
-import de.oliverpabst.jdp.model.Image;
+import de.oliverpabst.jdp.model.ArtistImage;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -108,7 +108,7 @@ public class ArtistParser {
                         String type = xmlParser.getAttributeValue(1);
                         String uri = xmlParser.getAttributeValue(2);
                         String width = xmlParser.getAttributeValue(3);
-                        Image image = new Image(height, width, uri, type);
+                        ArtistImage image = new ArtistImage(height, width, uri, type);
                         ae.addImage(image);
                     } else if (xmlParser.getLocalName().equals("id")) {
                         id = true;
@@ -160,15 +160,22 @@ public class ArtistParser {
                     if(xmlParser.getLocalName().equals("artist")) {
                         artist = false;
                         // TODO: add further processing of the read artist object
+                        // further process ArtistEntityObject (add to db)
                     } else if(xmlParser.getLocalName().equals("images")) {
                         images = false;
                     } else if(xmlParser.getLocalName().equals("namevariations")) {
                         namevariations = false;
                     } else if(xmlParser.getLocalName().equals("aliases")) {
                         aliases = false;
+                    } else if(xmlParser.getLocalName().equals("profile")) {
+                        profile = false;
+                    } else if(xmlParser.getLocalName().equals("realname")) {
+                        realname = false;
+                    } else if (xmlParser.getLocalName().equals("name")) {
+                        name = false;
                     }
-                    // TODO: add closing of enclosing tags
-                    // further process ArtistEntityObject (add to db)
+
+
                     break;
                 default:
                     break;

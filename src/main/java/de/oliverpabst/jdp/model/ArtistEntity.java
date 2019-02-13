@@ -1,16 +1,15 @@
 package de.oliverpabst.jdp.model;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 
 public class ArtistEntity {
 
     private String name;
     private String realName;
-    private ArrayList<Image> images;
+    private ArrayList<ArtistImage> images;
     private Integer id;
     private String profile;
-    private DataQuality dataQuality;
+    private ArtistDataQuality dataQuality;
     private ArrayList<String> nameVariations;
     private ArrayList<ArtistAlias> aliases;
 
@@ -36,11 +35,11 @@ public class ArtistEntity {
         realName = _realName;
     }
 
-    public ArrayList<Image> getImages() {
+    public ArrayList<ArtistImage> getImages() {
         return images;
     }
 
-    public void addImage(Image _image) {
+    public void addImage(ArtistImage _image) {
         images.add(_image);
     }
 
@@ -60,21 +59,25 @@ public class ArtistEntity {
         profile = _profile;
     }
 
-    public DataQuality getDataQuality() {
+    public ArtistDataQuality getDataQuality() {
         return dataQuality;
     }
 
     public void setDataQuality(String _quality) {
         if(_quality.equals("Correct")) {
-            dataQuality = DataQuality.CORRECT;
+            dataQuality = ArtistDataQuality.CORRECT;
         } else if (_quality.equals("Needs Major Changes")) {
-            dataQuality = DataQuality.NEEDS_MAJOR_CHANGES;
+            dataQuality = ArtistDataQuality.NEEDS_MAJOR_CHANGES;
         } else if (_quality.equals("Needs Vote")) {
-            dataQuality = DataQuality.NEEDS_VOTE;
+            dataQuality = ArtistDataQuality.NEEDS_VOTE;
         } else if (_quality.equals("Needs Minor Changes")) {
-            dataQuality = DataQuality.NEEDS_MINOR_CHANGES;
+            dataQuality = ArtistDataQuality.NEEDS_MINOR_CHANGES;
+        } else if (_quality.equals("Complete and Correct")) {
+            dataQuality = ArtistDataQuality.COMPLETE_AND_CORRECT;
+        } else if (_quality.equals("Entirely Incorrect")) {
+            dataQuality = ArtistDataQuality.ENTIRELY_INCORRECT;
         } else {
-            dataQuality = DataQuality.UNKNOWN;
+            dataQuality = ArtistDataQuality.UNKNOWN;
             System.err.println("Unknown data quality: " + _quality);
         }
     }
@@ -93,5 +96,27 @@ public class ArtistEntity {
 
     public void addAlias(ArtistAlias _aa) {
         aliases.add(_aa);
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Artist: " + name + "\n");
+        sb.append("Realname: " + realName + "\n");
+        sb.append("Images: ");
+        for(ArtistImage i: images) {
+            sb.append("  " + i.toString());
+        }
+        sb.append("ID: " + id + "\n");
+        sb.append("Profile: " + profile + "\n");
+        sb.append("ArtistDataQuality: " + dataQuality.name() + "\n");
+        sb.append("NameVariations: ");
+        for(String nv: nameVariations) {
+            sb.append("  " + nv + "\n");
+        }
+        for(ArtistAlias aa: aliases) {
+            sb.append("  " + aa.toString() + "\n");
+        }
+        return sb.toString();
     }
 }
