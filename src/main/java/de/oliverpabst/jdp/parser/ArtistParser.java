@@ -13,6 +13,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
+// TODO: Test mit mehreren Aliasen und Namensvariation -> zum richtigen Zeitpunkt anlegen und zu ArtistEntity hinzufügen
+
 /**
  * Parses contents of discogs_$date_artists.xml files.
  *
@@ -94,7 +96,6 @@ public class ArtistParser {
                     // Namespaces are not used in this project => do nothing
                     break;
                 case XMLStreamConstants.START_ELEMENT:
-                    String startElem = xmlParser.getLocalName();
                     if(xmlParser.getLocalName().equals("artists")) {
                         artists = true;
                     } else if(xmlParser.getLocalName().equals("artist")) {
@@ -104,10 +105,10 @@ public class ArtistParser {
                         images = true;
                     } else if (xmlParser.getLocalName().equals("image") && images == true) {
                         // subelement of images reached - values are attached as attributes to <image ... />
-                        String height = xmlParser.getAttributeValue(0);
-                        String type = xmlParser.getAttributeValue(1);
-                        String uri = xmlParser.getAttributeValue(2);
-                        String width = xmlParser.getAttributeValue(3);
+                        String height = xmlParser.getAttributeValue(null, "height");
+                        String type = xmlParser.getAttributeValue(null, "type");
+                        String uri = xmlParser.getAttributeValue(null, "uri");
+                        String width = xmlParser.getAttributeValue(null, "width");
                         ArtistImage image = new ArtistImage(height, width, uri, type);
                         ae.addImage(image);
                     } else if (xmlParser.getLocalName().equals("id")) {
@@ -128,11 +129,9 @@ public class ArtistParser {
                         namevariations = true;
                     } else if (xmlParser.getLocalName().equals("aliases")) {
                         aliases = true;
-                        aa = new ArtistAlias();
                     }
                     break;
                 case XMLStreamConstants.CHARACTERS:
-                    String chars = xmlParser.getText();
                     if(id) {
                         ae.setId(Integer.parseInt(xmlParser.getText()));
                         id = false;
@@ -156,7 +155,6 @@ public class ArtistParser {
                     }
                     break;
                 case XMLStreamConstants.END_ELEMENT:
-                    String endElem = xmlParser.getLocalName();
                     if(xmlParser.getLocalName().equals("artist")) {
                         artist = false;
                         // TODO: add further processing of the read artist object
@@ -166,6 +164,7 @@ public class ArtistParser {
                     } else if(xmlParser.getLocalName().equals("namevariations")) {
                         namevariations = false;
                     } else if(xmlParser.getLocalName().equals("aliases")) {
+                        ae.addAlias(aa);
                         aliases = false;
                     } else if(xmlParser.getLocalName().equals("profile")) {
                         profile = false;
@@ -174,8 +173,6 @@ public class ArtistParser {
                     } else if (xmlParser.getLocalName().equals("name")) {
                         name = false;
                     }
-
-
                     break;
                 default:
                     break;
