@@ -28,7 +28,7 @@ public class ArtistImage {
             type = ImageType.SECONDARY;
         } else {
             type = ImageType.UNKNOWN;
-            System.err.println("Unknown image type!");
+            System.err.println("Unknown image type: " + _type);
         }
     }
 

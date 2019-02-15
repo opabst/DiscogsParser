@@ -17,7 +17,7 @@ package de.oliverpabst.jdp.parser;
  *             </artist>
  *         </artists>
  *         <genres>
- *          <genre> </genre>
+ *             <genre> </genre>
  *         </genres>
  *         <styles>
  *             <style> </style>
