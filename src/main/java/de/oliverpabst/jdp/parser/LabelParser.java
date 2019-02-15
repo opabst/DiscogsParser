@@ -95,7 +95,7 @@ public class LabelParser {
                         le = new LabelEntity();
                     } else if(xmlParser.getLocalName().equals("images")) {
                         images = true;
-                    } else if(xmlParser.getLocalName().equals("image") && images == true) {
+                    } else if(xmlParser.getLocalName().equals("image") && images) {
                         String height = xmlParser.getAttributeValue(null, "height");
                         String type = xmlParser.getAttributeValue(null, "type");
                         String uri = xmlParser.getAttributeValue(null, "uri");
