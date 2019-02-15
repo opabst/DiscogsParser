@@ -1,4 +1,4 @@
-package de.oliverpabst.jdp.model;
+package de.oliverpabst.jdp.model.artist;
 
 public class ArtistAlias {
     private String aliasName;

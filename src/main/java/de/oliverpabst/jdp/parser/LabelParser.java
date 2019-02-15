@@ -1,8 +1,8 @@
 package de.oliverpabst.jdp.parser;
 
-import de.oliverpabst.jdp.model.LabelEntity;
-import de.oliverpabst.jdp.model.LabelImage;
-import de.oliverpabst.jdp.model.LabelSublabel;
+import de.oliverpabst.jdp.model.label.LabelEntity;
+import de.oliverpabst.jdp.model.label.LabelImage;
+import de.oliverpabst.jdp.model.label.LabelSublabel;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;

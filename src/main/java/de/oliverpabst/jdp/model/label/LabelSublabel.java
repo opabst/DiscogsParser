@@ -1,4 +1,4 @@
-package de.oliverpabst.jdp.model;
+package de.oliverpabst.jdp.model.label;
 
 public class LabelSublabel {
     private String sublabelName;

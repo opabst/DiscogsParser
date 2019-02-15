@@ -1,5 +1,5 @@
 package de.oliverpabst.jdp.model;
 
-public enum ArtistImageType {
+public enum ImageType {
     PRIMARY, SECONDARY, UNKNOWN
 }

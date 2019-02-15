@@ -1,6 +1,10 @@
-package de.oliverpabst.jdp.model;
+package de.oliverpabst.jdp.model.artist;
+
+import de.oliverpabst.jdp.model.DataQuality;
 
 import java.util.ArrayList;
+
+// TODO: Refactoring: put commonly used parts in a common superclass
 
 public class ArtistEntity {
 
@@ -9,7 +13,7 @@ public class ArtistEntity {
     private ArrayList<ArtistImage> images;
     private Integer id;
     private String profile;
-    private ArtistDataQuality dataQuality;
+    private DataQuality dataQuality;
     private ArrayList<String> nameVariations;
     private ArrayList<ArtistAlias> aliases;
 
@@ -59,25 +63,25 @@ public class ArtistEntity {
         profile = _profile;
     }
 
-    public ArtistDataQuality getDataQuality() {
+    public DataQuality getDataQuality() {
         return dataQuality;
     }
 
     public void setDataQuality(String _quality) {
         if(_quality.equals("Correct")) {
-            dataQuality = ArtistDataQuality.CORRECT;
+            dataQuality = DataQuality.CORRECT;
         } else if (_quality.equals("Needs Major Changes")) {
-            dataQuality = ArtistDataQuality.NEEDS_MAJOR_CHANGES;
+            dataQuality = DataQuality.NEEDS_MAJOR_CHANGES;
         } else if (_quality.equals("Needs Vote")) {
-            dataQuality = ArtistDataQuality.NEEDS_VOTE;
+            dataQuality = DataQuality.NEEDS_VOTE;
         } else if (_quality.equals("Needs Minor Changes")) {
-            dataQuality = ArtistDataQuality.NEEDS_MINOR_CHANGES;
+            dataQuality = DataQuality.NEEDS_MINOR_CHANGES;
         } else if (_quality.equals("Complete and Correct")) {
-            dataQuality = ArtistDataQuality.COMPLETE_AND_CORRECT;
+            dataQuality = DataQuality.COMPLETE_AND_CORRECT;
         } else if (_quality.equals("Entirely Incorrect")) {
-            dataQuality = ArtistDataQuality.ENTIRELY_INCORRECT;
+            dataQuality = DataQuality.ENTIRELY_INCORRECT;
         } else {
-            dataQuality = ArtistDataQuality.UNKNOWN;
+            dataQuality = DataQuality.UNKNOWN;
             System.err.println("Unknown data quality: " + _quality);
         }
     }
@@ -109,7 +113,7 @@ public class ArtistEntity {
         }
         sb.append("ID: " + id + "\n");
         sb.append("Profile: " + profile + "\n");
-        sb.append("ArtistDataQuality: " + dataQuality.name() + "\n");
+        sb.append("DataQuality: " + dataQuality.name() + "\n");
         sb.append("NameVariations: ");
         for(String nv: nameVariations) {
             sb.append("  " + nv + "\n");

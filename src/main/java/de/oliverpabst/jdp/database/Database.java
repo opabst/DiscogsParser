@@ -1,6 +1,6 @@
 package de.oliverpabst.jdp.database;
 
-import de.oliverpabst.jdp.model.ArtistEntity;
+import de.oliverpabst.jdp.model.artist.ArtistEntity;
 
 /**
  * Interface for database operations. Provides the following capabilities:

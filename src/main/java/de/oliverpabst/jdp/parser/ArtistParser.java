@@ -1,8 +1,8 @@
 package de.oliverpabst.jdp.parser;
 
-import de.oliverpabst.jdp.model.ArtistAlias;
-import de.oliverpabst.jdp.model.ArtistEntity;
-import de.oliverpabst.jdp.model.ArtistImage;
+import de.oliverpabst.jdp.model.artist.ArtistAlias;
+import de.oliverpabst.jdp.model.artist.ArtistEntity;
+import de.oliverpabst.jdp.model.artist.ArtistImage;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
