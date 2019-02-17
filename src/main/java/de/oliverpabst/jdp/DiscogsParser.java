@@ -2,6 +2,7 @@ package de.oliverpabst.jdp;
 
 import de.oliverpabst.jdp.parser.ArtistParser;
 import de.oliverpabst.jdp.parser.LabelParser;
+import de.oliverpabst.jdp.parser.MasterParser;
 import org.apache.commons.cli.*;
 
 import java.io.File;
@@ -29,10 +30,11 @@ public class DiscogsParser {
 
         File artistsFile = new File("data_" + date + "/discogs_" + date + "_artists.xml");
         File labelsFile = new File("data_" + date + "/discogs_" + date + "_labels.xml");
-        File masterFile = new File("data_" + date + "/discogs_" + date + "_masters.xml");
+        File mastersFile = new File("data_" + date + "/discogs_" + date + "_masters.xml");
         File releasesFile = new File("data_" + date + "/discogs_" + date + "_releases.xml");
 
         //ArtistParser ap = new ArtistParser(artistsFile);
-        LabelParser lp = new LabelParser(labelsFile);
+        //LabelParser lp = new LabelParser(labelsFile);
+        MasterParser mp = new MasterParser(mastersFile);
     }
 }

@@ -3,6 +3,7 @@ package de.oliverpabst.jdp.parser;
 import de.oliverpabst.jdp.model.master.MasterArtist;
 import de.oliverpabst.jdp.model.master.MasterEntity;
 import de.oliverpabst.jdp.model.master.MasterImage;
+import de.oliverpabst.jdp.model.master.MasterVideo;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -94,8 +95,9 @@ public class MasterParser {
 
         XMLStreamReader xmlParser = inFactory.createXMLStreamReader(is);
 
-        MasterEntity me = new MasterEntity();
-        MasterArtist ma = new MasterArtist();
+        MasterEntity me = null;
+        MasterArtist ma = null;
+        MasterVideo mv = null;
 
         while(xmlParser.hasNext()) {
             switch(xmlParser.getEventType()) {
@@ -158,6 +160,11 @@ public class MasterParser {
                         videos = true;
                     } else if (xmlParser.getLocalName().equals("video")) {
                         video = true;
+                        String duration = xmlParser.getAttributeValue(null, "duration");
+                        String embed = xmlParser.getAttributeValue(null, "embed");
+                        String source = xmlParser.getAttributeValue(null, "src");
+
+                        mv = new MasterVideo(duration, embed, source);
                     }
 
                     break;
@@ -184,6 +191,10 @@ public class MasterParser {
                         me.setYear(xmlParser.getText());
                     } else if (dataQualitiy) {
                         me.setDataQuality(xmlParser.getText());
+                    } else if (videos && video && title) {
+                        mv.setTitle(xmlParser.getText());
+                    } else if (videos && video && description) {
+                        mv.setDescription(xmlParser.getText());
                     }
                     break;
                 case XMLStreamConstants.END_ELEMENT:
@@ -225,6 +236,7 @@ public class MasterParser {
                         year = false;
                     } else if (xmlParser.getLocalName().equals("video")) {
                         video = false;
+                        me.addVideo(mv);
                     } else if (xmlParser.getLocalName().equals("videos")) {
                         videos = false;
                     }
@@ -232,6 +244,8 @@ public class MasterParser {
                 default:
                     break;
             }
+
+            xmlParser.next();
         }
     }
 }
