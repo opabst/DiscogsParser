@@ -1,5 +1,14 @@
 package de.oliverpabst.jdp.parser;
 
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 /**
  * <releases>
  *     <release id="..." status="...">
@@ -80,4 +89,57 @@ package de.oliverpabst.jdp.parser;
  */
 
 public class ReleaseParser {
+
+    private boolean releases = false;
+    private boolean release = false;
+
+    public ReleaseParser(File _file) {
+        try {
+            parse(_file);
+        } catch (XMLStreamException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void parse(File _releaseFile) throws XMLStreamException {
+        InputStream is = null;
+
+        try {
+            is = new FileInputStream(_releaseFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        XMLInputFactory inFactory = XMLInputFactory.newInstance();
+
+        XMLStreamReader xmlParser = inFactory.createXMLStreamReader(is);
+
+        while(xmlParser.hasNext()) {
+            switch(xmlParser.getEventType()) {
+                case XMLStreamConstants.START_DOCUMENT:
+                    // Do Nothing
+                    break;
+                case XMLStreamConstants.END_DOCUMENT:
+                    // EOF reached
+                    xmlParser.close();
+                case XMLStreamConstants.START_ELEMENT:
+                    if(xmlParser.getLocalName().equals("releases")) {
+                        releases = true;
+                    } else if (xmlParser.getLocalName().equals("release")) {
+                        release = true;
+                    }
+
+
+                    break;
+                case XMLStreamConstants.CHARACTERS:
+                    break;
+                case XMLStreamConstants.END_ELEMENT:
+                    break;
+                default:
+                    break;
+            }
+
+            xmlParser.next();
+        }
+    }
 }
