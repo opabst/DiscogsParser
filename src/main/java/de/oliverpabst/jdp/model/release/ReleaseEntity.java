@@ -1,13 +1,16 @@
 package de.oliverpabst.jdp.model.release;
 
 import de.oliverpabst.jdp.model.DataQuality;
-import de.oliverpabst.jdp.model.ImageType;
 
 import java.util.ArrayList;
 
 public class ReleaseEntity {
 
-    private ArrayList<ImageType> images;
+    private String id;
+
+    private String status;
+
+    private ArrayList<ReleaseImage> images;
 
     private String title;
 
@@ -63,11 +66,27 @@ public class ReleaseEntity {
         companies = new ArrayList<>();
     }
 
-    public void addImage(ImageType _image) {
+    public void setId(String _id) {
+        id = _id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setStatus(String _status) {
+        status = _status;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void addImage(ReleaseImage _image) {
         images.add(_image);
     }
 
-    public ArrayList<ImageType> getImages() {
+    public ArrayList<ReleaseImage> getImages() {
         return images;
     }
 
