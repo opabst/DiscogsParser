@@ -201,7 +201,7 @@ public class ReleaseEntity {
         return tracks;
     }
 
-    public void setIdentifier(ReleaseIdentifier _identifier) {
+    public void addIdentifier(ReleaseIdentifier _identifier) {
         identifiers.add(_identifier);
     }
 
