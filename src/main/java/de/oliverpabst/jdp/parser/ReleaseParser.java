@@ -119,6 +119,10 @@ public class ReleaseParser {
     private boolean genre = false;
     private boolean styles = false;
     private boolean style = false;
+    private boolean country = false;
+    private boolean released = false;
+    private boolean notes = false;
+    private boolean dataQuality = false;
 
     public ReleaseParser(File _file) {
         try {
@@ -239,6 +243,14 @@ public class ReleaseParser {
                         styles = true;
                     } else if (styles && xmlParser.getLocalName().equals("style")) {
                         style = true;
+                    } else if (xmlParser.getLocalName().equals("country")) {
+                        country = true;
+                    } else if (xmlParser.getLocalName().equals("released")) {
+                        released = true;
+                    } else if (xmlParser.getLocalName().equals("notes")) {
+                        notes = true;
+                    } else if (xmlParser.getLocalName().equals("data_quality")) {
+                        dataQuality = true;
                     }
 
 
@@ -273,6 +285,14 @@ public class ReleaseParser {
                         re.addGenre(xmlParser.getText());
                     } else if (styles && style) {
                         re.addStyle(xmlParser.getText());
+                    } else if (country) {
+                        re.setCountry(xmlParser.getText());
+                    } else if (released) {
+                        re.setReleased(xmlParser.getText());
+                    } else if (notes) {
+                        re.setNotes(xmlParser.getText());
+                    } else if (dataQuality) {
+                        re.setDataQuality(xmlParser.getText());
                     }
                     break;
                 case XMLStreamConstants.END_ELEMENT:
@@ -341,6 +361,14 @@ public class ReleaseParser {
                         style = false;
                     } else if (xmlParser.getLocalName().equals("styles")) {
                         styles = false;
+                    } else if (xmlParser.getLocalName().equals("country")) {
+                        country = false;
+                    } else if (xmlParser.getLocalName().equals("released")) {
+                        released = false;
+                    } else if (xmlParser.getLocalName().equals("notes")) {
+                        notes = false;
+                    } else if (xmlParser.getLocalName().equals("data_quality")) {
+                        dataQuality = false;
                     }
                     break;
                 default:
