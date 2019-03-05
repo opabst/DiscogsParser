@@ -1,24 +1,27 @@
 package de.oliverpabst.jdp.model.release;
 
+import java.util.ArrayList;
+
 public class ReleaseFormat  {
 
     private String name;
     private String qty;
     private String text;
-    private String desciption;
+    private ArrayList<String> descriptions;
 
     public ReleaseFormat(String _name, String _qty, String _text) {
+        descriptions = new ArrayList<>();
         name = _name;
         qty = _qty;
         text = _text;
     }
 
-    public void setDescription(String _description) {
-        desciption = _description;
+    public void addDescription(String _description) {
+        descriptions.add(_description);
     }
 
-    public String getDescription() {
-        return desciption;
+    public ArrayList<String> getDescriptions() {
+        return descriptions;
     }
 
     public String getName() {
