@@ -8,7 +8,7 @@ public class ReleaseVideo {
     private String title;
     private String description;
 
-    private ReleaseVideo(String _duration, String _embed, String _url) {
+    public ReleaseVideo(String _duration, String _embed, String _url) {
         duration = _duration;
         setEmbed(_embed);
         url = _url;
