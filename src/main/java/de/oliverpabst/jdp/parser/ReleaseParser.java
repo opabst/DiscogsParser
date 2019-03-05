@@ -44,17 +44,17 @@ import java.io.InputStream;
  *                 </tracks>
  *             </artist>
  *         </extraartists>
- *         <formats>!
+ *         <formats>
  *             <format name="..." qty="..." text="...">
  *                 <descriptions>
  *                     <description> </description>
  *                 </descriptions>
  *             </format>
  *         </formats>
- *         <genres>!
+ *         <genres>
  *             <genre> </genre>
  *         </genres>
- *         <styles>!
+ *         <styles>
  *             <style> </style>
  *         </styles>
  *         <country> </country>!
@@ -111,6 +111,14 @@ public class ReleaseParser {
     private boolean labels = false;
     private boolean label = false;
     private boolean extraartists = false;
+    private boolean formats = false;
+    private boolean format = false;
+    private boolean descriptions = false;
+    private boolean description = false;
+    private boolean genres = false;
+    private boolean genre = false;
+    private boolean styles = false;
+    private boolean style = false;
 
     public ReleaseParser(File _file) {
         try {
@@ -137,6 +145,7 @@ public class ReleaseParser {
         ReleaseArtist ra = null;
         ReleaseLabel rl = null;
         ReleaseExtraArtist rea = null;
+        ReleaseFormat rf = null;
 
         while(xmlParser.hasNext()) {
             switch(xmlParser.getEventType()) {
@@ -210,6 +219,26 @@ public class ReleaseParser {
                         role = true;
                     } else if (extraartists && artist && xmlParser.getLocalName().equals("tracks")) {
                         tracks = true;
+                    } else if (xmlParser.getLocalName().equals("formats")) {
+                        formats = true;
+                    } else if (formats && xmlParser.getLocalName().equals("format")) {
+                        format = true;
+                        String name = xmlParser.getAttributeValue(null, "name");
+                        String qty = xmlParser.getAttributeValue(null, "qty");
+                        String text = xmlParser.getAttributeValue(null, "text");
+                        rf = new ReleaseFormat(name, qty, text);
+                    } else if (format && xmlParser.getLocalName().equals("descriptions")) {
+                        descriptions = true;
+                    } else if (formats && format && descriptions && xmlParser.getLocalName().equals("description")) {
+                        description = true;
+                    } else if (xmlParser.getLocalName().equals("genres")) {
+                        genres = true;
+                    } else if (genres && xmlParser.getLocalName().equals("genre")) {
+                        genre = true;
+                    } else if (xmlParser.getLocalName().equals("styles")) {
+                        styles = true;
+                    } else if (styles && xmlParser.getLocalName().equals("style")) {
+                        style = true;
                     }
 
 
@@ -238,6 +267,12 @@ public class ReleaseParser {
                         rea.setJoin(xmlParser.getText());
                     } else if (extraartists && artist && role) {
                         rea.setRole(xmlParser.getText());
+                    } else if (formats && format && descriptions && description) {
+                        rf.addDescription(xmlParser.getText());
+                    } else if (genres && genre) {
+                        re.addGenre(xmlParser.getText());
+                    } else if (styles && style) {
+                        re.addStyle(xmlParser.getText());
                     }
                     break;
                 case XMLStreamConstants.END_ELEMENT:
@@ -289,6 +324,23 @@ public class ReleaseParser {
                         role = false;
                     } else if (extraartists && artist && xmlParser.equals("tracks")) {
                         tracks = false;
+                    } else if (formats && format && descriptions && xmlParser.getLocalName().equals("description")) {
+                        description = false;
+                    } else if (formats && format && xmlParser.getLocalName().equals("descriptions")) {
+                        descriptions = false;
+                    } else if (formats && xmlParser.getLocalName().equals("format")) {
+                        format = false;
+                        re.addFormat(rf);
+                    } else if (xmlParser.getLocalName().equals("formats")) {
+                        formats = false;
+                    } else if (genres && xmlParser.getLocalName().equals("genre")) {
+                        genre = false;
+                    } else if (xmlParser.getLocalName().equals("genres")) {
+                        genres = false;
+                    } else if (styles && xmlParser.getLocalName().equals("style")) {
+                        style = false;
+                    } else if (xmlParser.getLocalName().equals("styles")) {
+                        styles = false;
                     }
                     break;
                 default:
