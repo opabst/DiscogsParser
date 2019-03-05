@@ -110,7 +110,7 @@ public class MasterParser {
                     break;
                 case XMLStreamConstants.START_ELEMENT:
                     String startElem = xmlParser.getLocalName();
-                    if(xmlParser.getLocalName().equals("masters")) {
+                    if (xmlParser.getLocalName().equals("masters")) {
                         masters = true;
                     } else if (xmlParser.getLocalName().equals("master")) {
                         master = true;
@@ -128,15 +128,15 @@ public class MasterParser {
                     } else if (xmlParser.getLocalName().equals("artists")) {
                         artists = true;
                         ma = new MasterArtist();
-                    } else if(xmlParser.getLocalName().equals("artist")) {
+                    } else if (xmlParser.getLocalName().equals("artist")) {
                         artist = true;
-                    } else if(artist && xmlParser.getLocalName().equals("id")) {
+                    } else if (artist && xmlParser.getLocalName().equals("id")) {
                         id = true;
-                    } else if(artist && xmlParser.getLocalName().equals("anv")) {
+                    } else if (artist && xmlParser.getLocalName().equals("anv")) {
                         anv = true;
-                    } else if(artist && xmlParser.getLocalName().equals("join")) {
+                    } else if (artist && xmlParser.getLocalName().equals("join")) {
                         join = true;
-                    } else if(artist && xmlParser.getLocalName().equals("name")) {
+                    } else if (artist && xmlParser.getLocalName().equals("name")) {
                         name = true;
                     } else if (artist && xmlParser.getLocalName().equals("role")) {
                         role = true;
@@ -175,7 +175,7 @@ public class MasterParser {
                         ma.setId(Integer.parseInt(xmlParser.getText()));
                     } else if (artist && role) {
                         ma.setRole(xmlParser.getText());
-                    } else if(artist && join) {
+                    } else if (artist && join) {
                         ma.setRole(xmlParser.getText());
                     } else if (artist && anv) {
                         ma.setRole(xmlParser.getText());

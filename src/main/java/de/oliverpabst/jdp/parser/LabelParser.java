@@ -88,14 +88,14 @@ public class LabelParser {
 
                 case XMLStreamConstants.START_ELEMENT:
                     String startElem = xmlParser.getLocalName();
-                    if(xmlParser.getLocalName().equals("labels")) {
+                    if (xmlParser.getLocalName().equals("labels")) {
                         labels = true;
-                    } else if(xmlParser.getLocalName().equals("label")) {
+                    } else if (xmlParser.getLocalName().equals("label")) {
                         label = true;
                         le = new LabelEntity();
-                    } else if(xmlParser.getLocalName().equals("images")) {
+                    } else if (xmlParser.getLocalName().equals("images")) {
                         images = true;
-                    } else if(xmlParser.getLocalName().equals("image") && images) {
+                    } else if (xmlParser.getLocalName().equals("image") && images) {
                         String height = xmlParser.getAttributeValue(null, "height");
                         String type = xmlParser.getAttributeValue(null, "type");
                         String uri = xmlParser.getAttributeValue(null, "uri");
@@ -103,23 +103,23 @@ public class LabelParser {
                         String width = xmlParser.getAttributeValue(null, "width");
                         LabelImage image = new LabelImage(height, width, uri, uri150, type);
                         le.addImage(image);
-                    } else if(xmlParser.getLocalName().equals("id")) {
+                    } else if (xmlParser.getLocalName().equals("id")) {
                         id = true;
-                    } else if(xmlParser.getLocalName().equals("name")) {
+                    } else if (xmlParser.getLocalName().equals("name")) {
                         name = true;
-                    } else if(xmlParser.getLocalName().equals("contactinfo")) {
+                    } else if (xmlParser.getLocalName().equals("contactinfo")) {
                         contactinfo = true;
-                    } else if(xmlParser.getLocalName().equals("profile")) {
+                    } else if (xmlParser.getLocalName().equals("profile")) {
                         profile = true;
-                    } else if(xmlParser.getLocalName().equals("dataquality")) {
+                    } else if (xmlParser.getLocalName().equals("dataquality")) {
                         dataquality = true;
-                    } else if(xmlParser.getLocalName().equals("urls")) {
+                    } else if (xmlParser.getLocalName().equals("urls")) {
                         urls = true;
-                    } else if(xmlParser.getLocalName().equals("url")) {
+                    } else if (xmlParser.getLocalName().equals("url")) {
                         url = true;
-                    } else if(xmlParser.getLocalName().equals("sublabels")) {
+                    } else if (xmlParser.getLocalName().equals("sublabels")) {
                         sublabels = true;
-                    } else if(xmlParser.getLocalName().equals("sublabel")) {
+                    } else if (xmlParser.getLocalName().equals("sublabel")) {
                         sublabel = true;
                         ls = new LabelSublabel();
                         ls.setSublabelID(Integer.parseInt(xmlParser.getAttributeValue(0)));
@@ -128,32 +128,32 @@ public class LabelParser {
 
                 case XMLStreamConstants.CHARACTERS:
                     String chars = xmlParser.getText();
-                    if(id) {
+                    if (id) {
                         le.setId(Integer.parseInt(xmlParser.getText()));
-                    } else if(name) {
+                    } else if (name) {
                         le.setName(xmlParser.getText());
-                    } else if(contactinfo) {
+                    } else if (contactinfo) {
                         le.setContactinfo(xmlParser.getText());
-                    } else if(profile) {
+                    } else if (profile) {
                         le.setProfile(xmlParser.getText());
-                    } else if(dataquality) {
+                    } else if (dataquality) {
                         le.setDataQuality(xmlParser.getText());
-                    } else if(url) {
+                    } else if (url) {
                         le.addUrl(xmlParser.getText());
-                    } else if(sublabel) {
+                    } else if (sublabel) {
                         ls.setSublabelName(xmlParser.getText());
                     }
                     break;
 
                 case XMLStreamConstants.END_ELEMENT:
-                    if(xmlParser.getLocalName().equals("label")) {
+                    if (xmlParser.getLocalName().equals("label")) {
                         label = false;
-                    } else if(xmlParser.getLocalName().equals("sublabel")) {
+                    } else if (xmlParser.getLocalName().equals("sublabel")) {
                         le.addSublabel(ls);
                         sublabel = false;
-                    } else if(xmlParser.getLocalName().equals("name")) {
+                    } else if (xmlParser.getLocalName().equals("name")) {
                         name = false;
-                    } else if(xmlParser.getLocalName().equals("sublabels")) {
+                    } else if (xmlParser.getLocalName().equals("sublabels")) {
                         sublabels = false;
                     } else if (xmlParser.getLocalName().equals("profile")) {
                         profile = false;

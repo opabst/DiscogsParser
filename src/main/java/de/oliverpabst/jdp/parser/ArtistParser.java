@@ -96,9 +96,9 @@ public class ArtistParser {
                     // Namespaces are not used in this project => do nothing
                     break;
                 case XMLStreamConstants.START_ELEMENT:
-                    if(xmlParser.getLocalName().equals("artists")) {
+                    if (xmlParser.getLocalName().equals("artists")) {
                         artists = true;
-                    } else if(xmlParser.getLocalName().equals("artist")) {
+                    } else if (xmlParser.getLocalName().equals("artist")) {
                         artist = true;
                         ae = new ArtistEntity();
                     } else if (xmlParser.getLocalName().equals("images")) {
@@ -132,7 +132,7 @@ public class ArtistParser {
                     }
                     break;
                 case XMLStreamConstants.CHARACTERS:
-                    if(id) {
+                    if (id) {
                         ae.setId(Integer.parseInt(xmlParser.getText()));
                         id = false;
                     } else if (name && !namevariations && !aliases) {
@@ -155,20 +155,20 @@ public class ArtistParser {
                     }
                     break;
                 case XMLStreamConstants.END_ELEMENT:
-                    if(xmlParser.getLocalName().equals("artist")) {
+                    if (xmlParser.getLocalName().equals("artist")) {
                         artist = false;
                         // TODO: add further processing of the read artist object
                         // further process ArtistEntityObject (add to db)
-                    } else if(xmlParser.getLocalName().equals("images")) {
+                    } else if (xmlParser.getLocalName().equals("images")) {
                         images = false;
-                    } else if(xmlParser.getLocalName().equals("namevariations")) {
+                    } else if (xmlParser.getLocalName().equals("namevariations")) {
                         namevariations = false;
-                    } else if(xmlParser.getLocalName().equals("aliases")) {
+                    } else if (xmlParser.getLocalName().equals("aliases")) {
                         ae.addAlias(aa);
                         aliases = false;
-                    } else if(xmlParser.getLocalName().equals("profile")) {
+                    } else if (xmlParser.getLocalName().equals("profile")) {
                         profile = false;
-                    } else if(xmlParser.getLocalName().equals("realname")) {
+                    } else if (xmlParser.getLocalName().equals("realname")) {
                         realname = false;
                     } else if (xmlParser.getLocalName().equals("name")) {
                         name = false;
