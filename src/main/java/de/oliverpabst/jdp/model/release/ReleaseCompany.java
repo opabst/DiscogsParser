@@ -2,18 +2,18 @@ package de.oliverpabst.jdp.model.release;
 
 public class ReleaseCompany {
 
-    private Integer id;
+    private String id;
     private String name;
     private String catno;
     private String entityType;
     private String entityTypeName;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer _id) {
-        id = id;
+    public void setId(String _id) {
+        id = _id;
     }
 
     public String getName() {

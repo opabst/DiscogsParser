@@ -3,6 +3,7 @@ package de.oliverpabst.jdp;
 import de.oliverpabst.jdp.parser.ArtistParser;
 import de.oliverpabst.jdp.parser.LabelParser;
 import de.oliverpabst.jdp.parser.MasterParser;
+import de.oliverpabst.jdp.parser.ReleaseParser;
 import org.apache.commons.cli.*;
 
 import java.io.File;
@@ -35,6 +36,7 @@ public class DiscogsParser {
 
         //ArtistParser ap = new ArtistParser(artistsFile);
         //LabelParser lp = new LabelParser(labelsFile);
-        MasterParser mp = new MasterParser(mastersFile);
+        //MasterParser mp = new MasterParser(mastersFile);
+        ReleaseParser rp = new ReleaseParser(releasesFile);
     }
 }

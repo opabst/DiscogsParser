@@ -300,6 +300,7 @@ public class ReleaseParser {
                         companies = true;
                     } else if (companies && xmlParser.getLocalName().equals("company")) {
                         company = true;
+                        rc = new ReleaseCompany();
                     } else if (companies && company && xmlParser.getLocalName().equals("id")) {
                         id = true;
                     } else if (companies && company && xmlParser.getLocalName().equals("name")) {
@@ -364,7 +365,7 @@ public class ReleaseParser {
                     } else if (videos && video && description) {
                         rv.setTitle(xmlParser.getText());
                     } else if (companies && company && id) {
-                        rc.setId(Integer.parseInt(xmlParser.getText()));
+                        rc.setId(xmlParser.getText());
                     } else if (companies && company && name) {
                         rc.setName(xmlParser.getText());
                     } else if (companies && company && catno) {
