@@ -71,13 +71,13 @@ import java.io.InputStream;
  *         <identifiers>
  *             <identifier description="..." type="..." value="..." />
  *         </identifiers>
- *         <videos>!
+ *         <videos>
  *             <video duration="..." embed="..." src="...">
  *                 <title> </title>
  *                 <description> </description>
  *             </video>
  *         </videos>
- *         <companies>!
+ *         <companies>
  *             <company>
  *                 <id> </id>
  *                 <name> </name>
@@ -128,6 +128,13 @@ public class ReleaseParser {
     private boolean duration = false;
     private boolean identifiers = false;
     private boolean identifier = false;
+    private boolean videos = false;
+    private boolean companies = false;
+    private boolean company = false;
+    private boolean catno = false;
+    private boolean entityType = false;
+    private boolean entityTypeName = false;
+    private boolean resourceUrl = false;
 
     public ReleaseParser(File _file) {
         try {
@@ -155,6 +162,8 @@ public class ReleaseParser {
         ReleaseExtraArtist rea = null;
         ReleaseFormat rf = null;
         ReleaseTrack rt = null;
+        ReleaseVideo rv = null;
+        ReleaseCompany rc = null;
 
         while(xmlParser.hasNext()) {
             switch(xmlParser.getEventType()) {
@@ -275,8 +284,35 @@ public class ReleaseParser {
                         String type = xmlParser.getAttributeValue(null, "type");
                         String value = xmlParser.getAttributeValue(null, "value");
                         re.addIdentifier(new ReleaseIdentifier(description, type, value));
+                    } else if (xmlParser.getLocalName().equals("videos")) {
+                        videos = true;
+                    } else if (videos && xmlParser.getLocalName().equals("video")) {
+                        video = true;
+                        String duration = xmlParser.getAttributeValue(null, "duration");
+                        String embed = xmlParser.getAttributeValue(null, "embed");
+                        String src = xmlParser.getAttributeValue(null, "src");
+                        rv = new ReleaseVideo(duration, embed, src);
+                    } else if (videos && video && xmlParser.getLocalName().equals("title")) {
+                        title = true;
+                    } else if (videos && video && xmlParser.getLocalName().equals("description")) {
+                        description = true;
+                    } else if (xmlParser.getLocalName().equals("companies")) {
+                        companies = true;
+                    } else if (companies && xmlParser.getLocalName().equals("company")) {
+                        company = true;
+                    } else if (companies && company && xmlParser.getLocalName().equals("id")) {
+                        id = true;
+                    } else if (companies && company && xmlParser.getLocalName().equals("name")) {
+                        name = true;
+                    } else if (companies && company && xmlParser.getLocalName().equals("catno")) {
+                        catno = true;
+                    } else if (companies && company && xmlParser.getLocalName().equals("entity_type")) {
+                        entityType = true;
+                    } else if (companies && company && xmlParser.getLocalName().equals("entity_type_name")) {
+                        entityTypeName = true;
+                    } else if (companies && company && xmlParser.getLocalName().equals("resource_url")) {
+                        resourceUrl = true;
                     }
-
 
                     break;
                 case XMLStreamConstants.CHARACTERS:
@@ -323,6 +359,22 @@ public class ReleaseParser {
                         rt.setTitle(xmlParser.getText());
                     } else if (tracklist && track && duration) {
                         rt.setDuration(xmlParser.getText());
+                    } else if (videos && video && title) {
+                        rv.setTitle(xmlParser.getText());
+                    } else if (videos && video && description) {
+                        rv.setTitle(xmlParser.getText());
+                    } else if (companies && company && id) {
+                        rc.setId(Integer.parseInt(xmlParser.getText()));
+                    } else if (companies && company && name) {
+                        rc.setName(xmlParser.getText());
+                    } else if (companies && company && catno) {
+                        rc.setCatno(xmlParser.getText());
+                    } else if (companies && company && entityType) {
+                        rc.setEntityType(xmlParser.getText());
+                    } else if (companies && company && entityTypeName) {
+                        rc.setEntityTypeName(xmlParser.getText());
+                    } else if (companies && company && resourceUrl) {
+                        rc.setResourceUrl(xmlParser.getText());
                     }
                     break;
                 case XMLStreamConstants.END_ELEMENT:
@@ -414,6 +466,32 @@ public class ReleaseParser {
                         identifier = false;
                     } else if (xmlParser.getLocalName().equals("identifiers")) {
                         identifiers = false;
+                    } else if (videos && video && xmlParser.getLocalName().equals("description")) {
+                        description = false;
+                    } else if (videos && video && xmlParser.getLocalName().equals("title")) {
+                        title = false;
+                    } else if (videos && xmlParser.getLocalName().equals("video")) {
+                        re.addVideo(rv);
+                        video = false;
+                    } else if (xmlParser.getLocalName().equals("videos")) {
+                        videos = false;
+                    } else if (companies && company && xmlParser.getLocalName().equals("id")) {
+                        id = false;
+                    } else if (companies && company && xmlParser.getLocalName().equals("name")) {
+                        name = false;
+                    } else if (companies && company && xmlParser.getLocalName().equals("catno")) {
+                        catno = false;
+                    } else if (companies && company && xmlParser.getLocalName().equals("entity_type")) {
+                        entityType = false;
+                    } else if (companies && company && xmlParser.getLocalName().equals("entity_type_name")) {
+                        entityTypeName = false;
+                    } else if (companies && company && xmlParser.getLocalName().equals("resource_url")) {
+                        resourceUrl = false;
+                    } else if (companies && xmlParser.getLocalName().equals("company")) {
+                        company = false;
+                        re.addCompany(rc);
+                    } else if (xmlParser.getLocalName().equals("companies")) {
+                        companies = false;
                     }
                     break;
                 default:
