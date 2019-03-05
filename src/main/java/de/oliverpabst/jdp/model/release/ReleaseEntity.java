@@ -170,7 +170,7 @@ public class ReleaseEntity {
         return notes;
     }
 
-    public void setDataQuality(DataQuality _quality) {
+    public void setDataQuality(String _quality) {
         if(_quality.equals("Correct")) {
             dataQuality = DataQuality.CORRECT;
         } else if (_quality.equals("Needs Major Changes")) {
