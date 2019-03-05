@@ -18,7 +18,7 @@ import java.io.InputStream;
  *             <image height="..." type="..." uri="..." uri150="..." width="..." />
  *         </images>
  *         <artists>
- *              <artist>!
+ *              <artist>
  *                  <id> </id>
  *                  <name> </name>
  *                  <anv> </anv>
@@ -57,18 +57,18 @@ import java.io.InputStream;
  *         <styles>
  *             <style> </style>
  *         </styles>
- *         <country> </country>!
- *         <released> </released>!
- *         <notes> </notes>!
- *         <data_quality> </data_quality>!
- *         <tracklist>!
+ *         <country> </country>
+ *         <released> </released>
+ *         <notes> </notes>
+ *         <data_quality> </data_quality>
+ *         <tracklist>
  *             <track>
  *                 <position> </position>
  *                 <title> </title>
  *                 <duration> </duration>
  *             </track>
  *         </tracklist>
- *         <identifiers>!
+ *         <identifiers>
  *             <identifier description="..." type="..." value="..." />
  *         </identifiers>
  *         <videos>!
@@ -123,6 +123,11 @@ public class ReleaseParser {
     private boolean released = false;
     private boolean notes = false;
     private boolean dataQuality = false;
+    private boolean tracklist = false;
+    private boolean position = false;
+    private boolean duration = false;
+    private boolean identifiers = false;
+    private boolean identifier = false;
 
     public ReleaseParser(File _file) {
         try {
@@ -147,9 +152,9 @@ public class ReleaseParser {
 
         ReleaseEntity re = null;
         ReleaseArtist ra = null;
-        ReleaseLabel rl = null;
         ReleaseExtraArtist rea = null;
         ReleaseFormat rf = null;
+        ReleaseTrack rt = null;
 
         while(xmlParser.hasNext()) {
             switch(xmlParser.getEventType()) {
@@ -251,6 +256,25 @@ public class ReleaseParser {
                         notes = true;
                     } else if (xmlParser.getLocalName().equals("data_quality")) {
                         dataQuality = true;
+                    } else if (xmlParser.getLocalName().equals("tracklist")) {
+                        tracklist = true;
+                    } else if (tracklist && xmlParser.getLocalName().equals("track")) {
+                        track = true;
+                        rt = new ReleaseTrack();
+                    } else if (tracklist && track && xmlParser.getLocalName().equals("postion")) {
+                        position = true;
+                    } else if (tracklist && track && xmlParser.getLocalName().equals("title")) {
+                        title = true;
+                    } else if (tracklist && track && xmlParser.getLocalName().equals("duration")) {
+                        duration = true;
+                    } else if (xmlParser.getLocalName().equals("identifiers")) {
+                        identifiers = true;
+                    } else if (identifiers && xmlParser.getLocalName().equals("identifier")) {
+                        identifier = true;
+                        String description = xmlParser.getAttributeValue(null, "description");
+                        String type = xmlParser.getAttributeValue(null, "type");
+                        String value = xmlParser.getAttributeValue(null, "value");
+                        re.addIdentifier(new ReleaseIdentifier(description, type, value));
                     }
 
 
@@ -293,6 +317,12 @@ public class ReleaseParser {
                         re.setNotes(xmlParser.getText());
                     } else if (dataQuality) {
                         re.setDataQuality(xmlParser.getText());
+                    } else if (tracklist && track && position) {
+                        rt.setPosition(xmlParser.getText());
+                    } else if (tracklist && track && title) {
+                        rt.setTitle(xmlParser.getText());
+                    } else if (tracklist && track && duration) {
+                        rt.setDuration(xmlParser.getText());
                     }
                     break;
                 case XMLStreamConstants.END_ELEMENT:
@@ -332,17 +362,17 @@ public class ReleaseParser {
                         extraartists = false;
                     } else if (extraartists && xmlParser.getLocalName().equals("artist")) {
                         artist = false;
-                    } else if (extraartists && artist && xmlParser.equals("id")) {
+                    } else if (extraartists && artist && xmlParser.getLocalName().equals("id")) {
                         id = false;
-                    } else if (extraartists && artist && xmlParser.equals("name")) {
+                    } else if (extraartists && artist && xmlParser.getLocalName().equals("name")) {
                         name = false;
-                    } else if (extraartists && artist && xmlParser.equals("anv")) {
+                    } else if (extraartists && artist && xmlParser.getLocalName().equals("anv")) {
                         anv = false;
-                    } else if (extraartists && artist && xmlParser.equals("join")) {
+                    } else if (extraartists && artist && xmlParser.getLocalName().equals("join")) {
                         join = false;
-                    } else if (extraartists && artist && xmlParser.equals("role")) {
+                    } else if (extraartists && artist && xmlParser.getLocalName().equals("role")) {
                         role = false;
-                    } else if (extraartists && artist && xmlParser.equals("tracks")) {
+                    } else if (extraartists && artist && xmlParser.getLocalName().equals("tracks")) {
                         tracks = false;
                     } else if (formats && format && descriptions && xmlParser.getLocalName().equals("description")) {
                         description = false;
@@ -369,6 +399,21 @@ public class ReleaseParser {
                         notes = false;
                     } else if (xmlParser.getLocalName().equals("data_quality")) {
                         dataQuality = false;
+                    } else if (tracklist && track && xmlParser.getLocalName().equals("duration")) {
+                        duration = false;
+                    } else if (tracklist && track && xmlParser.getLocalName().equals("title")) {
+                        title = false;
+                    } else if (tracklist && track && xmlParser.getLocalName().equals("position")) {
+                        position = false;
+                    } else if (tracklist && xmlParser.getLocalName().equals("track")) {
+                        re.addTrack(rt);
+                        track = false;
+                    } else if (xmlParser.getLocalName().equals("tracklist")) {
+                        tracklist = false;
+                    } else if (identifiers && xmlParser.getLocalName().equals("identifier")) {
+                        identifier = false;
+                    } else if (xmlParser.getLocalName().equals("identifiers")) {
+                        identifiers = false;
                     }
                     break;
                 default:
