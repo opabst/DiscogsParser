@@ -171,7 +171,22 @@ public class ReleaseEntity {
     }
 
     public void setDataQuality(DataQuality _quality) {
-        dataQuality = _quality;
+        if(_quality.equals("Correct")) {
+            dataQuality = DataQuality.CORRECT;
+        } else if (_quality.equals("Needs Major Changes")) {
+            dataQuality = DataQuality.NEEDS_MAJOR_CHANGES;
+        } else if (_quality.equals("Needs Vote")) {
+            dataQuality = DataQuality.NEEDS_VOTE;
+        } else if (_quality.equals("Needs Minor Changes")) {
+            dataQuality = DataQuality.NEEDS_MINOR_CHANGES;
+        } else if (_quality.equals("Complete and Correct")) {
+            dataQuality = DataQuality.COMPLETE_AND_CORRECT;
+        } else if (_quality.equals("Entirely Incorrect")) {
+            dataQuality = DataQuality.ENTIRELY_INCORRECT;
+        } else {
+            dataQuality = DataQuality.UNKNOWN;
+            System.err.println("Unknown data quality: " + _quality);
+        }
     }
 
     public DataQuality getDataQuality() {
