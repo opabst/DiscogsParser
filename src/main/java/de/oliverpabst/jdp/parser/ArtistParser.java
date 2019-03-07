@@ -108,8 +108,9 @@ public class ArtistParser {
                         String height = xmlParser.getAttributeValue(null, "height");
                         String type = xmlParser.getAttributeValue(null, "type");
                         String uri = xmlParser.getAttributeValue(null, "uri");
+                        String uri150 = xmlParser.getAttributeValue(null, "uri150");
                         String width = xmlParser.getAttributeValue(null, "width");
-                        ArtistImage image = new ArtistImage(height, width, uri, type);
+                        ArtistImage image = new ArtistImage(height, width, uri, uri150, type);
                         ae.addImage(image);
                     } else if (xmlParser.getLocalName().equals("id")) {
                         id = true;
