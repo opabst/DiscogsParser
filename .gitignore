@@ -5,3 +5,4 @@ gradlew.bat
 .idea
 settings.gradle
 /data*
+/out
