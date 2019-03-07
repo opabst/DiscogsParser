@@ -34,6 +34,26 @@ public class Image {
         }
     }
 
+    public Integer getHeight() {
+        return height;
+    }
+
+    public Integer getWidth() {
+        return width;
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public String getUri150() {
+        return uri150;
+    }
+
+    public ImageType getType() {
+        return type;
+    }
+
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Image: [");
