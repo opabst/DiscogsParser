@@ -47,6 +47,7 @@ public class PostgreSQLConnector implements DatabaseInterface {
     }
     @Override
     public void connect(ConnectionParameters _parameters) {
+        // TODO: maybe probe schema and fail gracefully, problably before parsing to save time
         String url = "jdbc:postgresql://" + _parameters.getHostname() + ":" + _parameters.getPort() + "/" + _parameters.getDatabasename();
         try {
             con = DriverManager.getConnection(url, _parameters.getUsername(), _parameters.getPassword());
