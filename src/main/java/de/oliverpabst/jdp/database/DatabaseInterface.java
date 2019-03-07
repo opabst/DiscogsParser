@@ -20,6 +20,9 @@ public interface DatabaseInterface {
 
     public void disconnect();
 
+    /**
+     * Prepare all statements that are required to insert the *Entity objects in the database
+     */
     public void setupPreparedStatements();
 
     public void insertArtist(ArtistEntity _ae);
