@@ -5,6 +5,8 @@ import de.oliverpabst.jdp.model.label.LabelEntity;
 import de.oliverpabst.jdp.model.master.MasterEntity;
 import de.oliverpabst.jdp.model.release.ReleaseEntity;
 
+import java.sql.SQLException;
+
 /**
  * Interface for database operations. Provides the following capabilities:
  *
@@ -23,13 +25,13 @@ public interface DatabaseInterface {
     /**
      * Prepare all statements that are required to insert the *Entity objects in the database
      */
-    public void setupPreparedStatements();
+    public void setupPreparedStatements() throws SQLException;
 
-    public void insertArtist(ArtistEntity _ae);
+    public void insertArtist(ArtistEntity _ae) throws SQLException;
 
-    public void insertLabel(LabelEntity _le);
+    public void insertLabel(LabelEntity _le) throws SQLException ;
 
-    public void insertMaster(MasterEntity _me);
+    public void insertMaster(MasterEntity _me) throws SQLException;
 
-    public void insertRelease(ReleaseEntity _re);
+    public void insertRelease(ReleaseEntity _re) throws SQLException;
 }
