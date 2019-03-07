@@ -1,6 +1,7 @@
 package de.oliverpabst.jdp.model.release;
 
 import de.oliverpabst.jdp.model.DataQuality;
+import de.oliverpabst.jdp.model.Image;
 
 import java.util.ArrayList;
 
@@ -10,7 +11,7 @@ public class ReleaseEntity {
 
     private String status;
 
-    private ArrayList<ReleaseImage> images;
+    private ArrayList<Image> images;
 
     private String title;
 
@@ -43,7 +44,7 @@ public class ReleaseEntity {
     private ArrayList<ReleaseCompany> companies;
 
     public ReleaseEntity() {
-        images = new ArrayList<>();
+        images = new ArrayList<Image>();
 
         artists = new ArrayList<>();
 
@@ -82,11 +83,11 @@ public class ReleaseEntity {
         return status;
     }
 
-    public void addImage(ReleaseImage _image) {
+    public void addImage(Image _image) {
         images.add(_image);
     }
 
-    public ArrayList<ReleaseImage> getImages() {
+    public ArrayList<Image> getImages() {
         return images;
     }
 

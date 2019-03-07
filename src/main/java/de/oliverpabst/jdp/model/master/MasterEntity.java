@@ -1,12 +1,13 @@
 package de.oliverpabst.jdp.model.master;
 
 import de.oliverpabst.jdp.model.DataQuality;
+import de.oliverpabst.jdp.model.Image;
 
 import java.util.ArrayList;
 
 public class MasterEntity {
 
-    private ArrayList<MasterImage> images;
+    private ArrayList<Image> images;
     private ArrayList<MasterVideo> videos;
     private ArrayList<MasterArtist> artists;
 
@@ -18,7 +19,7 @@ public class MasterEntity {
     private DataQuality dataQuality;
 
     public MasterEntity() {
-        images = new ArrayList<>();
+        images = new ArrayList<Image>();
         videos = new ArrayList<>();
         artists = new ArrayList<>();
 
@@ -26,11 +27,11 @@ public class MasterEntity {
         styles = new ArrayList<>();
     }
 
-    public void addImage(MasterImage _image) {
+    public void addImage(Image _image) {
         images.add(_image);
     }
 
-    public ArrayList<MasterImage> getImages() {
+    public ArrayList<Image> getImages() {
         return images;
     }
 

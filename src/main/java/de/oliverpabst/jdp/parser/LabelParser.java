@@ -1,7 +1,7 @@
 package de.oliverpabst.jdp.parser;
 
+import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.label.LabelEntity;
-import de.oliverpabst.jdp.model.label.LabelImage;
 import de.oliverpabst.jdp.model.label.LabelSublabel;
 
 import javax.xml.stream.XMLInputFactory;
@@ -101,7 +101,7 @@ public class LabelParser {
                         String uri = xmlParser.getAttributeValue(null, "uri");
                         String uri150 = xmlParser.getAttributeValue(null, "uri150");
                         String width = xmlParser.getAttributeValue(null, "width");
-                        LabelImage image = new LabelImage(height, width, uri, uri150, type);
+                        Image image = new Image(height, width, uri, uri150, type);
                         le.addImage(image);
                     } else if (xmlParser.getLocalName().equals("id")) {
                         id = true;

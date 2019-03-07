@@ -1,5 +1,6 @@
 package de.oliverpabst.jdp.parser;
 
+import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.release.*;
 
 import javax.xml.stream.XMLInputFactory;
@@ -192,7 +193,7 @@ public class ReleaseParser {
                         String uri = xmlParser.getAttributeValue(null, "uri");
                         String uri150 = xmlParser.getAttributeValue(null, "uri150");
                         String width = xmlParser.getAttributeValue(null, "width");
-                        re.addImage(new ReleaseImage(height, width, uri, uri150, type));
+                        re.addImage(new Image(height, width, uri, uri150, type));
                     } else if (xmlParser.getLocalName().equals("artists")) {
                         artists = true;
                     } else if (artists && xmlParser.getLocalName().equals("artist")) {

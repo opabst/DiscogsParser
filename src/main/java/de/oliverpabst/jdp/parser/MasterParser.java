@@ -1,8 +1,8 @@
 package de.oliverpabst.jdp.parser;
 
+import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.master.MasterArtist;
 import de.oliverpabst.jdp.model.master.MasterEntity;
-import de.oliverpabst.jdp.model.master.MasterImage;
 import de.oliverpabst.jdp.model.master.MasterVideo;
 
 import javax.xml.stream.XMLInputFactory;
@@ -123,7 +123,7 @@ public class MasterParser {
                         String uri = xmlParser.getAttributeValue(null, "uri");
                         String uri150 = xmlParser.getAttributeValue(null, "uri150");
                         String width = xmlParser.getAttributeValue(null, "width");
-                        MasterImage image = new MasterImage(height, width, uri, uri150, type);
+                        Image image = new Image(height, width, uri, uri150, type);
                         me.addImage(image);
                     } else if (xmlParser.getLocalName().equals("artists")) {
                         artists = true;

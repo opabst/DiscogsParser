@@ -1,6 +1,7 @@
 package de.oliverpabst.jdp.model.label;
 
 import de.oliverpabst.jdp.model.DataQuality;
+import de.oliverpabst.jdp.model.Image;
 
 import java.util.ArrayList;
 
@@ -8,7 +9,7 @@ public class LabelEntity {
 
     private String name;
     private String contactinfo;
-    private ArrayList<LabelImage> images;
+    private ArrayList<Image> images;
     private Integer id;
     private String profile;
     private DataQuality dataQuality;
@@ -16,7 +17,7 @@ public class LabelEntity {
     private ArrayList<LabelSublabel> sublabels;
 
     public LabelEntity() {
-        images = new ArrayList<>();
+        images = new ArrayList<Image>();
         urls = new ArrayList<>();
         sublabels = new ArrayList<>();
     }
@@ -37,11 +38,11 @@ public class LabelEntity {
         contactinfo = _contactInfo;
     }
 
-    public ArrayList<LabelImage> getImages() {
+    public ArrayList<Image> getImages() {
         return images;
     }
 
-    public void addImage(LabelImage _image) {
+    public void addImage(Image _image) {
         images.add(_image);
     }
 
@@ -106,7 +107,7 @@ public class LabelEntity {
         sb.append("Artist: " + name + "\n");
         sb.append("Contactinfo: " + contactinfo + "\n");
         sb.append("Images: ");
-        for(LabelImage i: images) {
+        for(Image i: images) {
             sb.append("  " + i.toString());
         }
         sb.append("ID: " + id + "\n");

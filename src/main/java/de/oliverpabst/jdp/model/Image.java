@@ -1,15 +1,14 @@
-package de.oliverpabst.jdp.model.artist;
+package de.oliverpabst.jdp.model;
 
-import de.oliverpabst.jdp.model.ImageType;
+public class Image {
 
-public class ArtistImage {
     private Integer height;
     private Integer width;
     private String uri;
     private String uri150;
     private ImageType type;
 
-    public ArtistImage(String _height, String _width, String _uri, String _uri150, String _type) {
+    public Image(String _height, String _width, String _uri, String _uri150, String _type) {
         if(_height.length() > 0) {
             height = Integer.parseInt(_height);
         } else {
@@ -21,16 +20,17 @@ public class ArtistImage {
         } else {
             width = 0;
         }
+
         uri = _uri;
         uri150 = _uri150;
 
         if(_type.equals("primary")) {
             type = ImageType.PRIMARY;
-        } else if (_type.equals("secondary")) {
+        } else if(_type.equals("secondary")) {
             type = ImageType.SECONDARY;
         } else {
             type = ImageType.UNKNOWN;
-            System.err.println("Unknown image type: " + _type);
+            System.err.println("Unknow image type: " + _type);
         }
     }
 
@@ -46,3 +46,4 @@ public class ArtistImage {
         return sb.toString();
     }
 }
+

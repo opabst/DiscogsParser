@@ -1,8 +1,8 @@
 package de.oliverpabst.jdp.parser;
 
+import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.artist.ArtistAlias;
 import de.oliverpabst.jdp.model.artist.ArtistEntity;
-import de.oliverpabst.jdp.model.artist.ArtistImage;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -110,7 +110,7 @@ public class ArtistParser {
                         String uri = xmlParser.getAttributeValue(null, "uri");
                         String uri150 = xmlParser.getAttributeValue(null, "uri150");
                         String width = xmlParser.getAttributeValue(null, "width");
-                        ArtistImage image = new ArtistImage(height, width, uri, uri150, type);
+                        Image image = new Image(height, width, uri, uri150, type);
                         ae.addImage(image);
                     } else if (xmlParser.getLocalName().equals("id")) {
                         id = true;

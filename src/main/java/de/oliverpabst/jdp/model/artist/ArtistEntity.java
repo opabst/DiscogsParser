@@ -1,6 +1,7 @@
 package de.oliverpabst.jdp.model.artist;
 
 import de.oliverpabst.jdp.model.DataQuality;
+import de.oliverpabst.jdp.model.Image;
 
 import java.util.ArrayList;
 
@@ -10,7 +11,7 @@ public class ArtistEntity {
 
     private String name;
     private String realName;
-    private ArrayList<ArtistImage> images;
+    private ArrayList<Image> images;
     private Integer id;
     private String profile;
     private DataQuality dataQuality;
@@ -18,7 +19,7 @@ public class ArtistEntity {
     private ArrayList<ArtistAlias> aliases;
 
     public ArtistEntity() {
-        images = new ArrayList<>();
+        images = new ArrayList<Image>();
         nameVariations = new ArrayList<>();
         aliases = new ArrayList<>();
     }
@@ -39,11 +40,11 @@ public class ArtistEntity {
         realName = _realName;
     }
 
-    public ArrayList<ArtistImage> getImages() {
+    public ArrayList<Image> getImages() {
         return images;
     }
 
-    public void addImage(ArtistImage _image) {
+    public void addImage(Image _image) {
         images.add(_image);
     }
 
@@ -108,7 +109,7 @@ public class ArtistEntity {
         sb.append("Artist: " + name + "\n");
         sb.append("Realname: " + realName + "\n");
         sb.append("Images: ");
-        for(ArtistImage i: images) {
+        for(Image i: images) {
             sb.append("  " + i.toString());
         }
         sb.append("ID: " + id + "\n");
