@@ -143,3 +143,112 @@ ALTER TABLE discogs.master_artist_performs ADD FOREIGN KEY (artist_id) REFERENCE
 --------------------------------------------------------------------------------
 -- ReleaseEntity
 --------------------------------------------------------------------------------
+
+CREATE TABLE discogs.release (
+	id INTEGER PRIMARY KEY,
+	releases TEXT,
+	country TEXT,
+	notes TEXT,
+	status TEXT,
+	title TEXT,
+	data_quality TEXT);
+	
+CREATE TABLE discogs.release_styles (
+	id INTEGER,
+	style TEXT);
+ALTER TABLE discogs.release_styles ADD PRIMARY KEY (id, style);
+ALTER TABLE discogs.release_styles ADD FOREIGN KEY (id) REFERENCES discogs.release(id);
+
+CREATE TABLE discogs.release_genres (
+	id INTEGER,
+	genre TEXT);
+ALTER TABLE discogs.release_genres ADD PRIMARY KEY (id, style);
+ALTER TABLE discogs.release_genres ADD FOREIGN KEY (id) REFERENCES discogs.release(id);
+
+CREATE TABLE discogs.release_artist (
+	id INTEGER PRIMARY KEY,
+	name TEXT,
+	role TEXT,
+	anv TEXT,
+	join TEXT);
+	
+CREATE TABLE discogs.artist_of_release (
+	release_id INTEGER,
+	artist_id INTEGER);
+ALTER TABLE discogs.artist_of_release ADD PRIMARY KEY (release_id, artist_id);
+ALTER TABLE discogs.artist_of_release ADD FOREIGN KEY (release_id) REFERENCES discogs.release(id);
+ALTER TABLE discogs.artist_of_release ADD FOREIGN KEY (artist_id) REFERENCES discogs.release_artist(id);
+
+CREATE TABLE discogs.extraartist_of_release (
+	release_id INTEGER,
+	artist_id INTEGER);
+ALTER TABLE discogs.extraartist_of_release ADD PRIMARY KEY (release_id, artist_id);
+ALTER TABLE discogs.extraartist_of_release ADD FOREIGN KEY (release_id) REFERENCES discogs.release(id);
+ALTER TABLE discogs.extraartist_of_release ADD FOREIGN KEY (artist_id) REFERENCES discogs.release_extraartist(id);
+
+CREATE TABLE discogs.release_identifier (
+	value TEXT PRIMARY KEY,
+	type TEXT,
+	description TEXT);
+	
+CREATE TABLE discogs.identifies (
+	release_id INTEGER,
+	identifier_value TEXT);
+ALTER TABLE discogs.identifies ADD PRIMARY KEY (release_id, identifier_value);
+ALTER TABLE discogs.identifies ADD FOREIGN KEY (release_id) REFERENCES discogs.release(id);
+ALTER TABLE discogs.identifies ADD FOREIGN KEY (identifier_value) REFERENCES discogs.release_identifier(value);
+
+CREATE TABLE discogs.release_video (
+	src TEXT PRIMARY KEY,
+	duration TEXT,
+	description TEXT,
+	title TEXT,
+	embed TEXT); -- maybe boolean
+
+CREATE TABLE discogs.video_of_release (
+	release_id INTEGER,
+	video_src TEXT);
+ALTER TABLE discogs.video_of_release ADD PRIMARY KEY (release_id, video_src);
+ALTER TABLE discogs.video_of_release ADD FOREIGN KEY (release_id) REFERENCES discogs.release(id);
+ALTER TABLE discogs.video_of_release ADD FOREIGN KEY (video_src) REFERENCES discogs.release_video(src);
+
+CREATE TABLE discogs.release_company (
+	id INTEGER PRIMARY KEY,
+	resource_url TEXT,
+	name TEXT,
+	entity_type TEXT,
+	entity_type_value TEXT,
+	catno TEXT);
+	
+CREATE TABLE discogs.company_of_release (
+	release_id INTEGER,
+	company_id INTEGER);
+ALTER TABLE discogs.company_of_release ADD PRIMARY KEY (release_id, company_id);
+ALTER TABLE discogs.company_of_release ADD FOREIGN KEY (release_id) REFERENCES discogs.release(id);
+ALTER TABLE discogs.company_of_release ADD FOREIGN KEY (company_id) REFERENCES discogs.release_company(id);
+
+CREATE TABLE discogs.release_image (
+	uri TEXT PRIMARY KEY,
+	uri150 TEXT,
+	type TEXT,
+	width INTEGER,
+	heigth INTEGER);
+
+CREATE TABLE discogs.image_of_release (
+	uri TEXT,
+	release_id INTEGER);
+ALTER TABLE discogs.image_of_release ADD PRIMARY KEY (uri, release_id);
+ALTER TABLE discogs.image_of_release ADD FOREIGN KEY (uri) REFERENCES discogs.release_image(uri);
+ALTER TABLE discogs.image_of_release ADD FOREIGN KEY (release_id) REFERENCES discogs.release(id);
+
+CREATE TABLE discogs.release_label (
+	id INTEGER PRIMARY KEY,
+	catno TEXT,
+	name TEXT);
+
+CREATE TABLE discogs.label_of_release (
+	label_id INTEGER,
+	release_id INTEGER);
+ALTER TABLE discogs.label_of_release ADD PRIMARY KEY (label_id, release_id);
+ALTER TABLE discogs.label_of_release ADD FOREIGN KEY (label_id) REFERENCES discogs.release_label(id);
+ALTER TABLE discogs.label_of_release ADD FOREIGN KEY (release_id) REFERENCES discogs.release(id);
