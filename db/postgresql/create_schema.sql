@@ -47,3 +47,54 @@ CREATE TABLE discogs.image_of_artist (
 	uri TEXT);
 
 ALTER TABLE discogs.image_of_artist ADD FOREIGN KEY (id) REFERENCES discogs.artist(id);
+
+--------------------------------------------------------------------------------
+-- LabelEntity
+--------------------------------------------------------------------------------
+
+CREATE TABLE discogs.label (
+	id INTEGER PRIMARY KEY,
+	name TEXT,
+	contactinfo TEXT,
+	profile TEXT,
+	data_quality TEXT);
+	
+CREATE TABLE discogs.label_urls (
+	id INTEGER,
+	url TEXT);	
+ALTER TABLE discogs.label_urls ADD PRIMARY KEY (id, url);
+ALTER TABLE discogs.label_urls ADD FOREIGN KEY (id) REFERENCES discogs.label(id);
+
+CREATE TABLE discogs.sublabel (
+	id INTEGER,
+	name TEXT);
+ALTER TABLE discogs.sublabel ADD PRIMARY KEY (id, name);
+
+CREATE TABLE discogs.sublabel_of (
+	label_id INTEGER,
+	sublabel_id INTEGER);
+	
+ALTER TABLE discogs.sublabel_of ADD PRIMARY KEY (label_id, sublabel_id);
+ALTER TABLE discogs.sublabel_of ADD FOREIGN KEY (label_id) REFERENCES discogs.label(id);
+ALTER TABLE discogs.sublabel_of ADD FOREIGN KEY (sublabel_id) REFERENCES discogs.sublabel(id);
+
+CREATE TABLE discogs.label_images (
+	uri TEXT,
+	uri150 TEXT,
+	type TEXT,
+	width INTEGER,
+	height INTEGER);
+	
+CREATE TABLE discogs.image_of_label (
+	uri TEXT,
+	label_id INTEGER);
+ALTER TABLE discogs.image_of_label ADD FOREIGN KEY (label_id) REFERENCES discogs.label(id);
+ALTER TABLE discogs.image_of_label ADD FOREIGN KEY (uri) REFERENCES discogs.label_images(uri);	
+
+--------------------------------------------------------------------------------
+-- MasterEntity
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+-- ReleaseEntity
+--------------------------------------------------------------------------------
