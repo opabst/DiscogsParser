@@ -7,6 +7,9 @@ import java.util.ArrayList;
 
 public class MasterEntity {
 
+    private String id;
+    private String mainRelease;
+
     private ArrayList<Image> images;
     private ArrayList<MasterVideo> videos;
     private ArrayList<MasterArtist> artists;
@@ -25,6 +28,22 @@ public class MasterEntity {
 
         genres = new ArrayList<>();
         styles = new ArrayList<>();
+    }
+
+    public void setId(String _id) {
+        id = _id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setMainRelease(String _mainRelease) {
+        mainRelease = _mainRelease;
+    }
+
+    public String getMainRelease() {
+        return mainRelease;
     }
 
     public void addImage(Image _image) {

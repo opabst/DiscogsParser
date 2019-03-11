@@ -16,7 +16,8 @@ import java.io.InputStream;
 
 /**
  * <masters>
- *     <master>
+ *     <master id="...">
+ *         <main_release></main_release>
  *         <images>
  *             <image height="..." type="..." uri="..." uri150="..." width="..."
  *         </images>
@@ -55,6 +56,7 @@ public class MasterParser {
 
     private boolean masters = false;
     private boolean master = false;
+    private boolean mainRelease = false;
     private boolean images = false;
     private boolean artists = false;
     private boolean artist = false;
@@ -115,6 +117,10 @@ public class MasterParser {
                     } else if (xmlParser.getLocalName().equals("master")) {
                         master = true;
                         me = new MasterEntity();
+                        String id = xmlParser.getAttributeValue(null, "id");
+                        me.setId(id);
+                    } else if (xmlParser.getLocalName().equals("main_release")) {
+                        mainRelease = true;
                     } else if (xmlParser.getLocalName().equals("images")) {
                         images = true;
                     } else if (xmlParser.getLocalName().equals("image") && images) {
@@ -171,7 +177,9 @@ public class MasterParser {
                 case XMLStreamConstants.CHARACTERS:
                     // Artist, Style und Genre verarbeitet
                     String chars = xmlParser.getText();
-                    if(artist && id) {
+                    if(mainRelease) {
+                        me.setMainRelease(xmlParser.getText());
+                    } else if(artist && id) {
                         ma.setId(Integer.parseInt(xmlParser.getText()));
                     } else if (artist && role) {
                         ma.setRole(xmlParser.getText());
@@ -203,6 +211,8 @@ public class MasterParser {
                         masters = false;
                     } else if (xmlParser.getLocalName().equals("master")) {
                         master = false;
+                    } else if (xmlParser.getLocalName().equals("main_release")) {
+                        mainRelease = false;
                     } else if (xmlParser.getLocalName().equals("images")) {
                         images = false;
                     } else if (xmlParser.getLocalName().equals("artists")) {
