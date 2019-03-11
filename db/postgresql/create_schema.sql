@@ -95,6 +95,51 @@ ALTER TABLE discogs.image_of_label ADD FOREIGN KEY (uri) REFERENCES discogs.labe
 -- MasterEntity
 --------------------------------------------------------------------------------
 
+CREATE TABLE discogs.master (
+	id INTEGER PRIMARY KEY,
+	year INTEGER,
+	data_quality TEXT,
+	title TEXT,
+	main_release INTEGER);
+	
+CREATE TABLE discogs.master_styles (
+	id INTEGER,
+	style TEXT);
+ALTER TABLE discogs.master_styles ADD PRIMARY KEY (id, style);
+ALTER TABLE discogs.master_styles ADD FOREIGN KEY (id) REFERENCES discogs.master_styles(id);
+
+CREATE TABLE discogs.master_genres (
+	id INTEGER,
+	genre TEXT);
+ALTER TABLE discogs.master_genres ADD PRIMARY KEY (id, genre);
+ALTER TABLE discogs.master_genres ADD FOREIGN KEY (id) REFERENCES discogs.master_genres(id);
+
+CREATE TABLE discogs.master_images (
+	uri TEXT,
+	uri150 TEXT,
+	type TEXT,
+	width INTEGER,
+	height INTEGER);
+	
+CREATE TABLE discogs.images_of_master (
+	uri TEXT,
+	master_id INTEGER);
+ALTER TABLE discogs.images_of_master ADD FOREIGN KEY (label_id) REFERENCES discogs.master(id);
+ALTER TABLE discogs.images_of_master ADD FOREIGN KEY (uri) REFERENCES discogs.master_images(uri);
+
+CREATE TABLE discogs.master_artist (
+	id INTEGER PRIMARY KEY,
+	name TEXT,
+	role TEXT,
+	join TEXT,
+	anv TEXT);
+	
+CREATE TABLE discogs.master_artist_performs(
+	master_id INTEGER,
+	artist_id INTEGER);
+ALTER TABLE discogs.master_artist_performs ADD PRIMARY KEY (master_id, artist_id);
+ALTER TABLE discogs.master_artist_performs ADD FOREIGN KEY (master_id) REFERENCES discogs.master(id);
+ALTER TABLE discogs.master_artist_performs ADD FOREIGN KEY (artist_id) REFERENCES discogs.master_artist(id);
 --------------------------------------------------------------------------------
 -- ReleaseEntity
 --------------------------------------------------------------------------------
