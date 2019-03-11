@@ -6,6 +6,7 @@ import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.artist.ArtistAlias;
 import de.oliverpabst.jdp.model.artist.ArtistEntity;
 import de.oliverpabst.jdp.model.label.LabelEntity;
+import de.oliverpabst.jdp.model.label.LabelSublabel;
 import de.oliverpabst.jdp.model.master.MasterEntity;
 import de.oliverpabst.jdp.model.release.ReleaseEntity;
 import jdk.tools.jlink.internal.PathResourcePoolEntry;
@@ -188,7 +189,41 @@ public class PostgreSQLConnector implements DatabaseInterface {
 
     @Override
     public void insertLabel(LabelEntity _le) throws SQLException{
+        insLabel.setInt(1, _le.getId());
+        insLabel.setString(2, _le.getName());
+        insLabel.setString(3, _le.getContactinfo());
+        insLabel.setString(4, _le.getProfile());
+        insLabel.setString(5, _le.getDataQuality().toString());
+        insLabel.addBatch();
 
+        for(String url: _le.getUrls()) {
+            insLabelUrls.setInt(1, _le.getId());
+            insLabelUrls.setString(2, url);
+            insLabelUrls.addBatch();
+        }
+
+        for(LabelSublabel ls: _le.getSublabels()) {
+            insSublabel.setInt(1, ls.getSublabelID());
+            insSublabel.setString(2, ls.getSublabelName());
+            insSublabel.addBatch();
+
+            insSublabelOf.setInt(1, _le.getId());
+            insSublabelOf.setInt(2, ls.getSublabelID());
+            insSublabelOf.addBatch();
+        }
+
+        for(Image i: _le.getImages()) {
+            insLabelImages.setString(1, i.getUri());
+            insLabelImages.setString(2, i.getUri150());
+            insLabelImages.setString(3, i.getType().toString());
+            insLabelImages.setInt(4, i.getWidth());
+            insLabelImages.setInt(5, i.getHeight());
+            insLabelImages.addBatch();
+
+            insImageOfLabel.setString(1, i.getUri());
+            insImageOfLabel.setInt(2, _le.getId());
+            insImageOfLabel.addBatch();
+        }
     }
 
     @Override
