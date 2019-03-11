@@ -146,7 +146,7 @@ ALTER TABLE discogs.master_artist_performs ADD FOREIGN KEY (artist_id) REFERENCE
 
 CREATE TABLE discogs.release (
 	id INTEGER PRIMARY KEY,
-	releases TEXT,
+	released TEXT,
 	country TEXT,
 	notes TEXT,
 	status TEXT,
@@ -178,6 +178,13 @@ CREATE TABLE discogs.artist_of_release (
 ALTER TABLE discogs.artist_of_release ADD PRIMARY KEY (release_id, artist_id);
 ALTER TABLE discogs.artist_of_release ADD FOREIGN KEY (release_id) REFERENCES discogs.release(id);
 ALTER TABLE discogs.artist_of_release ADD FOREIGN KEY (artist_id) REFERENCES discogs.release_artist(id);
+
+CREATE TABLE discogs.release_extraartist (
+	id INTEGER PRIMARY KEY,
+	name TEXT,
+	role TEXT,
+	anv TEXT,
+	join TEXT);
 
 CREATE TABLE discogs.extraartist_of_release (
 	release_id INTEGER,

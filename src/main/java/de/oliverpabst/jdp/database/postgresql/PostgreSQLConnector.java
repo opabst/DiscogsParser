@@ -8,6 +8,7 @@ import de.oliverpabst.jdp.model.artist.ArtistEntity;
 import de.oliverpabst.jdp.model.label.LabelEntity;
 import de.oliverpabst.jdp.model.master.MasterEntity;
 import de.oliverpabst.jdp.model.release.ReleaseEntity;
+import jdk.tools.jlink.internal.PathResourcePoolEntry;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -30,10 +31,37 @@ public class PostgreSQLConnector implements DatabaseInterface {
 
     // LabelEntity
     private PreparedStatement insLabel;
+    private PreparedStatement insLabelUrls;
+    private PreparedStatement insSublabel;
+    private PreparedStatement insSublabelOf;
+    private PreparedStatement insLabelImages;
+    private PreparedStatement insImageOfLabel;
     // MasterEntity
     private PreparedStatement insMaster;
+    private PreparedStatement insMasterStyles;
+    private PreparedStatement insMasterGenres;
+    private PreparedStatement insMasterImages;
+    private PreparedStatement insImagesOfMaster;
+    private PreparedStatement insMasterArtist;
+    private PreparedStatement insMasterArtistPerforms;
     // ReleaseEntity
     private PreparedStatement insRelease;
+    private PreparedStatement insReleaseStyles;
+    private PreparedStatement insReleaseGenres;
+    private PreparedStatement insReleaseArtist;
+    private PreparedStatement insArtistOfRelease;
+    private PreparedStatement insReleaseExtraartist;
+    private PreparedStatement insExtraartistOfRelease;
+    private PreparedStatement insReleaseIdentifier;
+    private PreparedStatement insIdentifies;
+    private PreparedStatement insReleaseVideo;
+    private PreparedStatement insVideoOfRelease;
+    private PreparedStatement insReleaseCompany;
+    private PreparedStatement insCompanyOfRelease;
+    private PreparedStatement insReleaseImage;
+    private PreparedStatement insImageOfRelease;
+    private PreparedStatement insReleaseLabel;
+    private PreparedStatement insLabelOfRelease;
 
     public static PostgreSQLConnector getInstance() {
         if(instance == null) {
@@ -75,9 +103,38 @@ public class PostgreSQLConnector implements DatabaseInterface {
         insArtistImage = con.prepareStatement("INSERT INTO discogs.artist_image (uri, uri150, type, width, height) VALUES (?, ?, ?, ?, ?)");
         insImageOfArtist = con.prepareStatement("INSERT INTO discogs.image_of_artist (id, uri) VALUES (?, ?)");
         // LabelEntity
+        insLabel = con.prepareStatement("INSERT INTO discogs.label (id, name, contactinfo, profile, data_quality) VALUES (?, ?, ?, ?, ?)");
+        insLabelUrls = con.prepareStatement("INSERT INTO discogs.label_urls (id, url) VALUES (?, ?)");
+        insSublabel = con.prepareStatement("INSERT INTO discogs.sublabel (id, name) VALUES (?, ?)");
+        insSublabelOf = con.prepareStatement("INSERT INTO discogs.sublabel_of (label_id, sublabel_id) VALUES (?, ?)");
+        insLabelImages = con.prepareStatement("INSERT INTO discogs.label_images (uri, uri150, type, width, height) VALUES (?, ?, ?, ?, ?)");
+        insImageOfLabel = con.prepareStatement("INSERT INTO discogs.image_of_labels (uri, label_id) VALUES (?, ?)");
         // MasterEntity
+        insMaster = con.prepareStatement("INSERT INTO discogs.master (id, year, data_quality, title, main_release) VALUES (?, ?, ?, ?, ?)");
+        insMasterStyles = con.prepareStatement("INSERT INTO discogs.master_styles (id, style) VALUES (?, ?)");
+        insMasterGenres = con.prepareStatement("INSERT INTO discogs.master_genres (id, genre) VALUES (?, ?)");
+        insMasterImages = con.prepareStatement("INSERT INTO discogs.master_images (uri, uri150, type, width, height) VALUES (?, ?, ?, ?, ?)");
+        insImagesOfMaster = con.prepareStatement("INSERT INTO discogs.images_of_master (uri, master_id) VALUES (?, ?)");
+        insMasterArtist = con.prepareStatement("INSERT INTO discogs.master_artist (id, name, role, join, anv) VALUES (?, ?, ?, ?, ?)");
+        insMasterArtistPerforms = con.prepareStatement("INSERT INTO discogs.master_artist_performs (master_id, artist_id) VALUES (?, ?)");
         // ReleaseEntity
-
+        insRelease = con.prepareStatement("INSERT INTO discogs.release (id, released, country, notes, status, title, data_quality) VALUES (?, ?, ?, ?, ?, ?)");
+        insReleaseStyles = con.prepareStatement("INSERT INTO discogs.release_styles (id, style) VALUES (?. ?)");
+        insReleaseGenres = con.prepareStatement("INSERT INTO discogs.release_genres (id, genre) VALUES (?, ?)");
+        insReleaseArtist = con.prepareStatement("INSERT INTO discogs.release_artist (id, name, role, anv, join) VALUES (?, ?, ?, ?, ?)");
+        insArtistOfRelease = con.prepareStatement("INSERT INTO discogs.artist_of_release (release_id, artist_id) VALUES (?, ?)");
+        insReleaseExtraartist = con.prepareStatement("INSERT INTO discogs.release_extraartist (id, name, role, anv, join) VALUES (?, ?, ?, ?, ?)");
+        insExtraartistOfRelease = con.prepareStatement("INSERT INTO discogs.extraartist_of_release (release_id, artist_id) VALUES (?, ?)");
+        insReleaseIdentifier = con.prepareStatement("INSERT INTO discogs.release_identifier (value, type, description) VALUES (?, ?, ?)");
+        insIdentifies = con.prepareStatement("INSERT INTO discogs.identifies (release_id, identifier_value) VALUES (?, ?");
+        insReleaseVideo = con.prepareStatement("INSERT INTO discogs.release_video (src, duration, description, title, embed) VALUES (?, ?, ?, ?, ?)");
+        insVideoOfRelease = con.prepareStatement("INSERT INTO discogs.video_of_release (release_id, video_src) VALUES (?, ?)");
+        insReleaseCompany = con.prepareStatement("INSERT INTO discogs.release_company (id, resource_url, name, entity_type, entity_type_value, catno) VALUES (?, ?, ?, ?, ?, ?)");
+        insCompanyOfRelease = con.prepareStatement("INSERT INTO discogs.company_of_release (release_id, company_id) VALUES (?, ?)");
+        insReleaseImage = con.prepareStatement("INSERT INTO discogs.release_image (uri, uri150, type, width, heigth) VALUES (?, ?, ?, ?, ?)");
+        insImageOfRelease = con.prepareStatement("INSERT INTO discogs.image_of_release (uri, release_id) VALUES (?, ?)");
+        insReleaseLabel = con.prepareStatement("INSERT INTO discogs.release_label (id, catno, name) VALUES (?, ?, ?)");
+        insLabelOfRelease = con.prepareStatement("INSERT INTO discogs.label_of_release (label_id, release_id) VALUES (?, ?)");
     }
 
     @Override
@@ -130,7 +187,7 @@ public class PostgreSQLConnector implements DatabaseInterface {
     }
 
     @Override
-    public void insertLabel(LabelEntity _le) {
+    public void insertLabel(LabelEntity _le) throws SQLException{
 
     }
 
