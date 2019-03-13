@@ -18,7 +18,7 @@ import java.sql.SQLException;
 
 public interface DatabaseInterface {
 
-    public void connect(ConnectionParameters _parameters);
+    public void connect(ConnectionParameters _parameters) throws SchemaDoesNotExistException;
 
     public void disconnect();
 

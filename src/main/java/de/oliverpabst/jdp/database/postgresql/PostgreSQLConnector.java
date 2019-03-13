@@ -2,6 +2,7 @@ package de.oliverpabst.jdp.database.postgresql;
 
 import de.oliverpabst.jdp.database.ConnectionParameters;
 import de.oliverpabst.jdp.database.DatabaseInterface;
+import de.oliverpabst.jdp.database.SchemaDoesNotExistException;
 import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.artist.ArtistAlias;
 import de.oliverpabst.jdp.model.artist.ArtistEntity;
@@ -11,10 +12,7 @@ import de.oliverpabst.jdp.model.master.MasterArtist;
 import de.oliverpabst.jdp.model.master.MasterEntity;
 import de.oliverpabst.jdp.model.release.*;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class PostgreSQLConnector implements DatabaseInterface {
 
@@ -82,11 +80,18 @@ public class PostgreSQLConnector implements DatabaseInterface {
 
     }
     @Override
-    public void connect(ConnectionParameters _parameters) {
-        // TODO: maybe probe schema and fail gracefully, problably before parsing to save time
+    public void connect(ConnectionParameters _parameters) throws SchemaDoesNotExistException {
         String url = "jdbc:postgresql://" + _parameters.getHostname() + ":" + _parameters.getPort() + "/" + _parameters.getDatabasename();
         try {
             con = DriverManager.getConnection(url, _parameters.getUsername(), _parameters.getPassword());
+
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT schema_name FROM information.schemata WHERE schema_name = 'discogs'");
+            if(!rs.next()) {
+                // Schema does not exist!
+                throw new SchemaDoesNotExistException("Schema 'discogs' does not exist. Create schema before proceeding!");
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
