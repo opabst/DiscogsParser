@@ -3,7 +3,7 @@ package de.oliverpabst.jdp.model.release;
 import java.util.ArrayList;
 
 public class ReleaseArtist {
-    private Integer id;
+    private String id;
     private String name;
     private String anv;
     private String join;
@@ -17,10 +17,10 @@ public class ReleaseArtist {
     }
 
     public void setId(String _id) {
-        id = Integer.parseInt(_id);
+        id = _id;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 

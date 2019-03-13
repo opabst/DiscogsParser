@@ -4,16 +4,12 @@ public class MasterVideo {
     private boolean embed;
     private String sourceUrl;
     private String description;
-    private Integer duration;
+    private String duration;
     private String title;
 
 
     public MasterVideo(String _duration, String _embed, String _src) {
-        if(_duration.length() > 0) {
-            duration = Integer.parseInt(_duration);
-        } else {
-            duration = 0;
-        }
+        duration = _duration;
 
         if(_embed.equals("true")) {
             embed = true;
@@ -51,7 +47,7 @@ public class MasterVideo {
         return sourceUrl;
     }
 
-    public Integer getDuration() {
+    public String getDuration() {
         return duration;
     }
 }

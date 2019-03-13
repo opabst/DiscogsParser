@@ -2,9 +2,9 @@ package de.oliverpabst.jdp.model.artist;
 
 public class ArtistAlias {
     private String aliasName;
-    private Integer aliasID;
+    private String aliasID;
 
-    public ArtistAlias(String _aliasName, Integer _aliasID) {
+    public ArtistAlias(String _aliasName, String _aliasID) {
         aliasID = _aliasID;
         aliasName = _aliasName;
     }
@@ -21,11 +21,11 @@ public class ArtistAlias {
         aliasName = _aliasName;
     }
 
-    public Integer getAliasID() {
+    public String getAliasID() {
         return aliasID;
     }
 
-    public void setAliasID(Integer _aliasId) {
+    public void setAliasID(String _aliasId) {
         aliasID = _aliasId;
     }
 

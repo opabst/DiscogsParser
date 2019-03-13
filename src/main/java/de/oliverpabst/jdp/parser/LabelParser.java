@@ -122,14 +122,14 @@ public class LabelParser {
                     } else if (xmlParser.getLocalName().equals("sublabel")) {
                         sublabel = true;
                         ls = new LabelSublabel();
-                        ls.setSublabelID(Integer.parseInt(xmlParser.getAttributeValue(0)));
+                        ls.setSublabelID(xmlParser.getAttributeValue(0));
                     }
                     break;
 
                 case XMLStreamConstants.CHARACTERS:
                     String chars = xmlParser.getText();
                     if (id) {
-                        le.setId(Integer.parseInt(xmlParser.getText()));
+                        le.setId(xmlParser.getText());
                     } else if (name) {
                         le.setName(xmlParser.getText());
                     } else if (contactinfo) {

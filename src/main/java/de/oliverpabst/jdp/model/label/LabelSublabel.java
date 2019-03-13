@@ -2,9 +2,9 @@ package de.oliverpabst.jdp.model.label;
 
 public class LabelSublabel {
     private String sublabelName;
-    private Integer sublabelID;
+    private String sublabelID;
 
-    public LabelSublabel(String _name, Integer _id) {
+    public LabelSublabel(String _name, String _id) {
         sublabelName = _name;
         sublabelID = _id;
     }
@@ -21,11 +21,11 @@ public class LabelSublabel {
         return sublabelName;
     }
 
-    public void setSublabelID(Integer _id) {
+    public void setSublabelID(String _id) {
         sublabelID = _id;
     }
 
-    public Integer getSublabelID() {
+    public String getSublabelID() {
         return sublabelID;
     }
 

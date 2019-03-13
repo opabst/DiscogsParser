@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class MasterArtist {
 
-    private Integer id;
+    private String id;
     private String name;
     private String anv;
     private String join;
@@ -23,11 +23,11 @@ public class MasterArtist {
         return tracks;
     }
 
-    public void setId(Integer _id) {
+    public void setId(String _id) {
         id = _id;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 

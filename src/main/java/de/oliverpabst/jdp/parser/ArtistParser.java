@@ -118,7 +118,7 @@ public class ArtistParser {
                         name = true;
                     } else if (xmlParser.getLocalName().equals("name") && aliases) {
                         aa = new ArtistAlias();
-                        aa.setAliasID(Integer.parseInt(xmlParser.getAttributeValue(0)));
+                        aa.setAliasID(xmlParser.getAttributeValue(0));
                         name = true;
                     } else if (xmlParser.getLocalName().equals("realname")) {
                         realname = true;
@@ -134,7 +134,7 @@ public class ArtistParser {
                     break;
                 case XMLStreamConstants.CHARACTERS:
                     if (id) {
-                        ae.setId(Integer.parseInt(xmlParser.getText()));
+                        ae.setId(xmlParser.getText());
                         id = false;
                     } else if (name && !namevariations && !aliases) {
                         ae.setName(xmlParser.getText());
