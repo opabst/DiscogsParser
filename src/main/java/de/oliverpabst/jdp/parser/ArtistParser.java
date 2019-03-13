@@ -1,5 +1,6 @@
 package de.oliverpabst.jdp.parser;
 
+import de.oliverpabst.jdp.database.postgresql.PostgreSQLConnector;
 import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.artist.ArtistAlias;
 import de.oliverpabst.jdp.model.artist.ArtistEntity;
@@ -8,10 +9,8 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
+import java.sql.SQLException;
 
 // TODO: Test mit mehreren Aliasen und Namensvariation -> zum richtigen Zeitpunkt anlegen und zu ArtistEntity hinzufügen
 
@@ -156,10 +155,15 @@ public class ArtistParser {
                     }
                     break;
                 case XMLStreamConstants.END_ELEMENT:
-                    if (xmlParser.getLocalName().equals("artist")) {
+                    if(xmlParser.getLocalName().equals("artists")) {
+                        artists = false;
+                    } else if (xmlParser.getLocalName().equals("artist")) {
                         artist = false;
-                        // TODO: add further processing of the read artist object
-                        // further process ArtistEntityObject (add to db)
+                        try {
+                            PostgreSQLConnector.getInstance().insertArtist(ae);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                     } else if (xmlParser.getLocalName().equals("images")) {
                         images = false;
                     } else if (xmlParser.getLocalName().equals("namevariations")) {
@@ -179,6 +183,12 @@ public class ArtistParser {
                     break;
             }
             xmlParser.next();
+        }
+        xmlParser.close();
+        try {
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

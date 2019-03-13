@@ -1,5 +1,7 @@
 package de.oliverpabst.jdp.parser;
 
+import de.oliverpabst.jdp.database.DatabaseInterface;
+import de.oliverpabst.jdp.database.postgresql.PostgreSQLConnector;
 import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.release.*;
 
@@ -7,10 +9,8 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
+import java.sql.SQLException;
 
 /**
  * <releases>
@@ -384,7 +384,11 @@ public class ReleaseParser {
                         releases = false;
                     } else if (xmlParser.getLocalName().equals("release")) {
                         release = false;
-                        // TODO: ReleaseEntity weiterverarbeiten
+                        try {
+                            PostgreSQLConnector.getInstance().insertRelease(re);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                     } else if (xmlParser.getLocalName().equals("images")) {
                         images = false;
                     } else if (images && xmlParser.getLocalName().equals("image")) {
@@ -501,6 +505,12 @@ public class ReleaseParser {
             }
 
             xmlParser.next();
+        }
+        xmlParser.close();
+        try {
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

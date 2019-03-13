@@ -1,5 +1,6 @@
 package de.oliverpabst.jdp.parser;
 
+import de.oliverpabst.jdp.database.postgresql.PostgreSQLConnector;
 import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.label.LabelEntity;
 import de.oliverpabst.jdp.model.label.LabelSublabel;
@@ -8,10 +9,8 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
+import java.sql.SQLException;
 
 /**
  * Parses contents of discogs_$date_artists.xml files.
@@ -146,8 +145,15 @@ public class LabelParser {
                     break;
 
                 case XMLStreamConstants.END_ELEMENT:
-                    if (xmlParser.getLocalName().equals("label")) {
+                    if (xmlParser.getLocalName().equals("labels")) {
+                        labels = false;
+                    } else if (xmlParser.getLocalName().equals("label")) {
                         label = false;
+                        try {
+                            PostgreSQLConnector.getInstance().insertLabel(le);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                     } else if (xmlParser.getLocalName().equals("sublabel")) {
                         le.addSublabel(ls);
                         sublabel = false;
@@ -171,6 +177,12 @@ public class LabelParser {
             }
 
             xmlParser.next();
+        }
+        xmlParser.close();
+        try {
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

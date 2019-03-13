@@ -22,7 +22,7 @@ public class MasterEntity {
     private DataQuality dataQuality;
 
     public MasterEntity() {
-        images = new ArrayList<Image>();
+        images = new ArrayList<>();
         videos = new ArrayList<>();
         artists = new ArrayList<>();
 

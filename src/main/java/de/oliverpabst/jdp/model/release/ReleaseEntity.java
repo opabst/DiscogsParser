@@ -44,7 +44,7 @@ public class ReleaseEntity {
     private ArrayList<ReleaseCompany> companies;
 
     public ReleaseEntity() {
-        images = new ArrayList<Image>();
+        images = new ArrayList<>();
 
         artists = new ArrayList<>();
 

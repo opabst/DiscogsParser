@@ -19,7 +19,7 @@ public class ArtistEntity {
     private ArrayList<ArtistAlias> aliases;
 
     public ArtistEntity() {
-        images = new ArrayList<Image>();
+        images = new ArrayList<>();
         nameVariations = new ArrayList<>();
         aliases = new ArrayList<>();
     }

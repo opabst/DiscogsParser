@@ -208,7 +208,7 @@ public class PostgreSQLConnector implements DatabaseInterface {
 
     @Override
     public void insertArtist(ArtistEntity _ae) throws SQLException {
-        insArtist.setInt(1, _ae.getId());
+        insArtist.setInt(1, Integer.parseInt(_ae.getId()));
         insArtist.setString(2, _ae.getName());
         insArtist.setString(3, _ae.getRealName());
         insArtist.setString(4, _ae.getDataQuality().toString());
@@ -216,19 +216,19 @@ public class PostgreSQLConnector implements DatabaseInterface {
         insArtist.execute();
 
         for(String nv: _ae.getNameVariations()) {
-            insArtistNameVariations.setInt(1, _ae.getId());
+            insArtistNameVariations.setInt(1, Integer.parseInt(_ae.getId()));
             insArtistNameVariations.setString(2, nv);
             insArtistNameVariations.addBatch();
         }
         insArtistNameVariations.executeBatch();
 
         for(ArtistAlias aa: _ae.getAliases()) {
-            insArtistAlias.setInt(1, aa.getAliasID());
+            insArtistAlias.setInt(1, Integer.parseInt(aa.getAliasID()));
             insArtistAlias.setString(2, aa.getAliasName());
             insArtistAlias.addBatch();
 
-            insAliasOfArtist.setInt(1, _ae.getId());
-            insAliasOfArtist.setInt(2, aa.getAliasID());
+            insAliasOfArtist.setInt(1, Integer.parseInt(_ae.getId()));
+            insAliasOfArtist.setInt(2, Integer.parseInt(aa.getAliasID()));
             insAliasOfArtist.setString(3, aa.getAliasName());
             insAliasOfArtist.addBatch();
         }
@@ -243,7 +243,7 @@ public class PostgreSQLConnector implements DatabaseInterface {
             insArtistImage.setInt(5, i.getHeight());
             insArtistImage.addBatch();
 
-            insImageOfArtist.setInt(1, _ae.getId());
+            insImageOfArtist.setInt(1, Integer.parseInt(_ae.getId()));
             insImageOfArtist.setString(2, i.getUri());
             insImageOfArtist.addBatch();
         }
@@ -259,7 +259,7 @@ public class PostgreSQLConnector implements DatabaseInterface {
 
     @Override
     public void insertLabel(LabelEntity _le) throws SQLException{
-        insLabel.setInt(1, _le.getId());
+        insLabel.setInt(1, Integer.parseInt(_le.getId()));
         insLabel.setString(2, _le.getName());
         insLabel.setString(3, _le.getContactinfo());
         insLabel.setString(4, _le.getProfile());
@@ -267,18 +267,18 @@ public class PostgreSQLConnector implements DatabaseInterface {
         insLabel.addBatch();
 
         for(String url: _le.getUrls()) {
-            insLabelUrls.setInt(1, _le.getId());
+            insLabelUrls.setInt(1, Integer.parseInt(_le.getId()));
             insLabelUrls.setString(2, url);
             insLabelUrls.addBatch();
         }
 
         for(LabelSublabel ls: _le.getSublabels()) {
-            insSublabel.setInt(1, ls.getSublabelID());
+            insSublabel.setInt(1, Integer.parseInt(ls.getSublabelID()));
             insSublabel.setString(2, ls.getSublabelName());
             insSublabel.addBatch();
 
-            insSublabelOf.setInt(1, _le.getId());
-            insSublabelOf.setInt(2, ls.getSublabelID());
+            insSublabelOf.setInt(1, Integer.parseInt(_le.getId()));
+            insSublabelOf.setInt(2, Integer.parseInt(ls.getSublabelID()));
             insSublabelOf.addBatch();
         }
 
@@ -291,7 +291,7 @@ public class PostgreSQLConnector implements DatabaseInterface {
             insLabelImages.addBatch();
 
             insImageOfLabel.setString(1, i.getUri());
-            insImageOfLabel.setInt(2, _le.getId());
+            insImageOfLabel.setInt(2, Integer.parseInt(_le.getId()));
             insImageOfLabel.addBatch();
         }
 
@@ -335,7 +335,7 @@ public class PostgreSQLConnector implements DatabaseInterface {
         }
 
         for(MasterArtist ma: _me.getArtists()) {
-            insMasterArtist.setInt(1, ma.getId());
+            insMasterArtist.setInt(1, Integer.parseInt(ma.getId()));
             insMasterArtist.setString(2, ma.getName());
             insMasterArtist.setString(3, ma.getRole());
             insMasterArtist.setString(4, ma.getJoin());
@@ -343,7 +343,7 @@ public class PostgreSQLConnector implements DatabaseInterface {
             insMasterArtist.addBatch();
 
             insMasterArtistPerforms.setInt(1, Integer.parseInt(_me.getId()));
-            insMasterArtistPerforms.setInt(2, ma.getId());
+            insMasterArtistPerforms.setInt(2, Integer.parseInt(ma.getId()));
             insMasterArtistPerforms.addBatch();
         }
 
@@ -376,7 +376,7 @@ public class PostgreSQLConnector implements DatabaseInterface {
         }
 
         for(ReleaseArtist ra: _re.getArtists()) {
-            insReleaseArtist.setInt(1, ra.getId());
+            insReleaseArtist.setInt(1, Integer.parseInt(ra.getId()));
             insReleaseArtist.setString(2, ra.getName());
             insReleaseArtist.setString(3, ra.getRole());
             insReleaseArtist.setString(4, ra.getAnv());
@@ -384,12 +384,12 @@ public class PostgreSQLConnector implements DatabaseInterface {
             insReleaseArtist.addBatch();
 
             insArtistOfRelease.setInt(1, Integer.parseInt(_re.getId()));
-            insArtistOfRelease.setInt(2, ra.getId());
+            insArtistOfRelease.setInt(2, Integer.parseInt(ra.getId()));
             insArtistOfRelease.addBatch();
         }
 
         for(ReleaseExtraArtist rea: _re.getExtraArtists()) {
-            insReleaseExtraartist.setInt(1, rea.getId());
+            insReleaseExtraartist.setInt(1, Integer.parseInt(rea.getId()));
             insReleaseExtraartist.setString(2, rea.getName());
             insReleaseExtraartist.setString(3, rea.getRole());
             insReleaseExtraartist.setString(4, rea.getAnv());
@@ -397,7 +397,7 @@ public class PostgreSQLConnector implements DatabaseInterface {
             insReleaseExtraartist.addBatch();
 
             insExtraartistOfRelease.setInt(1, Integer.parseInt(_re.getId()));
-            insExtraartistOfRelease.setInt(2, rea.getId());
+            insExtraartistOfRelease.setInt(2, Integer.parseInt(rea.getId()));
             insExtraartistOfRelease.addBatch();
         }
 

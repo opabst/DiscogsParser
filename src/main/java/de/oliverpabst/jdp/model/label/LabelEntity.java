@@ -17,7 +17,7 @@ public class LabelEntity {
     private ArrayList<LabelSublabel> sublabels;
 
     public LabelEntity() {
-        images = new ArrayList<Image>();
+        images = new ArrayList<>();
         urls = new ArrayList<>();
         sublabels = new ArrayList<>();
     }
