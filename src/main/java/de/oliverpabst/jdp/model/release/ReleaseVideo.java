@@ -4,14 +4,14 @@ public class ReleaseVideo {
 
     private String duration;
     private Boolean embed;
-    private String url;
+    private String src;
     private String title;
     private String description;
 
     public ReleaseVideo(String _duration, String _embed, String _url) {
         duration = _duration;
         setEmbed(_embed);
-        url = _url;
+        src = _url;
     }
 
     private void setEmbed(String _embed) {
@@ -30,8 +30,8 @@ public class ReleaseVideo {
         return duration;
     }
 
-    public String getUrl() {
-        return url;
+    public String getSrc() {
+        return src;
     }
 
     public void setTitle(String _title) {

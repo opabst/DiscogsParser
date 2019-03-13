@@ -6,7 +6,7 @@ public class ReleaseCompany {
     private String name;
     private String catno;
     private String entityType;
-    private String entityTypeName;
+    private String entityTypeValue;
 
     public String getId() {
         return id;
@@ -40,12 +40,12 @@ public class ReleaseCompany {
         entityType = _entityType;
     }
 
-    public String getEntityTypeName() {
-        return entityTypeName;
+    public String getEntityTypeValue() {
+        return entityTypeValue;
     }
 
-    public void setEntityTypeName(String _entityTypeName) {
-        entityTypeName = _entityTypeName;
+    public void setEntityTypeValue(String _entityTypeName) {
+        entityTypeValue = _entityTypeName;
     }
 
     public String getResourceUrl() {

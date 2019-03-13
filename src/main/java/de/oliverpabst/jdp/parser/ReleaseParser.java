@@ -374,7 +374,7 @@ public class ReleaseParser {
                     } else if (companies && company && entityType) {
                         rc.setEntityType(xmlParser.getText());
                     } else if (companies && company && entityTypeName) {
-                        rc.setEntityTypeName(xmlParser.getText());
+                        rc.setEntityTypeValue(xmlParser.getText());
                     } else if (companies && company && resourceUrl) {
                         rc.setResourceUrl(xmlParser.getText());
                     }
