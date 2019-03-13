@@ -180,7 +180,7 @@ public class MasterParser {
                     if(mainRelease) {
                         me.setMainRelease(xmlParser.getText());
                     } else if(artist && id) {
-                        ma.setId(Integer.parseInt(xmlParser.getText()));
+                        ma.setId(xmlParser.getText());
                     } else if (artist && role) {
                         ma.setRole(xmlParser.getText());
                     } else if (artist && join) {
