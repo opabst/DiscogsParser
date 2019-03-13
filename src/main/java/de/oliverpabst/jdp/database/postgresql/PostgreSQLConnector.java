@@ -7,9 +7,9 @@ import de.oliverpabst.jdp.model.artist.ArtistAlias;
 import de.oliverpabst.jdp.model.artist.ArtistEntity;
 import de.oliverpabst.jdp.model.label.LabelEntity;
 import de.oliverpabst.jdp.model.label.LabelSublabel;
+import de.oliverpabst.jdp.model.master.MasterArtist;
 import de.oliverpabst.jdp.model.master.MasterEntity;
-import de.oliverpabst.jdp.model.release.ReleaseEntity;
-import jdk.tools.jlink.internal.PathResourcePoolEntry;
+import de.oliverpabst.jdp.model.release.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -227,12 +227,161 @@ public class PostgreSQLConnector implements DatabaseInterface {
     }
 
     @Override
-    public void insertMaster(MasterEntity _me) {
+    public void insertMaster(MasterEntity _me) throws SQLException {
+        insMaster.setInt(1, Integer.parseInt(_me.getId()));
+        insMaster.setInt(2, Integer.parseInt(_me.getYear()));
+        insMaster.setString(3, _me.getDataQuality().toString());
+        insMaster.setString(4, _me.getTitle());// title
+        insMaster.setInt(5, Integer.parseInt(_me.getMainRelease()));
 
+        for(String genre: _me.getGenres()) {
+            insMasterGenres.setInt(1, Integer.parseInt(_me.getId()));
+            insMasterGenres.setString(2, genre);
+            insMasterGenres.addBatch();
+        }
+
+        for(String style: _me.getStyles()) {
+            insMasterStyles.setInt(1, Integer.parseInt(_me.getId()));
+            insMasterStyles.setString(2, style);
+            insMasterStyles.addBatch();
+        }
+
+        for(Image i: _me.getImages()) {
+            insMasterImages.setString(1, i.getUri());
+            insMasterImages.setString(2, i.getUri150());
+            insMasterImages.setString(3, i.getType().toString());
+            insMasterImages.setInt(4, i.getWidth());
+            insMasterImages.setInt(5, i.getHeight());
+            insMasterImages.addBatch();
+
+            insImagesOfMaster.setString(1, i.getUri());
+            insImagesOfMaster.setInt(2, Integer.parseInt(_me.getId()));
+            insImagesOfMaster.addBatch();
+        }
+
+        for(MasterArtist ma: _me.getArtists()) {
+            insMasterArtist.setInt(1, ma.getId());
+            insMasterArtist.setString(2, ma.getName());
+            insMasterArtist.setString(3, ma.getRole());
+            insMasterArtist.setString(4, ma.getJoin());
+            insMasterArtist.setString(5, ma.getAnv());
+            insMasterArtist.addBatch();
+
+            insMasterArtistPerforms.setInt(1, Integer.parseInt(_me.getId()));
+            insMasterArtistPerforms.setInt(2, ma.getId());
+            insMasterArtistPerforms.addBatch();
+        }
     }
 
     @Override
-    public void insertRelease(ReleaseEntity _re) {
+    public void insertRelease(ReleaseEntity _re) throws SQLException {
+        insRelease.setInt(1, Integer.parseInt(_re.getId()));
+        insRelease.setString(2, _re.getReleased());
+        insRelease.setString(3, _re.getCountry());
+        insRelease.setString(4, _re.getNotes());
+        insRelease.setString(5, _re.getStatus());
+        insRelease.setString(6, _re.getTitle());
+        insRelease.setString(7, _re.getDataQuality().toString());
 
+        for(String genre: _re.getGenres()) {
+            insReleaseGenres.setInt(1, Integer.parseInt(_re.getId()));
+            insReleaseGenres.setString(2, genre);
+            insReleaseGenres.addBatch();
+        }
+
+        for(String style: _re.getStyles()) {
+            insReleaseStyles.setInt(1, Integer.parseInt(_re.getId()));
+            insReleaseStyles.setString(2, style);
+            insReleaseStyles.addBatch();
+        }
+
+        for(ReleaseArtist ra: _re.getArtists()) {
+            insReleaseArtist.setInt(1, ra.getId());
+            insReleaseArtist.setString(2, ra.getName());
+            insReleaseArtist.setString(3, ra.getRole());
+            insReleaseArtist.setString(4, ra.getAnv());
+            insReleaseArtist.setString(5, ra.getJoin());
+            insReleaseArtist.addBatch();
+
+            insArtistOfRelease.setInt(1, Integer.parseInt(_re.getId()));
+            insArtistOfRelease.setInt(2, ra.getId());
+            insArtistOfRelease.addBatch();
+        }
+
+        for(ReleaseExtraArtist rea: _re.getExtraArtists()) {
+            insReleaseExtraartist.setInt(1, rea.getId());
+            insReleaseExtraartist.setString(2, rea.getName());
+            insReleaseExtraartist.setString(3, rea.getRole());
+            insReleaseExtraartist.setString(4, rea.getAnv());
+            insReleaseExtraartist.setString(5, rea.getJoin());
+            insReleaseExtraartist.addBatch();
+
+            insExtraartistOfRelease.setInt(1, Integer.parseInt(_re.getId()));
+            insExtraartistOfRelease.setInt(2, rea.getId());
+            insExtraartistOfRelease.addBatch();
+        }
+
+        for(ReleaseIdentifier ri: _re.getIdentifiers()) {
+            insReleaseIdentifier.setString(1, ri.getValue());
+            insReleaseIdentifier.setString(2, ri.getType());
+            insReleaseIdentifier.setString(3, ri.getDescription());
+            insReleaseIdentifier.addBatch();
+
+            insIdentifies.setInt(1, Integer.parseInt(_re.getId()));
+            insIdentifies.setString(2, ri.getValue());
+            insIdentifies.addBatch();
+        }
+
+        for(ReleaseVideo rv: _re.getVideos()) {
+            insReleaseVideo.setString(1, rv.getSrc());
+            insReleaseVideo.setString(2, rv.getDuration());
+            insReleaseVideo.setString(3, rv.getDescription());
+            insReleaseVideo.setString(4, rv.getTitle());
+            insReleaseVideo.setBoolean(5, rv.getEmbed());
+            insReleaseVideo.addBatch();
+
+            insVideoOfRelease.setInt(1, Integer.parseInt(_re.getId()));
+            insVideoOfRelease.setString(2, rv.getSrc());
+            insVideoOfRelease.addBatch();
+        }
+
+        for(ReleaseCompany rc: _re.getCompanies()) {
+            insReleaseCompany.setInt(1, Integer.parseInt(rc.getId()));
+            insReleaseCompany.setString(2, rc.getResourceUrl());
+            insReleaseCompany.setString(3, rc.getName());
+            insReleaseCompany.setString(4, rc.getEntityType());
+            insReleaseCompany.setString(5, rc.getEntityTypeValue());
+            insReleaseCompany.setString(6, rc.getCatno());
+            insReleaseCompany.addBatch();
+
+            insCompanyOfRelease.setInt(1, Integer.parseInt(_re.getId()));
+            insCompanyOfRelease.setInt(2, Integer.parseInt(rc.getId()));
+            insCompanyOfRelease.addBatch();
+        }
+
+        for(Image i: _re.getImages()) {
+            insReleaseImage.setString(1, i.getUri());
+            insReleaseImage.setString(2, i.getUri150());
+            insReleaseImage.setString(3, i.getType().toString());
+            insReleaseImage.setInt(4, i.getWidth());
+            insReleaseImage.setInt(5, i.getHeight());
+            insReleaseImage.addBatch();
+
+            insImageOfRelease.setString(1, i.getUri());
+            insImageOfRelease.setInt(2, Integer.parseInt(_re.getId()));
+            insImageOfRelease.addBatch();
+        }
+
+        for(ReleaseLabel rl: _re.getLabels()) {
+            insReleaseLabel.setInt(1, Integer.parseInt(rl.getId()));
+            insReleaseLabel.setString(2, rl.getCatno());
+            insReleaseLabel.setString(3, rl.getName());
+            insReleaseLabel.addBatch();
+
+            insLabelOfRelease.setInt(1, Integer.parseInt(rl.getId()));
+            insLabelOfRelease.setInt(2, Integer.parseInt(_re.getId()));
+            insLabelOfRelease.addBatch();
+        }
+        // TODO!
     }
 }
