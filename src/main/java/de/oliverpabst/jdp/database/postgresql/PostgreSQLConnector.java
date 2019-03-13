@@ -22,6 +22,13 @@ public class PostgreSQLConnector implements DatabaseInterface {
 
     private Connection con;
 
+    private Integer artistCounter = 0;
+    private Integer labelCounter = 0;
+    private Integer masterCounter = 0;
+    private Integer releaseCounter = 0;
+
+    private Integer insertTrigger = 250;
+
     // ArtistEntity
     private PreparedStatement insArtist;
     private PreparedStatement insArtistNameVariations;
@@ -95,6 +102,62 @@ public class PostgreSQLConnector implements DatabaseInterface {
     }
 
     @Override
+    public void executeAllBatchs() throws SQLException {
+        executeArtistBatchs();
+        executeLabelBatchs();
+        executeMasterBatchs();
+        executeReleaseBatchs();
+    }
+
+    public void executeArtistBatchs() throws SQLException {
+        insArtist.executeBatch();
+        insArtistNameVariations.executeBatch();
+        insArtistAlias.executeBatch();
+        insAliasOfArtist.executeBatch();
+        insArtistImage.executeBatch();
+        insImageOfArtist.executeBatch();
+    }
+
+    public void executeLabelBatchs() throws SQLException {
+        insLabel.executeBatch();
+        insLabelUrls.executeBatch();
+        insSublabel.executeBatch();
+        insSublabelOf.executeBatch();
+        insLabelImages.executeBatch();
+        insImageOfLabel.executeBatch();
+    }
+
+    public void executeMasterBatchs() throws SQLException {
+        insMaster.executeBatch();
+        insMasterStyles.executeBatch();
+        insMasterGenres.executeBatch();
+        insMasterImages.executeBatch();
+        insImagesOfMaster.executeBatch();
+        insMasterArtist.executeBatch();
+        insMasterArtistPerforms.executeBatch();
+    }
+
+    public void executeReleaseBatchs() throws SQLException {
+        insRelease.executeBatch();
+        insReleaseStyles.executeBatch();
+        insReleaseGenres.executeBatch();
+        insReleaseArtist.executeBatch();
+        insArtistOfRelease.executeBatch();
+        insReleaseExtraartist.executeBatch();
+        insExtraartistOfRelease.executeBatch();
+        insReleaseIdentifier.executeBatch();
+        insIdentifies.executeBatch();
+        insReleaseVideo.executeBatch();
+        insVideoOfRelease.executeBatch();
+        insReleaseCompany.executeBatch();
+        insCompanyOfRelease.executeBatch();
+        insReleaseImage.executeBatch();
+        insImageOfRelease.executeBatch();
+        insReleaseLabel.executeBatch();
+        insLabelOfRelease.executeBatch();
+    }
+
+    @Override
     public void setupPreparedStatements() throws SQLException {
         // ArtistEntity
         insArtist = con.prepareStatement("INSERT INTO discogs.artist (id, name, realname, data_quality, profile) VALUES (?, ?, ?, ?, ?)");
@@ -140,9 +203,6 @@ public class PostgreSQLConnector implements DatabaseInterface {
 
     @Override
     public void insertArtist(ArtistEntity _ae) throws SQLException {
-        // Find a way to make a batch insert -> not all data can be stored
-        // Maybe execute batch every 100 objects
-        // TODO: last execute of batch statement when the end of the parsed document is reached -> expose a method to execute the batch statement
         insArtist.setInt(1, _ae.getId());
         insArtist.setString(2, _ae.getName());
         insArtist.setString(3, _ae.getRealName());
@@ -185,6 +245,11 @@ public class PostgreSQLConnector implements DatabaseInterface {
 
         insArtistImage.executeBatch();
         insImageOfArtist.executeBatch();
+
+        artistCounter++;
+        if(artistCounter % insertTrigger == 0) {
+            executeArtistBatchs();
+        }
     }
 
     @Override
@@ -223,6 +288,11 @@ public class PostgreSQLConnector implements DatabaseInterface {
             insImageOfLabel.setString(1, i.getUri());
             insImageOfLabel.setInt(2, _le.getId());
             insImageOfLabel.addBatch();
+        }
+
+        labelCounter++;
+        if(labelCounter % insertTrigger == 0) {
+            executeLabelBatchs();
         }
     }
 
@@ -270,6 +340,11 @@ public class PostgreSQLConnector implements DatabaseInterface {
             insMasterArtistPerforms.setInt(1, Integer.parseInt(_me.getId()));
             insMasterArtistPerforms.setInt(2, ma.getId());
             insMasterArtistPerforms.addBatch();
+        }
+
+        masterCounter++;
+        if(masterCounter % insertTrigger == 0) {
+            executeMasterBatchs();
         }
     }
 
@@ -382,6 +457,11 @@ public class PostgreSQLConnector implements DatabaseInterface {
             insLabelOfRelease.setInt(2, Integer.parseInt(_re.getId()));
             insLabelOfRelease.addBatch();
         }
-        // TODO!
+
+
+        releaseCounter++;
+        if(releaseCounter % insertTrigger == 0) {
+            executeReleaseBatchs();
+        }
     }
 }

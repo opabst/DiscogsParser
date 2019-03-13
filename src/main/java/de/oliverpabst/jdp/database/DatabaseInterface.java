@@ -22,6 +22,16 @@ public interface DatabaseInterface {
 
     public void disconnect();
 
+    public void executeAllBatchs() throws SQLException;
+
+    public void executeArtistBatchs() throws SQLException;
+
+    public void executeLabelBatchs() throws SQLException;
+
+    public void executeMasterBatchs() throws SQLException;
+
+    public void executeReleaseBatchs() throws SQLException;
+
     /**
      * Prepare all statements that are required to insert the *Entity objects in the database
      */

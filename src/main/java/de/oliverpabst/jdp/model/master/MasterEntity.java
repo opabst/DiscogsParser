@@ -17,7 +17,7 @@ public class MasterEntity {
     private ArrayList<String> genres;
     private ArrayList<String> styles;
 
-    private Integer year;
+    private String year;
     private String title;
     private DataQuality dataQuality;
 
@@ -88,18 +88,22 @@ public class MasterEntity {
 
     public void setYear(String _year) {
         if(_year.length() > 0) {
-            year = Integer.parseInt(_year);
+            year = _year;
         } else {
-            year = 0;
+            year = "0";
         }
     }
 
-    public Integer getYear() {
+    public String getYear() {
         return year;
     }
 
     public void setTitle(String _title) {
         title = _title;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public void setDataQuality(String _quality) {
