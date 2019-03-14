@@ -128,6 +128,7 @@ public class ArtistParser {
                     } else if (xmlParser.getLocalName().equals("namevariations")) {
                         namevariations = true;
                     } else if (xmlParser.getLocalName().equals("aliases")) {
+                        aa.setAliasID(xmlParser.getAttributeValue(null, "id"));
                         aliases = true;
                     }
                     break;
