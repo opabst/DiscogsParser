@@ -10,6 +10,7 @@ import de.oliverpabst.jdp.parser.ReleaseParser;
 import org.apache.commons.cli.*;
 
 import java.io.File;
+import java.sql.SQLException;
 
 public class DiscogsParser {
     public static void main(String[] args) {
@@ -59,13 +60,22 @@ public class DiscogsParser {
             PostgreSQLConnector.getInstance().connect(cParams);
         } catch (SchemaDoesNotExistException e) {
             System.err.println(e.getMessage());
-        } finally {
             System.exit(1); // Exit because db schema does not exist in the specified database
+        } finally {
+
+        }
+
+        try {
+            PostgreSQLConnector.getInstance().setupPreparedStatements();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         ArtistParser ap = new ArtistParser(artistsFile);
         LabelParser lp = new LabelParser(labelsFile);
         MasterParser mp = new MasterParser(mastersFile);
         ReleaseParser rp = new ReleaseParser(releasesFile);
+
+        PostgreSQLConnector.getInstance().disconnect();
     }
 }

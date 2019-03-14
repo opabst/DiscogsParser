@@ -86,7 +86,7 @@ public class PostgreSQLConnector implements DatabaseInterface {
             con = DriverManager.getConnection(url, _parameters.getUsername(), _parameters.getPassword());
 
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT schema_name FROM information.schemata WHERE schema_name = 'discogs'");
+            ResultSet rs = stmt.executeQuery("SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'discogs'");
             if(!rs.next()) {
                 // Schema does not exist!
                 throw new SchemaDoesNotExistException("Schema 'discogs' does not exist. Create schema before proceeding!");
