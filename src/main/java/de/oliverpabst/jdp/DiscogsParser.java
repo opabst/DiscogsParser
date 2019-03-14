@@ -59,6 +59,7 @@ public class DiscogsParser {
             PostgreSQLConnector.getInstance().connect(cParams);
         } catch (SchemaDoesNotExistException e) {
             System.err.println(e.getMessage());
+        } finally {
             System.exit(1); // Exit because db schema does not exist in the specified database
         }
 

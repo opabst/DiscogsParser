@@ -1,1 +1,1 @@
-DROP SCHEMA discogs;
+DROP SCHEMA discogs CASCADE;

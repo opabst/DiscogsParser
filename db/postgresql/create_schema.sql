@@ -1,4 +1,4 @@
-CREATE OR REPLACE SCHEMA discogs;
+CREATE SCHEMA discogs;
 
 --------------------------------------------------------------------------------
 -- ArtistEntity
@@ -10,7 +10,7 @@ CREATE TABLE discogs.artist (
 	realname TEXT,
 	data_quality TEXT,
 	profile TEXT);
-// TODO: add check clause for dataquality
+-- TODO: add check clause for dataquality
 
 CREATE TABLE discogs.artist_namevariations (
 	id INTEGER,
@@ -40,7 +40,7 @@ CREATE TABLE discogs.artist_image (
 	type TEXT,
 	width INTEGER,
 	height INTEGER);
-// NOTE: the URIs are empty, so no suitable primary key can be selected!
+-- NOTE: the URIs are empty, so no suitable primary key can be selected!
 
 CREATE TABLE discogs.image_of_artist (
 	id INTEGER,
@@ -68,7 +68,7 @@ ALTER TABLE discogs.label_urls ADD FOREIGN KEY (id) REFERENCES discogs.label(id)
 CREATE TABLE discogs.sublabel (
 	id INTEGER,
 	name TEXT);
-ALTER TABLE discogs.sublabel ADD PRIMARY KEY (id, name);
+ALTER TABLE discogs.sublabel ADD PRIMARY KEY (id);
 
 CREATE TABLE discogs.sublabel_of (
 	label_id INTEGER,
@@ -84,6 +84,7 @@ CREATE TABLE discogs.label_images (
 	type TEXT,
 	width INTEGER,
 	height INTEGER);
+ALTER TABLE discogs.label_images ADD PRIMARY KEY (uri);
 	
 CREATE TABLE discogs.image_of_label (
 	uri TEXT,
@@ -106,32 +107,32 @@ CREATE TABLE discogs.master_styles (
 	id INTEGER,
 	style TEXT);
 ALTER TABLE discogs.master_styles ADD PRIMARY KEY (id, style);
-ALTER TABLE discogs.master_styles ADD FOREIGN KEY (id) REFERENCES discogs.master_styles(id);
+ALTER TABLE discogs.master_styles ADD FOREIGN KEY (id) REFERENCES discogs.master(id);
 
 CREATE TABLE discogs.master_genres (
 	id INTEGER,
 	genre TEXT);
 ALTER TABLE discogs.master_genres ADD PRIMARY KEY (id, genre);
-ALTER TABLE discogs.master_genres ADD FOREIGN KEY (id) REFERENCES discogs.master_genres(id);
+ALTER TABLE discogs.master_genres ADD FOREIGN KEY (id) REFERENCES discogs.master(id);
 
 CREATE TABLE discogs.master_images (
-	uri TEXT,
+	uri TEXT PRIMARY KEY,
 	uri150 TEXT,
 	type TEXT,
 	width INTEGER,
-	height INTEGER);
+	height INTEGER);	
 	
 CREATE TABLE discogs.images_of_master (
 	uri TEXT,
 	master_id INTEGER);
-ALTER TABLE discogs.images_of_master ADD FOREIGN KEY (label_id) REFERENCES discogs.master(id);
+ALTER TABLE discogs.images_of_master ADD FOREIGN KEY (master_id) REFERENCES discogs.master(id);
 ALTER TABLE discogs.images_of_master ADD FOREIGN KEY (uri) REFERENCES discogs.master_images(uri);
 
 CREATE TABLE discogs.master_artist (
 	id INTEGER PRIMARY KEY,
 	name TEXT,
 	role TEXT,
-	join TEXT,
+	join_att TEXT,
 	anv TEXT);
 	
 CREATE TABLE discogs.master_artist_performs(
@@ -162,15 +163,15 @@ ALTER TABLE discogs.release_styles ADD FOREIGN KEY (id) REFERENCES discogs.relea
 CREATE TABLE discogs.release_genres (
 	id INTEGER,
 	genre TEXT);
-ALTER TABLE discogs.release_genres ADD PRIMARY KEY (id, style);
+ALTER TABLE discogs.release_genres ADD PRIMARY KEY (id, genre);
 ALTER TABLE discogs.release_genres ADD FOREIGN KEY (id) REFERENCES discogs.release(id);
 
 CREATE TABLE discogs.release_artist (
 	id INTEGER PRIMARY KEY,
 	name TEXT,
 	role TEXT,
-	anv TEXT,
-	join TEXT);
+	join_att TEXT,
+	anv TEXT);
 	
 CREATE TABLE discogs.artist_of_release (
 	release_id INTEGER,
@@ -183,8 +184,8 @@ CREATE TABLE discogs.release_extraartist (
 	id INTEGER PRIMARY KEY,
 	name TEXT,
 	role TEXT,
-	anv TEXT,
-	join TEXT);
+	join_att TEXT,
+	anv TEXT);
 
 CREATE TABLE discogs.extraartist_of_release (
 	release_id INTEGER,
