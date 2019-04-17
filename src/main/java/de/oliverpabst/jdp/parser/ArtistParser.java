@@ -113,11 +113,11 @@ public class ArtistParser {
                         ae.addImage(image);
                     } else if (xmlParser.getLocalName().equals("id")) {
                         id = true;
-                    } else if (xmlParser.getLocalName().equals("name")) {
+                    } else if (xmlParser.getLocalName().equals("name") && !aliases) {
                         name = true;
                     } else if (xmlParser.getLocalName().equals("name") && aliases) {
                         aa = new ArtistAlias();
-                        aa.setAliasID(xmlParser.getAttributeValue(0));
+                        aa.setAliasID(xmlParser.getAttributeValue(null, "id"));
                         name = true;
                     } else if (xmlParser.getLocalName().equals("realname")) {
                         realname = true;
@@ -128,7 +128,7 @@ public class ArtistParser {
                     } else if (xmlParser.getLocalName().equals("namevariations")) {
                         namevariations = true;
                     } else if (xmlParser.getLocalName().equals("aliases")) {
-                        aa.setAliasID(xmlParser.getAttributeValue(null, "id"));
+                        //aa.setAliasID(xmlParser.getAttributeValue(null, "id")); //TODO: should not work as there is no id attribute at an alias element
                         aliases = true;
                     }
                     break;
