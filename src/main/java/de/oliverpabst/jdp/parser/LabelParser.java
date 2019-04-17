@@ -89,7 +89,7 @@ public class LabelParser {
                     String startElem = xmlParser.getLocalName();
                     if (xmlParser.getLocalName().equals("labels")) {
                         labels = true;
-                    } else if (xmlParser.getLocalName().equals("label")) {
+                    } else if (labels && xmlParser.getLocalName().equals("label")) {
                         label = true;
                         le = new LabelEntity();
                     } else if (xmlParser.getLocalName().equals("images")) {
@@ -110,15 +110,15 @@ public class LabelParser {
                         contactinfo = true;
                     } else if (xmlParser.getLocalName().equals("profile")) {
                         profile = true;
-                    } else if (xmlParser.getLocalName().equals("dataquality")) {
+                    } else if (xmlParser.getLocalName().equals("data_quality")) {
                         dataquality = true;
                     } else if (xmlParser.getLocalName().equals("urls")) {
                         urls = true;
-                    } else if (xmlParser.getLocalName().equals("url")) {
+                    } else if (urls && xmlParser.getLocalName().equals("url")) {
                         url = true;
                     } else if (xmlParser.getLocalName().equals("sublabels")) {
                         sublabels = true;
-                    } else if (xmlParser.getLocalName().equals("sublabel")) {
+                    } else if (sublabels && xmlParser.getLocalName().equals("sublabel")) {
                         sublabel = true;
                         ls = new LabelSublabel();
                         ls.setSublabelID(xmlParser.getAttributeValue(0));
@@ -147,14 +147,14 @@ public class LabelParser {
                 case XMLStreamConstants.END_ELEMENT:
                     if (xmlParser.getLocalName().equals("labels")) {
                         labels = false;
-                    } else if (xmlParser.getLocalName().equals("label")) {
+                    } else if (labels && xmlParser.getLocalName().equals("label")) {
                         label = false;
                         try {
                             PostgreSQLConnector.getInstance().insertLabel(le);
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
-                    } else if (xmlParser.getLocalName().equals("sublabel")) {
+                    } else if (sublabels && xmlParser.getLocalName().equals("sublabel")) {
                         le.addSublabel(ls);
                         sublabel = false;
                     } else if (xmlParser.getLocalName().equals("name")) {
@@ -163,14 +163,17 @@ public class LabelParser {
                         sublabels = false;
                     } else if (xmlParser.getLocalName().equals("profile")) {
                         profile = false;
+                    } else if (xmlParser.getLocalName().equals("data_quality")) {
+                        dataquality = false;
                     } else if (xmlParser.getLocalName().equals("images")) {
                         images = false;
+                    } else if (urls && xmlParser.getLocalName().equals("url")) {
+                        url = false;
                     } else if (xmlParser.getLocalName().equals("urls")) {
                         urls = false;
                     } else if (xmlParser.getLocalName().equals("id")) {
                         id = false;
                     }
-
                     break;
                 default:
                     break;
