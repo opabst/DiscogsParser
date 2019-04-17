@@ -25,7 +25,7 @@ public class PostgreSQLConnector implements DatabaseInterface {
     private Integer masterCounter = 0;
     private Integer releaseCounter = 0;
 
-    private Integer insertTrigger = 250;
+    private Integer insertTrigger = 50000;
 
     // ArtistEntity
     private PreparedStatement insArtist;
@@ -112,6 +112,7 @@ public class PostgreSQLConnector implements DatabaseInterface {
         executeLabelBatchs();
         executeMasterBatchs();
         executeReleaseBatchs();
+        con.setAutoCommit(true);
     }
 
     public void executeArtistBatchs() throws SQLException {
@@ -164,46 +165,47 @@ public class PostgreSQLConnector implements DatabaseInterface {
 
     @Override
     public void setupPreparedStatements() throws SQLException {
+        con.setAutoCommit(false);
         // ArtistEntity
-        insArtist = con.prepareStatement("INSERT INTO discogs.artist (id, name, realname, data_quality, profile) VALUES (?, ?, ?, ?, ?)");
-        insArtistNameVariations = con.prepareStatement("INSERT INTO discogs.artist_namevariations (id, name_variation) VALUES (?, ?)");
-        insArtistAlias = con.prepareStatement("INSERT INTO discogs.artist_alias (id, alias) VALUES (?, ?");
-        insAliasOfArtist = con.prepareStatement("INSERT INTO discogs.alias_of_artist(artist_id, alias_id, alias_name) VALUES (?, ?, ?");
-        insArtistImage = con.prepareStatement("INSERT INTO discogs.artist_image (uri, uri150, type, width, height) VALUES (?, ?, ?, ?, ?)");
-        insImageOfArtist = con.prepareStatement("INSERT INTO discogs.image_of_artist (id, uri) VALUES (?, ?)");
+        insArtist = con.prepareStatement("INSERT INTO discogs.artist_import (id, name, realname, data_quality, profile) VALUES (?, ?, ?, ?, ?)");
+        insArtistNameVariations = con.prepareStatement("INSERT INTO discogs.artist_namevariations_import (id, name_variation) VALUES (?, ?)");
+        insArtistAlias = con.prepareStatement("INSERT INTO discogs.artist_alias_import (id, alias) VALUES (?, ?)");
+        insAliasOfArtist = con.prepareStatement("INSERT INTO discogs.alias_of_artist_import(artist_id, alias_id, alias_name) VALUES (?, ?, ?)");
+        insArtistImage = con.prepareStatement("INSERT INTO discogs.artist_image_import (uri, uri150, type, width, height) VALUES (?, ?, ?, ?, ?)");
+        insImageOfArtist = con.prepareStatement("INSERT INTO discogs.image_of_artist_import (id, uri) VALUES (?, ?)");
         // LabelEntity
-        insLabel = con.prepareStatement("INSERT INTO discogs.label (id, name, contactinfo, profile, data_quality) VALUES (?, ?, ?, ?, ?)");
-        insLabelUrls = con.prepareStatement("INSERT INTO discogs.label_urls (id, url) VALUES (?, ?)");
-        insSublabel = con.prepareStatement("INSERT INTO discogs.sublabel (id, name) VALUES (?, ?)");
-        insSublabelOf = con.prepareStatement("INSERT INTO discogs.sublabel_of (label_id, sublabel_id) VALUES (?, ?)");
-        insLabelImages = con.prepareStatement("INSERT INTO discogs.label_images (uri, uri150, type, width, height) VALUES (?, ?, ?, ?, ?)");
-        insImageOfLabel = con.prepareStatement("INSERT INTO discogs.image_of_labels (uri, label_id) VALUES (?, ?)");
+        insLabel = con.prepareStatement("INSERT INTO discogs.label_import (id, name, contactinfo, profile, data_quality) VALUES (?, ?, ?, ?, ?)");
+        insLabelUrls = con.prepareStatement("INSERT INTO discogs.label_urls_import (id, url) VALUES (?, ?)");
+        insSublabel = con.prepareStatement("INSERT INTO discogs.sublabel_import (id, name) VALUES (?, ?)");
+        insSublabelOf = con.prepareStatement("INSERT INTO discogs.sublabel_of_import (label_id, sublabel_id) VALUES (?, ?)");
+        insLabelImages = con.prepareStatement("INSERT INTO discogs.label_images_import (uri, uri150, type, width, height) VALUES (?, ?, ?, ?, ?)");
+        insImageOfLabel = con.prepareStatement("INSERT INTO discogs.image_of_labels_import (uri, label_id) VALUES (?, ?)");
         // MasterEntity
-        insMaster = con.prepareStatement("INSERT INTO discogs.master (id, year, data_quality, title, main_release) VALUES (?, ?, ?, ?, ?)");
-        insMasterStyles = con.prepareStatement("INSERT INTO discogs.master_styles (id, style) VALUES (?, ?)");
-        insMasterGenres = con.prepareStatement("INSERT INTO discogs.master_genres (id, genre) VALUES (?, ?)");
-        insMasterImages = con.prepareStatement("INSERT INTO discogs.master_images (uri, uri150, type, width, height) VALUES (?, ?, ?, ?, ?)");
-        insImagesOfMaster = con.prepareStatement("INSERT INTO discogs.images_of_master (uri, master_id) VALUES (?, ?)");
-        insMasterArtist = con.prepareStatement("INSERT INTO discogs.master_artist (id, name, role, join, anv) VALUES (?, ?, ?, ?, ?)");
-        insMasterArtistPerforms = con.prepareStatement("INSERT INTO discogs.master_artist_performs (master_id, artist_id) VALUES (?, ?)");
+        insMaster = con.prepareStatement("INSERT INTO discogs.master_import (id, year, data_quality, title, main_release) VALUES (?, ?, ?, ?, ?)");
+        insMasterStyles = con.prepareStatement("INSERT INTO discogs.master_styles_import (id, style) VALUES (?, ?)");
+        insMasterGenres = con.prepareStatement("INSERT INTO discogs.master_genres_import (id, genre) VALUES (?, ?)");
+        insMasterImages = con.prepareStatement("INSERT INTO discogs.master_images_import (uri, uri150, type, width, height) VALUES (?, ?, ?, ?, ?)");
+        insImagesOfMaster = con.prepareStatement("INSERT INTO discogs.images_of_master_import (uri, master_id) VALUES (?, ?)");
+        insMasterArtist = con.prepareStatement("INSERT INTO discogs.master_artist_import (id, name, role, join, anv) VALUES (?, ?, ?, ?, ?)");
+        insMasterArtistPerforms = con.prepareStatement("INSERT INTO discogs.master_artist_performs_import (master_id, artist_id) VALUES (?, ?)");
         // ReleaseEntity
-        insRelease = con.prepareStatement("INSERT INTO discogs.release (id, released, country, notes, status, title, data_quality) VALUES (?, ?, ?, ?, ?, ?)");
-        insReleaseStyles = con.prepareStatement("INSERT INTO discogs.release_styles (id, style) VALUES (?. ?)");
-        insReleaseGenres = con.prepareStatement("INSERT INTO discogs.release_genres (id, genre) VALUES (?, ?)");
-        insReleaseArtist = con.prepareStatement("INSERT INTO discogs.release_artist (id, name, role, anv, join) VALUES (?, ?, ?, ?, ?)");
-        insArtistOfRelease = con.prepareStatement("INSERT INTO discogs.artist_of_release (release_id, artist_id) VALUES (?, ?)");
-        insReleaseExtraartist = con.prepareStatement("INSERT INTO discogs.release_extraartist (id, name, role, anv, join) VALUES (?, ?, ?, ?, ?)");
-        insExtraartistOfRelease = con.prepareStatement("INSERT INTO discogs.extraartist_of_release (release_id, artist_id) VALUES (?, ?)");
-        insReleaseIdentifier = con.prepareStatement("INSERT INTO discogs.release_identifier (value, type, description) VALUES (?, ?, ?)");
-        insIdentifies = con.prepareStatement("INSERT INTO discogs.identifies (release_id, identifier_value) VALUES (?, ?");
-        insReleaseVideo = con.prepareStatement("INSERT INTO discogs.release_video (src, duration, description, title, embed) VALUES (?, ?, ?, ?, ?)");
-        insVideoOfRelease = con.prepareStatement("INSERT INTO discogs.video_of_release (release_id, video_src) VALUES (?, ?)");
-        insReleaseCompany = con.prepareStatement("INSERT INTO discogs.release_company (id, resource_url, name, entity_type, entity_type_value, catno) VALUES (?, ?, ?, ?, ?, ?)");
-        insCompanyOfRelease = con.prepareStatement("INSERT INTO discogs.company_of_release (release_id, company_id) VALUES (?, ?)");
-        insReleaseImage = con.prepareStatement("INSERT INTO discogs.release_image (uri, uri150, type, width, heigth) VALUES (?, ?, ?, ?, ?)");
-        insImageOfRelease = con.prepareStatement("INSERT INTO discogs.image_of_release (uri, release_id) VALUES (?, ?)");
-        insReleaseLabel = con.prepareStatement("INSERT INTO discogs.release_label (id, catno, name) VALUES (?, ?, ?)");
-        insLabelOfRelease = con.prepareStatement("INSERT INTO discogs.label_of_release (label_id, release_id) VALUES (?, ?)");
+        insRelease = con.prepareStatement("INSERT INTO discogs.release_import (id, released, country, notes, status, title, data_quality) VALUES (?, ?, ?, ?, ?, ?)");
+        insReleaseStyles = con.prepareStatement("INSERT INTO discogs.release_styles_import (id, style) VALUES (?. ?)");
+        insReleaseGenres = con.prepareStatement("INSERT INTO discogs.release_genres_import (id, genre) VALUES (?, ?)");
+        insReleaseArtist = con.prepareStatement("INSERT INTO discogs.release_artist_import (id, name, role, anv, join) VALUES (?, ?, ?, ?, ?)");
+        insArtistOfRelease = con.prepareStatement("INSERT INTO discogs.artist_of_release_import (release_id, artist_id) VALUES (?, ?)");
+        insReleaseExtraartist = con.prepareStatement("INSERT INTO discogs.release_extraartist_import (id, name, role, anv, join) VALUES (?, ?, ?, ?, ?)");
+        insExtraartistOfRelease = con.prepareStatement("INSERT INTO discogs.extraartist_of_release_import (release_id, artist_id) VALUES (?, ?)");
+        insReleaseIdentifier = con.prepareStatement("INSERT INTO discogs.release_identifier_import (value, type, description) VALUES (?, ?, ?)");
+        insIdentifies = con.prepareStatement("INSERT INTO discogs.identifies_import (release_id, identifier_value) VALUES (?, ?");
+        insReleaseVideo = con.prepareStatement("INSERT INTO discogs.release_video_import (src, duration, description, title, embed) VALUES (?, ?, ?, ?, ?)");
+        insVideoOfRelease = con.prepareStatement("INSERT INTO discogs.video_of_release_import (release_id, video_src) VALUES (?, ?)");
+        insReleaseCompany = con.prepareStatement("INSERT INTO discogs.release_company_import (id, resource_url, name, entity_type, entity_type_value, catno) VALUES (?, ?, ?, ?, ?, ?)");
+        insCompanyOfRelease = con.prepareStatement("INSERT INTO discogs.company_of_release_import (release_id, company_id) VALUES (?, ?)");
+        insReleaseImage = con.prepareStatement("INSERT INTO discogs.release_image_import (uri, uri150, type, width, heigth) VALUES (?, ?, ?, ?, ?)");
+        insImageOfRelease = con.prepareStatement("INSERT INTO discogs.image_of_release_import (uri, release_id) VALUES (?, ?)");
+        insReleaseLabel = con.prepareStatement("INSERT INTO discogs.release_label_import (id, catno, name) VALUES (?, ?, ?)");
+        insLabelOfRelease = con.prepareStatement("INSERT INTO discogs.label_of_release_import (label_id, release_id) VALUES (?, ?)");
     }
 
     @Override
@@ -254,6 +256,7 @@ public class PostgreSQLConnector implements DatabaseInterface {
         artistCounter++;
         if(artistCounter % insertTrigger == 0) {
             executeArtistBatchs();
+            con.commit();
         }
     }
 
@@ -298,6 +301,7 @@ public class PostgreSQLConnector implements DatabaseInterface {
         labelCounter++;
         if(labelCounter % insertTrigger == 0) {
             executeLabelBatchs();
+            con.commit();
         }
     }
 
@@ -350,6 +354,7 @@ public class PostgreSQLConnector implements DatabaseInterface {
         masterCounter++;
         if(masterCounter % insertTrigger == 0) {
             executeMasterBatchs();
+            con.commit();
         }
     }
 
@@ -467,6 +472,7 @@ public class PostgreSQLConnector implements DatabaseInterface {
         releaseCounter++;
         if(releaseCounter % insertTrigger == 0) {
             executeReleaseBatchs();
+            con.commit();
         }
     }
 }
