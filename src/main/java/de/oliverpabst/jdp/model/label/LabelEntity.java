@@ -8,10 +8,10 @@ import java.util.ArrayList;
 public class LabelEntity {
 
     private String name;
-    private String contactinfo;
+    private StringBuilder contactinfo;
     private ArrayList<Image> images;
     private String id;
-    private String profile;
+    private StringBuilder profile;
     private DataQuality dataQuality;
     private ArrayList<String> urls;
     private ArrayList<LabelSublabel> sublabels;
@@ -20,6 +20,8 @@ public class LabelEntity {
         images = new ArrayList<>();
         urls = new ArrayList<>();
         sublabels = new ArrayList<>();
+        contactinfo = new StringBuilder();
+        profile = new StringBuilder();
     }
 
     public String getName() {
@@ -31,11 +33,11 @@ public class LabelEntity {
     }
 
     public String getContactinfo() {
-        return contactinfo;
+        return contactinfo.toString();
     }
 
     public void setContactinfo(String _contactInfo) {
-        contactinfo = _contactInfo;
+        contactinfo.append(_contactInfo);
     }
 
     public ArrayList<Image> getImages() {
@@ -55,11 +57,11 @@ public class LabelEntity {
     }
 
     public String getProfile() {
-        return profile;
+        return profile.toString();
     }
 
     public void setProfile(String _profile) {
-        profile = _profile;
+        profile.append(_profile);
     }
 
     public DataQuality getDataQuality() {
