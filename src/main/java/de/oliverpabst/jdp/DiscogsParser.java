@@ -71,10 +71,10 @@ public class DiscogsParser {
             e.printStackTrace();
         }
 
-        //ArtistParser ap = new ArtistParser(artistsFile);
+        ArtistParser ap = new ArtistParser(artistsFile);
         LabelParser lp = new LabelParser(labelsFile);
-        //MasterParser mp = new MasterParser(mastersFile);
-        //ReleaseParser rp = new ReleaseParser(releasesFile);
+        MasterParser mp = new MasterParser(mastersFile);
+        ReleaseParser rp = new ReleaseParser(releasesFile);
 
         PostgreSQLConnector.getInstance().disconnect();
     }
