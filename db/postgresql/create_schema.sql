@@ -95,7 +95,7 @@ CREATE TABLE discogs.label_images_import (
 	width INTEGER,
 	height INTEGER);
 
-ALTER TABLE discogs.label_images_import ADD PRIMARY KEY (uri);
+--ALTER TABLE discogs.label_images_import ADD PRIMARY KEY (uri);
 	
 CREATE TABLE discogs.image_of_label_import (
 	uri TEXT,
