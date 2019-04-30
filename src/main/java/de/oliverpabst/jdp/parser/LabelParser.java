@@ -89,7 +89,7 @@ public class LabelParser {
                     String startElem = xmlParser.getLocalName();
                     if (xmlParser.getLocalName().equals("labels")) {
                         labels = true;
-                    } else if (labels && xmlParser.getLocalName().equals("label")) {
+                    } else if (labels && !sublabels && xmlParser.getLocalName().equals("label")) {
                         label = true;
                         le = new LabelEntity();
                     } else if (xmlParser.getLocalName().equals("images")) {
@@ -102,23 +102,23 @@ public class LabelParser {
                         String width = xmlParser.getAttributeValue(null, "width");
                         Image image = new Image(height, width, uri, uri150, type);
                         le.addImage(image);
-                    } else if (xmlParser.getLocalName().equals("id")) {
+                    } else if (label && xmlParser.getLocalName().equals("id")) {
                         id = true;
-                    } else if (xmlParser.getLocalName().equals("name")) {
+                    } else if (label && xmlParser.getLocalName().equals("name")) {
                         name = true;
-                    } else if (xmlParser.getLocalName().equals("contactinfo")) {
+                    } else if (label && xmlParser.getLocalName().equals("contactinfo")) {
                         contactinfo = true;
-                    } else if (xmlParser.getLocalName().equals("profile")) {
+                    } else if (label && xmlParser.getLocalName().equals("profile")) {
                         profile = true;
-                    } else if (xmlParser.getLocalName().equals("data_quality")) {
+                    } else if (label && xmlParser.getLocalName().equals("data_quality")) {
                         dataquality = true;
-                    } else if (xmlParser.getLocalName().equals("urls")) {
+                    } else if (label && xmlParser.getLocalName().equals("urls")) {
                         urls = true;
-                    } else if (urls && xmlParser.getLocalName().equals("url")) {
+                    } else if (label && urls && xmlParser.getLocalName().equals("url")) {
                         url = true;
-                    } else if (xmlParser.getLocalName().equals("sublabels")) {
+                    } else if (label && xmlParser.getLocalName().equals("sublabels")) {
                         sublabels = true;
-                    } else if (sublabels && xmlParser.getLocalName().equals("sublabel")) {
+                    } else if (label && sublabels && xmlParser.getLocalName().equals("label")) {
                         sublabel = true;
                         ls = new LabelSublabel();
                         ls.setSublabelID(xmlParser.getAttributeValue(0));
@@ -147,20 +147,22 @@ public class LabelParser {
                 case XMLStreamConstants.END_ELEMENT:
                     if (xmlParser.getLocalName().equals("labels")) {
                         labels = false;
-                    } else if (labels && xmlParser.getLocalName().equals("label")) {
+                    } else if (labels && !sublabels && xmlParser.getLocalName().equals("label")) {
                         label = false;
                         try {
                             PostgreSQLConnector.getInstance().insertLabel(le);
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
-                    } else if (sublabels && xmlParser.getLocalName().equals("sublabel")) {
+                    } else if (sublabels && xmlParser.getLocalName().equals("label")) {
                         le.addSublabel(ls);
                         sublabel = false;
                     } else if (xmlParser.getLocalName().equals("name")) {
                         name = false;
                     } else if (xmlParser.getLocalName().equals("sublabels")) {
                         sublabels = false;
+                    } else if (xmlParser.getLocalName().equals("contactinfo")) {
+                        contactinfo = false;
                     } else if (xmlParser.getLocalName().equals("profile")) {
                         profile = false;
                     } else if (xmlParser.getLocalName().equals("data_quality")) {
