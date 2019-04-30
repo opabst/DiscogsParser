@@ -13,7 +13,7 @@ public class ArtistEntity {
     private String realName;
     private ArrayList<Image> images;
     private String id;
-    private String profile;
+    private StringBuilder profile;
     private DataQuality dataQuality;
     private ArrayList<String> nameVariations;
     private ArrayList<ArtistAlias> aliases;
@@ -57,11 +57,11 @@ public class ArtistEntity {
     }
 
     public String getProfile() {
-        return profile;
+        return profile.toString();
     }
 
     public void setProfile(String _profile) {
-        profile = _profile;
+        profile.append(_profile);
     }
 
     public DataQuality getDataQuality() {
