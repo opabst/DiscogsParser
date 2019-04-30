@@ -7,6 +7,10 @@ import de.oliverpabst.jdp.parser.ArtistParser;
 import de.oliverpabst.jdp.parser.LabelParser;
 import de.oliverpabst.jdp.parser.MasterParser;
 import de.oliverpabst.jdp.parser.ReleaseParser;
+import de.oliverpabst.jdp.thread.ArtistThread;
+import de.oliverpabst.jdp.thread.LabelThread;
+import de.oliverpabst.jdp.thread.MasterThread;
+import de.oliverpabst.jdp.thread.ReleaseThread;
 import org.apache.commons.cli.*;
 
 import java.io.File;
@@ -75,6 +79,20 @@ public class DiscogsParser {
         LabelParser lp = new LabelParser(labelsFile);
         MasterParser mp = new MasterParser(mastersFile);
         ReleaseParser rp = new ReleaseParser(releasesFile);
+
+        /*Thread at = new Thread(new ArtistThread(artistsFile));
+        at.start();
+
+        Thread lt = new Thread(new LabelThread(labelsFile));
+        lt.start();
+
+        Thread mt = new Thread(new MasterThread(mastersFile));
+        mt.start();
+
+        Thread rt = new Thread(new ReleaseThread(releasesFile));
+        rt.start();*/
+
+        System.out.println("Finished parsing");
 
         PostgreSQLConnector.getInstance().disconnect();
     }
