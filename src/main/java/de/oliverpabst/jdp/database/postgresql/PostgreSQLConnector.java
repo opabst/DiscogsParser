@@ -113,6 +113,7 @@ public class PostgreSQLConnector implements DatabaseInterface {
         executeMasterBatchs();
         executeReleaseBatchs();
         con.setAutoCommit(true);
+        con.commit();
     }
 
     public void executeArtistBatchs() throws SQLException {
