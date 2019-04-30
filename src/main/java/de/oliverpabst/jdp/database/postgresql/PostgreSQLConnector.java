@@ -186,15 +186,15 @@ public class PostgreSQLConnector implements DatabaseInterface {
         insMasterGenres = con.prepareStatement("INSERT INTO discogs.master_genres_import (id, genre) VALUES (?, ?)");
         insMasterImages = con.prepareStatement("INSERT INTO discogs.master_images_import (uri, uri150, type, width, height) VALUES (?, ?, ?, ?, ?)");
         insImagesOfMaster = con.prepareStatement("INSERT INTO discogs.images_of_master_import (uri, master_id) VALUES (?, ?)");
-        insMasterArtist = con.prepareStatement("INSERT INTO discogs.master_artist_import (id, name, role, join, anv) VALUES (?, ?, ?, ?, ?)");
+        insMasterArtist = con.prepareStatement("INSERT INTO discogs.master_artist_import (id, name, role, join_att, anv) VALUES (?, ?, ?, ?, ?)");
         insMasterArtistPerforms = con.prepareStatement("INSERT INTO discogs.master_artist_performs_import (master_id, artist_id) VALUES (?, ?)");
         // ReleaseEntity
         insRelease = con.prepareStatement("INSERT INTO discogs.release_import (id, released, country, notes, status, title, data_quality) VALUES (?, ?, ?, ?, ?, ?)");
         insReleaseStyles = con.prepareStatement("INSERT INTO discogs.release_styles_import (id, style) VALUES (?. ?)");
         insReleaseGenres = con.prepareStatement("INSERT INTO discogs.release_genres_import (id, genre) VALUES (?, ?)");
-        insReleaseArtist = con.prepareStatement("INSERT INTO discogs.release_artist_import (id, name, role, anv, join) VALUES (?, ?, ?, ?, ?)");
+        insReleaseArtist = con.prepareStatement("INSERT INTO discogs.release_artist_import (id, name, role, join_att, anv) VALUES (?, ?, ?, ?, ?)");
         insArtistOfRelease = con.prepareStatement("INSERT INTO discogs.artist_of_release_import (release_id, artist_id) VALUES (?, ?)");
-        insReleaseExtraartist = con.prepareStatement("INSERT INTO discogs.release_extraartist_import (id, name, role, anv, join) VALUES (?, ?, ?, ?, ?)");
+        insReleaseExtraartist = con.prepareStatement("INSERT INTO discogs.release_extraartist_import (id, name, role, join_att, anv) VALUES (?, ?, ?, ?, ?)");
         insExtraartistOfRelease = con.prepareStatement("INSERT INTO discogs.extraartist_of_release_import (release_id, artist_id) VALUES (?, ?)");
         insReleaseIdentifier = con.prepareStatement("INSERT INTO discogs.release_identifier_import (value, type, description) VALUES (?, ?, ?)");
         insIdentifies = con.prepareStatement("INSERT INTO discogs.identifies_import (release_id, identifier_value) VALUES (?, ?");
