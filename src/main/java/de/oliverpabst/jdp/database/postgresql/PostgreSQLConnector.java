@@ -179,7 +179,7 @@ public class PostgreSQLConnector implements DatabaseInterface {
         insSublabel = con.prepareStatement("INSERT INTO discogs.sublabel_import (id, name) VALUES (?, ?)");
         insSublabelOf = con.prepareStatement("INSERT INTO discogs.sublabel_of_import (label_id, sublabel_id) VALUES (?, ?)");
         insLabelImages = con.prepareStatement("INSERT INTO discogs.label_images_import (uri, uri150, type, width, height) VALUES (?, ?, ?, ?, ?)");
-        insImageOfLabel = con.prepareStatement("INSERT INTO discogs.image_of_labels_import (uri, label_id) VALUES (?, ?)");
+        insImageOfLabel = con.prepareStatement("INSERT INTO discogs.image_of_label_import (uri, label_id) VALUES (?, ?)");
         // MasterEntity
         insMaster = con.prepareStatement("INSERT INTO discogs.master_import (id, year, data_quality, title, main_release) VALUES (?, ?, ?, ?, ?)");
         insMasterStyles = con.prepareStatement("INSERT INTO discogs.master_styles_import (id, style) VALUES (?, ?)");
