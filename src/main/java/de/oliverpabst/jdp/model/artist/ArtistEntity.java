@@ -22,6 +22,7 @@ public class ArtistEntity {
         images = new ArrayList<>();
         nameVariations = new ArrayList<>();
         aliases = new ArrayList<>();
+        profile = new StringBuilder();
     }
 
     public String getName() {
