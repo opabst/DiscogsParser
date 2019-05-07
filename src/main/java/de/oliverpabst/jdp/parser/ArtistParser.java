@@ -1,6 +1,6 @@
 package de.oliverpabst.jdp.parser;
 
-import de.oliverpabst.jdp.database.postgresql.PostgreSQLConnector;
+import de.oliverpabst.jdp.database.postgresql.ArtistWriter;
 import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.artist.ArtistAlias;
 import de.oliverpabst.jdp.model.artist.ArtistEntity;
@@ -50,7 +50,10 @@ public class ArtistParser {
     private boolean namevariations = false;
     private boolean aliases = false;
 
+    private ArtistWriter writer;
+
     public ArtistParser(File _file) {
+        writer = ArtistWriter.getInstance();
         try {
             parse(_file);
         } catch (XMLStreamException e) {
@@ -161,7 +164,7 @@ public class ArtistParser {
                     } else if (xmlParser.getLocalName().equals("artist")) {
                         artist = false;
                         try {
-                            PostgreSQLConnector.getInstance().insertArtist(ae);
+                            writer.insertArtist(ae);
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
@@ -186,6 +189,12 @@ public class ArtistParser {
             xmlParser.next();
         }
         xmlParser.close();
+        try {
+            writer.finalBatchExecute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        writer.disconnect();
         try {
             is.close();
         } catch (IOException e) {

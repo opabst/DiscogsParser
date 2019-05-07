@@ -1,6 +1,6 @@
 package de.oliverpabst.jdp.parser;
 
-import de.oliverpabst.jdp.database.postgresql.PostgreSQLConnector;
+import de.oliverpabst.jdp.database.postgresql.LabelWriter;
 import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.label.LabelEntity;
 import de.oliverpabst.jdp.model.label.LabelSublabel;
@@ -51,7 +51,10 @@ public class LabelParser {
     private boolean sublabels = false;
     private boolean sublabel = false;
 
+    private LabelWriter writer;
+
     public LabelParser(File _file) {
+        writer = LabelWriter.getInstance();
         try {
             parse(_file);
         } catch (XMLStreamException e) {
@@ -150,7 +153,7 @@ public class LabelParser {
                     } else if (labels && !sublabels && xmlParser.getLocalName().equals("label")) {
                         label = false;
                         try {
-                            PostgreSQLConnector.getInstance().insertLabel(le);
+                            writer.insertLabel(le);
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
@@ -184,6 +187,12 @@ public class LabelParser {
             xmlParser.next();
         }
         xmlParser.close();
+        try {
+            writer.finalBatchExecute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        writer.disconnect();
         try {
             is.close();
         } catch (IOException e) {

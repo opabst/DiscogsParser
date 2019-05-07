@@ -2,11 +2,7 @@ package de.oliverpabst.jdp;
 
 import de.oliverpabst.jdp.database.ConnectionParameters;
 import de.oliverpabst.jdp.database.SchemaDoesNotExistException;
-import de.oliverpabst.jdp.database.postgresql.PostgreSQLConnector;
-import de.oliverpabst.jdp.parser.ArtistParser;
-import de.oliverpabst.jdp.parser.LabelParser;
-import de.oliverpabst.jdp.parser.MasterParser;
-import de.oliverpabst.jdp.parser.ReleaseParser;
+import de.oliverpabst.jdp.database.postgresql.PostgreSQLConnection;
 import de.oliverpabst.jdp.thread.ArtistThread;
 import de.oliverpabst.jdp.thread.LabelThread;
 import de.oliverpabst.jdp.thread.MasterThread;
@@ -17,6 +13,7 @@ import java.io.File;
 import java.sql.SQLException;
 
 public class DiscogsParser {
+    private static ConnectionParameters params;
     public static void main(String[] args) {
         Options options = new Options();
 
@@ -58,10 +55,10 @@ public class DiscogsParser {
         String username = cmdLine.getOptionValue("u");
         String password = cmdLine.getOptionValue("pw");
 
-        ConnectionParameters cParams = new ConnectionParameters(hostname, port, db, username, password);
+        params = new ConnectionParameters(hostname, port, db, username, password);
 
         try {
-            PostgreSQLConnector.getInstance().connect(cParams);
+            PostgreSQLConnection con = new PostgreSQLConnection(DiscogsParser.getConnectionParameters());
         } catch (SchemaDoesNotExistException e) {
             System.err.println(e.getMessage());
             System.exit(1); // Exit because db schema does not exist in the specified database
@@ -69,18 +66,7 @@ public class DiscogsParser {
 
         }
 
-        try {
-            PostgreSQLConnector.getInstance().setupPreparedStatements();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        ArtistParser ap = new ArtistParser(artistsFile);
-        LabelParser lp = new LabelParser(labelsFile);
-        MasterParser mp = new MasterParser(mastersFile);
-        ReleaseParser rp = new ReleaseParser(releasesFile);
-
-        /*Thread at = new Thread(new ArtistThread(artistsFile));
+        Thread at = new Thread(new ArtistThread(artistsFile));
         at.start();
 
         Thread lt = new Thread(new LabelThread(labelsFile));
@@ -90,10 +76,13 @@ public class DiscogsParser {
         mt.start();
 
         Thread rt = new Thread(new ReleaseThread(releasesFile));
-        rt.start();*/
+        rt.start();
 
         System.out.println("Finished parsing");
 
-        PostgreSQLConnector.getInstance().disconnect();
+    }
+
+    public static ConnectionParameters getConnectionParameters() {
+        return params;
     }
 }

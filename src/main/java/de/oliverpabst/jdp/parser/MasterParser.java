@@ -1,6 +1,6 @@
 package de.oliverpabst.jdp.parser;
 
-import de.oliverpabst.jdp.database.postgresql.PostgreSQLConnector;
+import de.oliverpabst.jdp.database.postgresql.MasterWriter;
 import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.master.MasterArtist;
 import de.oliverpabst.jdp.model.master.MasterEntity;
@@ -76,7 +76,10 @@ public class MasterParser {
     private boolean video = false;
     private boolean description = false;
 
+    private MasterWriter writer;
+
     public MasterParser(File _file) {
+        writer = MasterWriter.getInstance();
         try {
             parse(_file);
         } catch (XMLStreamException e) {
@@ -211,7 +214,7 @@ public class MasterParser {
                     } else if (xmlParser.getLocalName().equals("master")) {
                         master = false;
                         try {
-                            PostgreSQLConnector.getInstance().insertMaster(me);
+                            writer.insertMaster(me);
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
@@ -262,6 +265,14 @@ public class MasterParser {
             xmlParser.next();
         }
         xmlParser.close();
+        try {
+            writer.finalBatchExecute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        writer.disconnect();
+
         try {
             is.close();
         } catch (IOException e) {

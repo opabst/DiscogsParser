@@ -10,13 +10,9 @@ public class PostgreSQLConnection {
     private Connection con;
     private ConnectionParameters params;
 
-    public PostgreSQLConnection(ConnectionParameters _params) {
+    public PostgreSQLConnection(ConnectionParameters _params) throws SchemaDoesNotExistException {
         params = _params;
-        try {
-            connect(params);
-        } catch (SchemaDoesNotExistException e) {
-            e.printStackTrace();
-        }
+        connect(params);
     }
 
     private void connect(ConnectionParameters _parameters) throws SchemaDoesNotExistException {
@@ -34,6 +30,10 @@ public class PostgreSQLConnection {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public Connection getConnection() {
+        return con;
     }
 
     public void disconnect() {

@@ -1,7 +1,6 @@
 package de.oliverpabst.jdp.parser;
 
-import de.oliverpabst.jdp.database.DatabaseInterface;
-import de.oliverpabst.jdp.database.postgresql.PostgreSQLConnector;
+import de.oliverpabst.jdp.database.postgresql.ReleaseWriter;
 import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.release.*;
 
@@ -137,7 +136,10 @@ public class ReleaseParser {
     private boolean entityTypeName = false;
     private boolean resourceUrl = false;
 
+    private ReleaseWriter writer;
+
     public ReleaseParser(File _file) {
+        writer = ReleaseWriter.getInstance();
         try {
             parse(_file);
         } catch (XMLStreamException e) {
@@ -385,7 +387,7 @@ public class ReleaseParser {
                     } else if (xmlParser.getLocalName().equals("release")) {
                         release = false;
                         try {
-                            PostgreSQLConnector.getInstance().insertRelease(re);
+                            writer.insertRelease(re);
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
@@ -507,6 +509,12 @@ public class ReleaseParser {
             xmlParser.next();
         }
         xmlParser.close();
+        try {
+            writer.finalBatchExecute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        writer.disconnect();
         try {
             is.close();
         } catch (IOException e) {
