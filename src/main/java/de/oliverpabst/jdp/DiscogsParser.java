@@ -10,10 +10,15 @@ import de.oliverpabst.jdp.thread.ReleaseThread;
 import org.apache.commons.cli.*;
 
 import java.io.File;
-import java.sql.SQLException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class DiscogsParser {
     private static ConnectionParameters params;
+
+    private static ExecutorService pool;
+
     public static void main(String[] args) {
         Options options = new Options();
 
@@ -66,17 +71,31 @@ public class DiscogsParser {
 
         }
 
+        int poolsize = Runtime.getRuntime().availableProcessors();
+        pool = Executors.newFixedThreadPool(poolsize);
+
         Thread at = new Thread(new ArtistThread(artistsFile));
-        at.start();
+        pool.submit(at);
 
         Thread lt = new Thread(new LabelThread(labelsFile));
-        lt.start();
+        pool.submit(lt);
 
         Thread mt = new Thread(new MasterThread(mastersFile));
-        mt.start();
+        pool.submit(mt);
 
         Thread rt = new Thread(new ReleaseThread(releasesFile));
-        rt.start();
+        pool.submit(rt);
+
+        pool.shutdown();
+
+        while(true) {
+            try {
+                if (!!pool.awaitTermination(2, TimeUnit.MINUTES)) break;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Waiting for completion");
+        }
 
         System.out.println("Finished parsing");
 

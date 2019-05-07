@@ -82,7 +82,6 @@ public class ReleaseWriter {
     public void finalBatchExecute() throws SQLException {
         executeReleaseBatchs();
         con.setAutoCommit(true);
-        con.commit();
     }
 
     public void setupPreparedStatements() throws SQLException {

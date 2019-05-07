@@ -62,7 +62,6 @@ public class MasterWriter {
     public void finalBatchExecute() throws SQLException {
         executeMasterBatchs();
         con.setAutoCommit(true);
-        con.commit();
     }
 
     public void setupPreparedStatements() throws SQLException {

@@ -62,7 +62,6 @@ public class LabelWriter {
     public void finalBatchExecute() throws SQLException {
         executeLabelBatchs();
         con.setAutoCommit(true);
-        con.commit();
     }
 
     public void setupPreparedStatements() throws SQLException {

@@ -61,7 +61,6 @@ public class ArtistWriter {
     public void finalBatchExecute() throws SQLException {
         executeArtistBatchs();
         con.setAutoCommit(true);
-        con.commit();
     }
 
     private void setupPreparedStatements() throws SQLException {
