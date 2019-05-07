@@ -17,6 +17,8 @@ import java.util.concurrent.TimeUnit;
 public class DiscogsParser {
     private static ConnectionParameters params;
 
+    private static Boolean showStatistics = true;
+
     private static ExecutorService pool;
 
     public static void main(String[] args) {
@@ -98,7 +100,9 @@ public class DiscogsParser {
         }
 
         System.out.println("Finished parsing");
-
+        if(showStatistics) {
+            System.out.println(ImportStatistics.getInstance().getStatistics());
+        }
     }
 
     public static ConnectionParameters getConnectionParameters() {
