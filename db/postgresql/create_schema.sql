@@ -22,14 +22,14 @@ CREATE TABLE discogs.artist_import (
 CREATE TABLE discogs.artist_namevariations_import (
 	id INTEGER,
 	name_variation TEXT);
-	
+
 --ALTER TABLE discogs.artist_namevariations_import ADD PRIMARY KEY (id, name_variation);
 --ALTER TABLE discogs.artist_namevariations_import ADD FOREIGN KEY (id) REFERENCES discogs.artist(id);
 
 CREATE TABLE discogs.artist_alias_import (
 	id INTEGER,
 	alias TEXT);
-	
+
 --ALTER TABLE discogs.artist_alias_import ADD PRIMARY KEY (id, alias);
 
 CREATE TABLE discogs.alias_of_artist_import (
@@ -67,10 +67,10 @@ CREATE TABLE discogs.label_import (
 	contactinfo TEXT,
 	profile TEXT,
 	data_quality TEXT);
-	
+
 CREATE TABLE discogs.label_urls_import (
 	id INTEGER,
-	url TEXT);	
+	url TEXT);
 
 --ALTER TABLE discogs.label_urls_import ADD PRIMARY KEY (id, url);
 --ALTER TABLE discogs.label_urls_import ADD FOREIGN KEY (id) REFERENCES discogs.label(id);
@@ -83,7 +83,7 @@ CREATE TABLE discogs.sublabel_import (
 CREATE TABLE discogs.sublabel_of_import (
 	label_id INTEGER,
 	sublabel_id INTEGER);
-	
+
 --ALTER TABLE discogs.sublabel_of_import ADD PRIMARY KEY (label_id, sublabel_id);
 --ALTER TABLE discogs.sublabel_of_import ADD FOREIGN KEY (label_id) REFERENCES discogs.label(id);
 --ALTER TABLE discogs.sublabel_of_import ADD FOREIGN KEY (sublabel_id) REFERENCES discogs.sublabel(id);
@@ -96,13 +96,13 @@ CREATE TABLE discogs.label_images_import (
 	height INTEGER);
 
 --ALTER TABLE discogs.label_images_import ADD PRIMARY KEY (uri);
-	
+
 CREATE TABLE discogs.image_of_label_import (
 	uri TEXT,
 	label_id INTEGER);
 
 --ALTER TABLE discogs.image_of_label_import ADD FOREIGN KEY (label_id) REFERENCES discogs.label(id);
---ALTER TABLE discogs.image_of_label_import ADD FOREIGN KEY (uri) REFERENCES discogs.label_images(uri);	
+--ALTER TABLE discogs.image_of_label_import ADD FOREIGN KEY (uri) REFERENCES discogs.label_images(uri);
 
 --------------------------------------------------------------------------------
 -- MasterEntity
@@ -115,7 +115,7 @@ CREATE TABLE discogs.master_import (
 	data_quality TEXT,
 	title TEXT,
 	main_release INTEGER);
-	
+
 CREATE TABLE discogs.master_styles_import (
 	id INTEGER,
 	style TEXT);
@@ -136,8 +136,8 @@ CREATE TABLE discogs.master_images_import (
 	uri150 TEXT,
 	type TEXT,
 	width INTEGER,
-	height INTEGER);	
-	
+	height INTEGER);
+
 CREATE TABLE discogs.images_of_master_import (
 	uri TEXT,
 	master_id INTEGER);
@@ -152,7 +152,7 @@ CREATE TABLE discogs.master_artist_import (
 	role TEXT,
 	join_att TEXT,
 	anv TEXT);
-	
+
 CREATE TABLE discogs.master_artist_performs_import (
 	master_id INTEGER,
 	artist_id INTEGER);
@@ -173,7 +173,7 @@ CREATE TABLE discogs.release_import (
 	status TEXT,
 	title TEXT,
 	data_quality TEXT);
-	
+
 CREATE TABLE discogs.release_styles_import (
 	id INTEGER,
 	style TEXT);
@@ -195,7 +195,7 @@ CREATE TABLE discogs.release_artist_import (
 	role TEXT,
 	join_att TEXT,
 	anv TEXT);
-	
+
 CREATE TABLE discogs.artist_of_release_import (
 	release_id INTEGER,
 	artist_id INTEGER);
@@ -225,7 +225,7 @@ CREATE TABLE discogs.release_identifier_import (
 	value TEXT,
 	type TEXT,
 	description TEXT);
-	
+
 CREATE TABLE discogs.identifies_import (
 	release_id INTEGER,
 	identifier_value TEXT);
@@ -258,7 +258,7 @@ CREATE TABLE discogs.release_company_import (
 	entity_type TEXT,
 	entity_type_value TEXT,
 	catno TEXT);
-	
+
 CREATE TABLE discogs.company_of_release_import (
 	release_id INTEGER,
 	company_id INTEGER);
@@ -311,21 +311,20 @@ CREATE TABLE discogs.artist (
 	id INTEGER PRIMARY KEY,
 	name TEXT,
 	realname TEXT,
-	data_quality TEXT,
 	profile TEXT);
 -- TODO: add check clause for dataquality
 
 CREATE TABLE discogs.artist_namevariations (
 	id INTEGER,
 	name_variation TEXT);
-	
+
 ALTER TABLE discogs.artist_namevariations ADD PRIMARY KEY (id, name_variation);
 ALTER TABLE discogs.artist_namevariations ADD FOREIGN KEY (id) REFERENCES discogs.artist(id);
 
 CREATE TABLE discogs.artist_alias (
 	id INTEGER,
 	alias TEXT);
-	
+
 ALTER TABLE discogs.artist_alias ADD PRIMARY KEY (id, alias);
 
 CREATE TABLE discogs.alias_of_artist (
@@ -361,10 +360,10 @@ CREATE TABLE discogs.label (
 	contactinfo TEXT,
 	profile TEXT,
 	data_quality TEXT);
-	
+
 CREATE TABLE discogs.label_urls (
 	id INTEGER,
-	url TEXT);	
+	url TEXT);
 ALTER TABLE discogs.label_urls ADD PRIMARY KEY (id, url);
 ALTER TABLE discogs.label_urls ADD FOREIGN KEY (id) REFERENCES discogs.label(id);
 
@@ -376,7 +375,7 @@ ALTER TABLE discogs.sublabel ADD PRIMARY KEY (id);
 CREATE TABLE discogs.sublabel_of (
 	label_id INTEGER,
 	sublabel_id INTEGER);
-	
+
 ALTER TABLE discogs.sublabel_of ADD PRIMARY KEY (label_id, sublabel_id);
 ALTER TABLE discogs.sublabel_of ADD FOREIGN KEY (label_id) REFERENCES discogs.label(id);
 ALTER TABLE discogs.sublabel_of ADD FOREIGN KEY (sublabel_id) REFERENCES discogs.sublabel(id);
@@ -388,12 +387,12 @@ CREATE TABLE discogs.label_images (
 	width INTEGER,
 	height INTEGER);
 ALTER TABLE discogs.label_images ADD PRIMARY KEY (uri);
-	
+
 CREATE TABLE discogs.image_of_label (
 	uri TEXT,
 	label_id INTEGER);
 ALTER TABLE discogs.image_of_label ADD FOREIGN KEY (label_id) REFERENCES discogs.label(id);
-ALTER TABLE discogs.image_of_label ADD FOREIGN KEY (uri) REFERENCES discogs.label_images(uri);	
+ALTER TABLE discogs.image_of_label ADD FOREIGN KEY (uri) REFERENCES discogs.label_images(uri);
 
 --------------------------------------------------------------------------------
 -- MasterEntity
@@ -405,7 +404,7 @@ CREATE TABLE discogs.master (
 	data_quality TEXT,
 	title TEXT,
 	main_release INTEGER);
-	
+
 CREATE TABLE discogs.master_styles (
 	id INTEGER,
 	style TEXT);
@@ -423,8 +422,8 @@ CREATE TABLE discogs.master_images (
 	uri150 TEXT,
 	type TEXT,
 	width INTEGER,
-	height INTEGER);	
-	
+	height INTEGER);
+
 CREATE TABLE discogs.images_of_master (
 	uri TEXT,
 	master_id INTEGER);
@@ -437,7 +436,7 @@ CREATE TABLE discogs.master_artist (
 	role TEXT,
 	join_att TEXT,
 	anv TEXT);
-	
+
 CREATE TABLE discogs.master_artist_performs(
 	master_id INTEGER,
 	artist_id INTEGER);
@@ -456,7 +455,7 @@ CREATE TABLE discogs.release (
 	status TEXT,
 	title TEXT,
 	data_quality TEXT);
-	
+
 CREATE TABLE discogs.release_styles (
 	id INTEGER,
 	style TEXT);
@@ -475,7 +474,7 @@ CREATE TABLE discogs.release_artist (
 	role TEXT,
 	join_att TEXT,
 	anv TEXT);
-	
+
 CREATE TABLE discogs.artist_of_release (
 	release_id INTEGER,
 	artist_id INTEGER);
@@ -501,7 +500,7 @@ CREATE TABLE discogs.release_identifier (
 	value TEXT PRIMARY KEY,
 	type TEXT,
 	description TEXT);
-	
+
 CREATE TABLE discogs.identifies (
 	release_id INTEGER,
 	identifier_value TEXT);
@@ -530,7 +529,7 @@ CREATE TABLE discogs.release_company (
 	entity_type TEXT,
 	entity_type_value TEXT,
 	catno TEXT);
-	
+
 CREATE TABLE discogs.company_of_release (
 	release_id INTEGER,
 	company_id INTEGER);
