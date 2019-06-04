@@ -86,7 +86,7 @@ public class ImportStatistics {
         sb.append("Label: " + statistics.get("Label") + "\n");
         sb.append("LabelUrls: " + statistics.get("LabelUrls") + "\n");
         sb.append("LabelSublabel: " + statistics.get("LabelSublabel") + "\n");
-        sb.append("LabelSublabelOf: " + statistics.get("LabelSubabelOf") + "\n");
+        sb.append("LabelSublabelOf: " + statistics.get("LabelSublabelOf") + "\n");
         sb.append("LabelImage: " + statistics.get("LabelImage") + "\n");
         sb.append("LabelImageOf: " + statistics.get("LabelImageOf") + "\n");
         sb.append("====================");
@@ -94,8 +94,8 @@ public class ImportStatistics {
         sb.append("Master: " + statistics.get("Master") + "\n");
         sb.append("MasterStyles: " + statistics.get("MasterStyles") + "\n");
         sb.append("MasterGenres: " + statistics.get("MasterGenres") + "\n");
-        sb.append("MasterImages: " + statistics.get("MasterImages") + "\n");
-        sb.append("MasterImagesOf: " + statistics.get("MasterImagesOf") + "\n");
+        sb.append("MasterImages: " + statistics.get("MasterImage") + "\n");
+        sb.append("MasterImagesOf: " + statistics.get("MasterImageOf") + "\n");
         sb.append("MasterArtist: " + statistics.get("MasterArtist") + "\n");
         sb.append("MasterArtistPerforms: " + statistics.get("MasterArtistPerforms") + "\n");
         sb.append("====================");
