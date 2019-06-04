@@ -1,6 +1,7 @@
 package de.oliverpabst.jdp.database.postgresql;
 
 import de.oliverpabst.jdp.DiscogsParser;
+import de.oliverpabst.jdp.ImportStatistics;
 import de.oliverpabst.jdp.database.SchemaDoesNotExistException;
 import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.artist.ArtistAlias;
@@ -79,27 +80,28 @@ public class ArtistWriter {
         insArtist.setString(3, _ae.getRealName());
         insArtist.setString(4, _ae.getDataQuality().toString());
         insArtist.setString(5, _ae.getProfile());
-        insArtist.execute();
+        insArtist.addBatch();
+        ImportStatistics.getInstance().increase("Artist");
 
         for(String nv: _ae.getNameVariations()) {
             insArtistNameVariations.setInt(1, Integer.parseInt(_ae.getId()));
             insArtistNameVariations.setString(2, nv);
             insArtistNameVariations.addBatch();
+            ImportStatistics.getInstance().increase("ArtistNameVariation");
         }
-        insArtistNameVariations.executeBatch();
 
         for(ArtistAlias aa: _ae.getAliases()) {
             insArtistAlias.setInt(1, Integer.parseInt(aa.getAliasID()));
             insArtistAlias.setString(2, aa.getAliasName());
             insArtistAlias.addBatch();
+            ImportStatistics.getInstance().increase("ArtistAlias");
 
             insAliasOfArtist.setInt(1, Integer.parseInt(_ae.getId()));
             insAliasOfArtist.setInt(2, Integer.parseInt(aa.getAliasID()));
             insAliasOfArtist.setString(3, aa.getAliasName());
             insAliasOfArtist.addBatch();
+            ImportStatistics.getInstance().increase("AliasOfArtist");
         }
-        insArtistAlias.executeBatch();
-        insAliasOfArtist.executeBatch();
 
         for(Image i: _ae.getImages()) {
             insArtistImage.setString(1, i.getUri());
@@ -108,14 +110,13 @@ public class ArtistWriter {
             insArtistImage.setInt(4, i.getWidth());
             insArtistImage.setInt(5, i.getHeight());
             insArtistImage.addBatch();
+            ImportStatistics.getInstance().increase("ArtistImage");
 
             insImageOfArtist.setInt(1, Integer.parseInt(_ae.getId()));
             insImageOfArtist.setString(2, i.getUri());
             insImageOfArtist.addBatch();
+            ImportStatistics.getInstance().increase("ArtistImageOf");
         }
-
-        insArtistImage.executeBatch();
-        insImageOfArtist.executeBatch();
 
         artistCounter++;
         if(artistCounter % insertTrigger == 0) {

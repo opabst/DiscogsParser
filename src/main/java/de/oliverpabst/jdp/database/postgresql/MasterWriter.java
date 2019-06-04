@@ -1,6 +1,7 @@
 package de.oliverpabst.jdp.database.postgresql;
 
 import de.oliverpabst.jdp.DiscogsParser;
+import de.oliverpabst.jdp.ImportStatistics;
 import de.oliverpabst.jdp.database.SchemaDoesNotExistException;
 import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.master.MasterArtist;
@@ -81,17 +82,21 @@ public class MasterWriter {
         insMaster.setString(3, _me.getDataQuality().toString());
         insMaster.setString(4, _me.getTitle());// title
         insMaster.setInt(5, Integer.parseInt(_me.getMainRelease()));
+        insMaster.addBatch();
+        ImportStatistics.getInstance().increase("Master");
 
         for(String genre: _me.getGenres()) {
             insMasterGenres.setInt(1, Integer.parseInt(_me.getId()));
             insMasterGenres.setString(2, genre);
             insMasterGenres.addBatch();
+            ImportStatistics.getInstance().increase("MasterStyles");
         }
 
         for(String style: _me.getStyles()) {
             insMasterStyles.setInt(1, Integer.parseInt(_me.getId()));
             insMasterStyles.setString(2, style);
             insMasterStyles.addBatch();
+            ImportStatistics.getInstance().increase("MasterGenres");
         }
 
         for(Image i: _me.getImages()) {
@@ -101,10 +106,12 @@ public class MasterWriter {
             insMasterImages.setInt(4, i.getWidth());
             insMasterImages.setInt(5, i.getHeight());
             insMasterImages.addBatch();
+            ImportStatistics.getInstance().increase("MasterImage");
 
             insImagesOfMaster.setString(1, i.getUri());
             insImagesOfMaster.setInt(2, Integer.parseInt(_me.getId()));
             insImagesOfMaster.addBatch();
+            ImportStatistics.getInstance().increase("MasterImageOf");
         }
 
         for(MasterArtist ma: _me.getArtists()) {
@@ -114,10 +121,12 @@ public class MasterWriter {
             insMasterArtist.setString(4, ma.getJoin());
             insMasterArtist.setString(5, ma.getAnv());
             insMasterArtist.addBatch();
+            ImportStatistics.getInstance().increase("MasterArtist");
 
             insMasterArtistPerforms.setInt(1, Integer.parseInt(_me.getId()));
             insMasterArtistPerforms.setInt(2, Integer.parseInt(ma.getId()));
             insMasterArtistPerforms.addBatch();
+            ImportStatistics.getInstance().increase("MasterArtistPerforms");
         }
 
         masterCounter++;

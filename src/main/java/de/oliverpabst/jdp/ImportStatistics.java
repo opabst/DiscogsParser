@@ -25,15 +25,15 @@ public class ImportStatistics {
         statistics.put("LabelUrls", 0);
         statistics.put("LabelSublabel", 0);
         statistics.put("LabelSublabelOf", 0);
-        statistics.put("LabelImages", 0);
+        statistics.put("LabelImage", 0);
         statistics.put("LabelImageOf", 0);
 
         // master
         statistics.put("Master", 0);
         statistics.put("MasterStyles", 0);
         statistics.put("MasterGenres", 0);
-        statistics.put("MasterImages", 0);
-        statistics.put("MasterImagesOf", 0);
+        statistics.put("MasterImage", 0);
+        statistics.put("MasterImageOf", 0);
         statistics.put("MasterArtist", 0);
         statistics.put("MasterArtistPerforms", 0);
 

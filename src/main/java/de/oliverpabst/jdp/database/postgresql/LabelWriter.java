@@ -1,6 +1,7 @@
 package de.oliverpabst.jdp.database.postgresql;
 
 import de.oliverpabst.jdp.DiscogsParser;
+import de.oliverpabst.jdp.ImportStatistics;
 import de.oliverpabst.jdp.database.SchemaDoesNotExistException;
 import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.label.LabelEntity;
@@ -81,21 +82,25 @@ public class LabelWriter {
         insLabel.setString(4, _le.getProfile());
         insLabel.setString(5, _le.getDataQuality().toString());
         insLabel.addBatch();
+        ImportStatistics.getInstance().increase("Label");
 
         for(String url: _le.getUrls()) {
             insLabelUrls.setInt(1, Integer.parseInt(_le.getId()));
             insLabelUrls.setString(2, url);
             insLabelUrls.addBatch();
+            ImportStatistics.getInstance().increase("LabelUrls");
         }
 
         for(LabelSublabel ls: _le.getSublabels()) {
             insSublabel.setInt(1, Integer.parseInt(ls.getSublabelID()));
             insSublabel.setString(2, ls.getSublabelName());
             insSublabel.addBatch();
+            ImportStatistics.getInstance().increase("LabelSublabel");
 
             insSublabelOf.setInt(1, Integer.parseInt(_le.getId()));
             insSublabelOf.setInt(2, Integer.parseInt(ls.getSublabelID()));
             insSublabelOf.addBatch();
+            ImportStatistics.getInstance().increase("LabelSublabelOf");
         }
 
         for(Image i: _le.getImages()) {
@@ -105,10 +110,12 @@ public class LabelWriter {
             insLabelImages.setInt(4, i.getWidth());
             insLabelImages.setInt(5, i.getHeight());
             insLabelImages.addBatch();
+            ImportStatistics.getInstance().increase("LabelImage");
 
             insImageOfLabel.setString(1, i.getUri());
             insImageOfLabel.setInt(2, Integer.parseInt(_le.getId()));
             insImageOfLabel.addBatch();
+            ImportStatistics.getInstance().increase("LabelImageOf");
         }
 
         labelCounter++;
