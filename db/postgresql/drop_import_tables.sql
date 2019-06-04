@@ -1,0 +1,42 @@
+-- ARTIST TABLES
+DROP TABLE discogs.artist_import;
+DROP TABLE discogs.artist_namevariations_import;
+DROP TABLE discogs.artist_alias_import;
+DROP TABLE discogs.alias_of_artist_import;
+DROP TABLE discogs.artist_image_import;
+DROP TABLE discogs.image_of_artist_import;
+
+-- LABEL TABLES
+DROP TABLE discogs.label_import;
+DROP TABLE discogs.label_urls_import;
+DROP TABLE discogs.sublabel_import;
+DROP TABLE discogs.sublabel_of_import;
+DROP TABLE discogs.label_images_import;
+DROP TABLE discogs.image_of_label_import;
+
+-- MASTER TABLES
+DROP TABLE discogs.master_import;
+DROP TABLE discogs.master_styles_import;
+DROP TABLE discogs.master_genres_import;
+DROP TABLE discogs.master_images_import;
+DROP TABLE discogs.master_artist_import;
+DROP TABLE discogs.master_artist_performs_import;
+
+-- RELEASE TABLES
+DROP TABLE discogs.release_import;
+DROP TABLE discogs.release_styles_import;
+DROP TABLE discogs.release_genres_import;
+DROP TABLE discogs.release_artist_import;
+DROP TABLE discogs.artist_of_release_import;
+DROP TABLE discogs.release_extraartist_import;
+DROP TABLE discogs.extraartist_of_release_import;
+DROP TABLE discogs.release_identifier_import;
+DROP TABLE discogs.identifies_import;
+DROP TABLE discogs.release_video_import;
+DROP TABLE discogs.video_of_release_import;
+DROP TABLE discogs.release_company_import;
+DROP TABLE discogs.company_of_release_import;
+DROP TABLE discogs.release_image_import;
+DROP TABLE discogs.image_of_release_import;
+DROP TABLE discogs.release_label_import;
+DROP TABLE discogs.label_of_release_import;
