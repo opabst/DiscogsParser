@@ -1,5 +1,7 @@
 package de.oliverpabst.jdp.thread;
 
+import de.oliverpabst.jdp.parser.ReleaseParser;
+
 import java.io.File;
 
 public class ReleaseThread implements Runnable {
@@ -11,6 +13,6 @@ public class ReleaseThread implements Runnable {
 
     @Override
     public void run() {
-        new ReleaseThread(file);
+        new ReleaseParser(file);
     }
 }
