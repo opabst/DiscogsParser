@@ -7,7 +7,6 @@ import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.label.LabelEntity;
 import de.oliverpabst.jdp.model.label.LabelSublabel;
 
-import java.awt.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -18,7 +17,7 @@ public class LabelWriter {
 
     private Connection con;
 
-    private Integer labelCounter = 0;
+    private Integer objectCounter = 0;
 
     // LabelEntity
     private PreparedStatement insLabel;
@@ -30,6 +29,13 @@ public class LabelWriter {
 
 
     private Integer insertTrigger = 50000;
+
+    private Integer labelCnt = 0;
+    private Integer labelUrlsCnt = 0;
+    private Integer sublabelCnt = 0;
+    private Integer sublabelOfCnt = 0;
+    private Integer labelImageCnt = 0;
+    private Integer imageOfLabelCnt = 0;
 
     private LabelWriter() {
         try {
@@ -62,6 +68,12 @@ public class LabelWriter {
 
     public void finalBatchExecute() throws SQLException {
         executeLabelBatchs();
+        ImportStatistics.getInstance().setValue("Label", labelCnt);
+        ImportStatistics.getInstance().setValue("LabelUrls", labelUrlsCnt);
+        ImportStatistics.getInstance().setValue("LabelSublabel", sublabelCnt);
+        ImportStatistics.getInstance().setValue("LabelSublabelOf", sublabelOfCnt);
+        ImportStatistics.getInstance().setValue("LabelImage", labelImageCnt);
+        ImportStatistics.getInstance().setValue("LabelImageOf", imageOfLabelCnt);
         con.setAutoCommit(true);
     }
 
@@ -82,25 +94,25 @@ public class LabelWriter {
         insLabel.setString(4, _le.getProfile());
         insLabel.setString(5, _le.getDataQuality().toString());
         insLabel.addBatch();
-        ImportStatistics.getInstance().increase("Label");
+        labelCnt++;
 
         for(String url: _le.getUrls()) {
             insLabelUrls.setInt(1, Integer.parseInt(_le.getId()));
             insLabelUrls.setString(2, url);
             insLabelUrls.addBatch();
-            ImportStatistics.getInstance().increase("LabelUrls");
+            labelUrlsCnt++;
         }
 
         for(LabelSublabel ls: _le.getSublabels()) {
             insSublabel.setInt(1, Integer.parseInt(ls.getSublabelID()));
             insSublabel.setString(2, ls.getSublabelName());
             insSublabel.addBatch();
-            ImportStatistics.getInstance().increase("LabelSublabel");
+            sublabelCnt++;
 
             insSublabelOf.setInt(1, Integer.parseInt(_le.getId()));
             insSublabelOf.setInt(2, Integer.parseInt(ls.getSublabelID()));
             insSublabelOf.addBatch();
-            ImportStatistics.getInstance().increase("LabelSublabelOf");
+            sublabelOfCnt++;
         }
 
         for(Image i: _le.getImages()) {
@@ -110,16 +122,16 @@ public class LabelWriter {
             insLabelImages.setInt(4, i.getWidth());
             insLabelImages.setInt(5, i.getHeight());
             insLabelImages.addBatch();
-            ImportStatistics.getInstance().increase("LabelImage");
+            labelImageCnt++;
 
             insImageOfLabel.setString(1, i.getUri());
             insImageOfLabel.setInt(2, Integer.parseInt(_le.getId()));
             insImageOfLabel.addBatch();
-            ImportStatistics.getInstance().increase("LabelImageOf");
+            imageOfLabelCnt++;
         }
 
-        labelCounter++;
-        if(labelCounter % insertTrigger == 0) {
+        objectCounter++;
+        if(objectCounter % insertTrigger == 0) {
             executeLabelBatchs();
             con.commit();
         }

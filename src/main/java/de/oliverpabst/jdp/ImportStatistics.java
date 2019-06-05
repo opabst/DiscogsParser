@@ -2,8 +2,6 @@ package de.oliverpabst.jdp;
 
 import java.util.HashMap;
 
-// TODO: add increasing statements to the data writers
-
 public class ImportStatistics {
     private static ImportStatistics instance;
 
@@ -75,6 +73,14 @@ public class ImportStatistics {
     public void increase(String _entry, Integer _value) {
         if(statistics.containsKey(_entry)) {
             statistics.put(_entry, statistics.get(_entry) + _value);
+        } else {
+            System.err.println("Error! Key not found!");
+        }
+    }
+
+    public void setValue(String _entry, Integer _value) {
+        if(statistics.containsKey(_entry)) {
+            statistics.put(_entry, _value);
         } else {
             System.err.println("Error! Key not found!");
         }

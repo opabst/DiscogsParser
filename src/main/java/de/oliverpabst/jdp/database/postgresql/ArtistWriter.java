@@ -17,7 +17,7 @@ public class ArtistWriter {
 
     private Connection con;
 
-    private Integer artistCounter = 0;
+    private Integer objectCounter = 0;
 
     // ArtistEntity
     private PreparedStatement insArtist;
@@ -28,6 +28,13 @@ public class ArtistWriter {
     private PreparedStatement insImageOfArtist;
 
     private final Integer insertTrigger = 50000;
+
+    private Integer artistCnt = 0;
+    private Integer artistNameVariationCnt = 0;
+    private Integer artistAliasCnt = 0;
+    private Integer aliasOfArtistCnt = 0;
+    private Integer artistImageCnt = 0;
+    private Integer imageOfArtistCnt = 0;
 
     private ArtistWriter() {
         try {
@@ -61,6 +68,12 @@ public class ArtistWriter {
 
     public void finalBatchExecute() throws SQLException {
         executeArtistBatchs();
+        ImportStatistics.getInstance().setValue("Artist", artistCnt);
+        ImportStatistics.getInstance().setValue("ArtistNameVariation", artistNameVariationCnt);
+        ImportStatistics.getInstance().setValue("ArtistAlias", artistAliasCnt);
+        ImportStatistics.getInstance().setValue("AliasOfArtist", aliasOfArtistCnt);
+        ImportStatistics.getInstance().setValue("ArtistImage", artistImageCnt);
+        ImportStatistics.getInstance().setValue("ArtistImageOf", imageOfArtistCnt);
         con.setAutoCommit(true);
     }
 
@@ -81,26 +94,26 @@ public class ArtistWriter {
         insArtist.setString(4, _ae.getDataQuality().toString());
         insArtist.setString(5, _ae.getProfile());
         insArtist.addBatch();
-        ImportStatistics.getInstance().increase("Artist");
+        artistCnt++;
 
         for(String nv: _ae.getNameVariations()) {
             insArtistNameVariations.setInt(1, Integer.parseInt(_ae.getId()));
             insArtistNameVariations.setString(2, nv);
             insArtistNameVariations.addBatch();
-            ImportStatistics.getInstance().increase("ArtistNameVariation");
+            artistNameVariationCnt++;
         }
 
         for(ArtistAlias aa: _ae.getAliases()) {
             insArtistAlias.setInt(1, Integer.parseInt(aa.getAliasID()));
             insArtistAlias.setString(2, aa.getAliasName());
             insArtistAlias.addBatch();
-            ImportStatistics.getInstance().increase("ArtistAlias");
+            artistAliasCnt++;
 
             insAliasOfArtist.setInt(1, Integer.parseInt(_ae.getId()));
             insAliasOfArtist.setInt(2, Integer.parseInt(aa.getAliasID()));
             insAliasOfArtist.setString(3, aa.getAliasName());
             insAliasOfArtist.addBatch();
-            ImportStatistics.getInstance().increase("AliasOfArtist");
+            aliasOfArtistCnt++;
         }
 
         for(Image i: _ae.getImages()) {
@@ -110,16 +123,16 @@ public class ArtistWriter {
             insArtistImage.setInt(4, i.getWidth());
             insArtistImage.setInt(5, i.getHeight());
             insArtistImage.addBatch();
-            ImportStatistics.getInstance().increase("ArtistImage");
+            artistImageCnt++;
 
             insImageOfArtist.setInt(1, Integer.parseInt(_ae.getId()));
             insImageOfArtist.setString(2, i.getUri());
             insImageOfArtist.addBatch();
-            ImportStatistics.getInstance().increase("ArtistImageOf");
+            imageOfArtistCnt++;
         }
 
-        artistCounter++;
-        if(artistCounter % insertTrigger == 0) {
+        objectCounter++;
+        if(objectCounter % insertTrigger == 0) {
             executeArtistBatchs();
             con.commit();
         }

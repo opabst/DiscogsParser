@@ -17,7 +17,7 @@ public class MasterWriter {
 
     private Connection con;
 
-    private Integer masterCounter = 0;
+    private Integer objectCounter = 0;
 
     // MasterEntity
     private PreparedStatement insMaster;
@@ -29,6 +29,14 @@ public class MasterWriter {
     private PreparedStatement insMasterArtistPerforms;
 
     private Integer insertTrigger = 50000;
+
+    private Integer masterCnt = 0;
+    private Integer masterStylesCnt = 0;
+    private Integer masterGenresCnt = 0;
+    private Integer masterImageCnt = 0;
+    private Integer imageOfMasterCnt = 0;
+    private Integer masterArtistCnt = 0;
+    private Integer masterArtistPerformsCnt = 0;
 
     private MasterWriter() {
         try {
@@ -62,6 +70,13 @@ public class MasterWriter {
 
     public void finalBatchExecute() throws SQLException {
         executeMasterBatchs();
+        ImportStatistics.getInstance().setValue("Master", masterCnt);
+        ImportStatistics.getInstance().setValue("MasterStyles", masterStylesCnt);
+        ImportStatistics.getInstance().setValue("MasterGenres", masterGenresCnt);
+        ImportStatistics.getInstance().setValue("MasterImage", masterImageCnt);
+        ImportStatistics.getInstance().setValue("MasterImageOf", imageOfMasterCnt);
+        ImportStatistics.getInstance().setValue("MasterArtist", masterArtistCnt);
+        ImportStatistics.getInstance().setValue("MasterArtistPerforms", masterArtistPerformsCnt);
         con.setAutoCommit(true);
     }
 
@@ -83,20 +98,20 @@ public class MasterWriter {
         insMaster.setString(4, _me.getTitle());// title
         insMaster.setInt(5, Integer.parseInt(_me.getMainRelease()));
         insMaster.addBatch();
-        ImportStatistics.getInstance().increase("Master");
+        masterCnt++;
 
         for(String genre: _me.getGenres()) {
             insMasterGenres.setInt(1, Integer.parseInt(_me.getId()));
             insMasterGenres.setString(2, genre);
             insMasterGenres.addBatch();
-            ImportStatistics.getInstance().increase("MasterStyles");
+            masterGenresCnt++;
         }
 
         for(String style: _me.getStyles()) {
             insMasterStyles.setInt(1, Integer.parseInt(_me.getId()));
             insMasterStyles.setString(2, style);
             insMasterStyles.addBatch();
-            ImportStatistics.getInstance().increase("MasterGenres");
+            masterStylesCnt++;
         }
 
         for(Image i: _me.getImages()) {
@@ -106,12 +121,12 @@ public class MasterWriter {
             insMasterImages.setInt(4, i.getWidth());
             insMasterImages.setInt(5, i.getHeight());
             insMasterImages.addBatch();
-            ImportStatistics.getInstance().increase("MasterImage");
+            masterImageCnt++;
 
             insImagesOfMaster.setString(1, i.getUri());
             insImagesOfMaster.setInt(2, Integer.parseInt(_me.getId()));
             insImagesOfMaster.addBatch();
-            ImportStatistics.getInstance().increase("MasterImageOf");
+            imageOfMasterCnt++;
         }
 
         for(MasterArtist ma: _me.getArtists()) {
@@ -121,16 +136,16 @@ public class MasterWriter {
             insMasterArtist.setString(4, ma.getJoin());
             insMasterArtist.setString(5, ma.getAnv());
             insMasterArtist.addBatch();
-            ImportStatistics.getInstance().increase("MasterArtist");
+            masterArtistCnt++;
 
             insMasterArtistPerforms.setInt(1, Integer.parseInt(_me.getId()));
             insMasterArtistPerforms.setInt(2, Integer.parseInt(ma.getId()));
             insMasterArtistPerforms.addBatch();
-            ImportStatistics.getInstance().increase("MasterArtistPerforms");
+            masterArtistPerformsCnt++;
         }
 
-        masterCounter++;
-        if(masterCounter % insertTrigger == 0) {
+        objectCounter++;
+        if(objectCounter % insertTrigger == 0) {
             executeMasterBatchs();
             con.commit();
         }

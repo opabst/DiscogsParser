@@ -321,15 +321,15 @@ public class ReleaseParser {
                     break;
                 case XMLStreamConstants.CHARACTERS:
                     String chars = xmlParser.getText();
-                    if(artist && id) {
+                    if(!extraartists && artist && id) {
                         ra.setId(xmlParser.getText());
-                    } else if (artist && name) {
+                    } else if (!extraartists && artist && name) {
                         ra.setName(xmlParser.getText());
-                    } else if (artist && anv) {
+                    } else if (!extraartists && artist && anv) {
                         ra.setAnv(xmlParser.getText());
-                    } else if (artist && join) {
+                    } else if (!extraartists && artist && join) {
                         ra.setJoin(xmlParser.getText());
-                    } else if (artist && role) {
+                    } else if (!extraartists && artist && role) {
                         ra.setRole(xmlParser.getText());
                     } else if (!track && !video && title) {
                         re.setTitle(xmlParser.getText());

@@ -16,7 +16,7 @@ public class ReleaseWriter {
 
     private Connection con;
 
-    private Integer releaseCounter = 0;
+    private Integer objectCounter = 0;
 
     // ReleaseEntity
     private PreparedStatement insRelease;
@@ -38,6 +38,24 @@ public class ReleaseWriter {
     private PreparedStatement insLabelOfRelease;
 
     private Integer insertTrigger = 50000;
+
+    private Integer releaseCnt = 0;
+    private Integer releaseStylesCnt = 0;
+    private Integer releaseGenresCnt = 0;
+    private Integer releaseArtistCnt = 0;
+    private Integer releaseArtistOfCnt = 0;
+    private Integer releaseExtraArtistCnt = 0;
+    private Integer releaseExtraArtistOfCnt = 0;
+    private Integer releaseIdentifierCnt = 0;
+    private Integer releaseIdentifiesCnt = 0;
+    private Integer releaseVideoCnt = 0;
+    private Integer releaseVideoOfCnt = 0;
+    private Integer releaseCompanyCnt = 0;
+    private Integer releaseCompanyOfCnt = 0;
+    private Integer releaseImageCnt = 0;
+    private Integer releaseImageOfCnt = 0;
+    private Integer releaseLabelCnt = 0;
+    private Integer releaseLabelOfCnt = 0;
 
     private ReleaseWriter() {
         try {
@@ -82,6 +100,23 @@ public class ReleaseWriter {
 
     public void finalBatchExecute() throws SQLException {
         executeReleaseBatchs();
+        ImportStatistics.getInstance().setValue("Release", releaseCnt);
+        ImportStatistics.getInstance().setValue("ReleaseStyles", releaseStylesCnt);
+        ImportStatistics.getInstance().setValue("ReleaseGenres", releaseGenresCnt);
+        ImportStatistics.getInstance().setValue("ReleaseArtist", releaseArtistCnt);
+        ImportStatistics.getInstance().setValue("ReleaseArtistOf", releaseArtistOfCnt);
+        ImportStatistics.getInstance().setValue("ReleaseExtraArtist", releaseExtraArtistCnt);
+        ImportStatistics.getInstance().setValue("ReleaseExtraArtistOf", releaseExtraArtistOfCnt);
+        ImportStatistics.getInstance().setValue("ReleaseIdentifier", releaseIdentifierCnt);
+        ImportStatistics.getInstance().setValue("ReleaseIdentifies", releaseIdentifiesCnt);
+        ImportStatistics.getInstance().setValue("ReleaseVideo", releaseVideoCnt);
+        ImportStatistics.getInstance().setValue("ReleaseVideoOf", releaseVideoOfCnt);
+        ImportStatistics.getInstance().setValue("ReleaseCompany", releaseCompanyCnt);
+        ImportStatistics.getInstance().setValue("ReleaseCompanyOf", releaseCompanyOfCnt);
+        ImportStatistics.getInstance().setValue("ReleaseImage", releaseImageCnt);
+        ImportStatistics.getInstance().setValue("ReleaseImageOf", releaseImageOfCnt);
+        ImportStatistics.getInstance().setValue("ReleaseLabel", releaseLabelCnt);
+        ImportStatistics.getInstance().setValue("ReleaseLabelOf", releaseLabelOfCnt);
         con.setAutoCommit(true);
     }
 
@@ -115,20 +150,20 @@ public class ReleaseWriter {
         insRelease.setString(6, _re.getTitle());
         insRelease.setString(7, _re.getDataQuality().toString());
         insRelease.addBatch();
-        ImportStatistics.getInstance().increase("Release");
+        releaseCnt++;
 
         for(String genre: _re.getGenres()) {
             insReleaseGenres.setInt(1, Integer.parseInt(_re.getId()));
             insReleaseGenres.setString(2, genre);
             insReleaseGenres.addBatch();
-            ImportStatistics.getInstance().increase("ReleaseStyles");
+            releaseGenresCnt++;
         }
 
         for(String style: _re.getStyles()) {
             insReleaseStyles.setInt(1, Integer.parseInt(_re.getId()));
             insReleaseStyles.setString(2, style);
             insReleaseStyles.addBatch();
-            ImportStatistics.getInstance().increase("ReleaseGenres");
+            releaseStylesCnt++;
         }
 
         for(ReleaseArtist ra: _re.getArtists()) {
@@ -138,12 +173,12 @@ public class ReleaseWriter {
             insReleaseArtist.setString(4, ra.getAnv());
             insReleaseArtist.setString(5, ra.getJoin());
             insReleaseArtist.addBatch();
-            ImportStatistics.getInstance().increase("ReleaseArtist");
+            releaseArtistCnt++;
 
             insArtistOfRelease.setInt(1, Integer.parseInt(_re.getId()));
             insArtistOfRelease.setInt(2, Integer.parseInt(ra.getId()));
             insArtistOfRelease.addBatch();
-            ImportStatistics.getInstance().increase("ReleaseArtistOf");
+            releaseArtistOfCnt++;
         }
 
         for(ReleaseExtraArtist rea: _re.getExtraArtists()) {
@@ -153,12 +188,12 @@ public class ReleaseWriter {
             insReleaseExtraartist.setString(4, rea.getAnv());
             insReleaseExtraartist.setString(5, rea.getJoin());
             insReleaseExtraartist.addBatch();
-            ImportStatistics.getInstance().increase("ReleaseExtraArtist");
+            releaseExtraArtistCnt++;
 
             insExtraartistOfRelease.setInt(1, Integer.parseInt(_re.getId()));
             insExtraartistOfRelease.setInt(2, Integer.parseInt(rea.getId()));
             insExtraartistOfRelease.addBatch();
-            ImportStatistics.getInstance().increase("ReleaseExtraArtistOf");
+            releaseExtraArtistOfCnt++;
         }
 
         for(ReleaseIdentifier ri: _re.getIdentifiers()) {
@@ -166,12 +201,12 @@ public class ReleaseWriter {
             insReleaseIdentifier.setString(2, ri.getType());
             insReleaseIdentifier.setString(3, ri.getDescription());
             insReleaseIdentifier.addBatch();
-            ImportStatistics.getInstance().increase("ReleaseIdentifier");
+            releaseIdentifierCnt++;
 
             insIdentifies.setInt(1, Integer.parseInt(_re.getId()));
             insIdentifies.setString(2, ri.getValue());
             insIdentifies.addBatch();
-            ImportStatistics.getInstance().increase("ReleaseIdentifies");
+            releaseIdentifiesCnt++;
         }
 
         for(ReleaseVideo rv: _re.getVideos()) {
@@ -181,12 +216,12 @@ public class ReleaseWriter {
             insReleaseVideo.setString(4, rv.getTitle());
             insReleaseVideo.setBoolean(5, rv.getEmbed());
             insReleaseVideo.addBatch();
-            ImportStatistics.getInstance().increase("ReleaseVideo");
+            releaseVideoCnt++;
 
             insVideoOfRelease.setInt(1, Integer.parseInt(_re.getId()));
             insVideoOfRelease.setString(2, rv.getSrc());
             insVideoOfRelease.addBatch();
-            ImportStatistics.getInstance().increase("ReleaseVideoOf");
+            releaseVideoOfCnt++;
         }
 
         for(ReleaseCompany rc: _re.getCompanies()) {
@@ -197,12 +232,12 @@ public class ReleaseWriter {
             insReleaseCompany.setString(5, rc.getEntityTypeValue());
             insReleaseCompany.setString(6, rc.getCatno());
             insReleaseCompany.addBatch();
-            ImportStatistics.getInstance().increase("ReleaseCompany");
+            releaseCompanyCnt++;
 
             insCompanyOfRelease.setInt(1, Integer.parseInt(_re.getId()));
             insCompanyOfRelease.setInt(2, Integer.parseInt(rc.getId()));
             insCompanyOfRelease.addBatch();
-            ImportStatistics.getInstance().increase("ReleaseCompanyOf");
+            releaseCompanyOfCnt++;
         }
 
         for(Image i: _re.getImages()) {
@@ -212,12 +247,12 @@ public class ReleaseWriter {
             insReleaseImage.setInt(4, i.getWidth());
             insReleaseImage.setInt(5, i.getHeight());
             insReleaseImage.addBatch();
-            ImportStatistics.getInstance().increase("ReleaseImage");
+            releaseImageCnt++;
 
             insImageOfRelease.setString(1, i.getUri());
             insImageOfRelease.setInt(2, Integer.parseInt(_re.getId()));
             insImageOfRelease.addBatch();
-            ImportStatistics.getInstance().increase("ReleaseImageOf");
+            releaseImageOfCnt++;
         }
 
         for(ReleaseLabel rl: _re.getLabels()) {
@@ -225,17 +260,17 @@ public class ReleaseWriter {
             insReleaseLabel.setString(2, rl.getCatno());
             insReleaseLabel.setString(3, rl.getName());
             insReleaseLabel.addBatch();
-            ImportStatistics.getInstance().increase("ReleaseLabel");
+            releaseLabelCnt++;
 
             insLabelOfRelease.setInt(1, Integer.parseInt(rl.getId()));
             insLabelOfRelease.setInt(2, Integer.parseInt(_re.getId()));
             insLabelOfRelease.addBatch();
-            ImportStatistics.getInstance().increase("ReleaseLabelOf");
+            releaseLabelOfCnt++;
         }
 
 
-        releaseCounter++;
-        if(releaseCounter % insertTrigger == 0) {
+        objectCounter++;
+        if(objectCounter % insertTrigger == 0) {
             executeReleaseBatchs();
             con.commit();
         }
