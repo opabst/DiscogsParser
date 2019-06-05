@@ -72,6 +72,14 @@ public class ImportStatistics {
         }
     }
 
+    public void increase(String _entry, Integer _value) {
+        if(statistics.containsKey(_entry)) {
+            statistics.put(_entry, statistics.get(_entry) + _value);
+        } else {
+            System.err.println("Error! Key not found!");
+        }
+    }
+
     public String getStatistics() {
         StringBuilder sb = new StringBuilder();
         sb.append("ARTIST\n");
