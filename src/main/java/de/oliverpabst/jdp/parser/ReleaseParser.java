@@ -395,7 +395,7 @@ public class ReleaseParser {
                         images = false;
                     } else if (images && xmlParser.getLocalName().equals("image")) {
                         image = false;
-                    } else if (xmlParser.getLocalName().equals("artist")) {
+                    } else if (artists && xmlParser.getLocalName().equals("artist")) {
                         re.addArtist(ra);
                         artist = false;
                     } else if (xmlParser.getLocalName().equals("artists")) {
@@ -422,6 +422,7 @@ public class ReleaseParser {
                         extraartists = false;
                     } else if (extraartists && xmlParser.getLocalName().equals("artist")) {
                         artist = false;
+                        re.addExtraArtist(rea);
                     } else if (extraartists && artist && xmlParser.getLocalName().equals("id")) {
                         id = false;
                     } else if (extraartists && artist && xmlParser.getLocalName().equals("name")) {
