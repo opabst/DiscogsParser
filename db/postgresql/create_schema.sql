@@ -385,13 +385,13 @@ CREATE TABLE discogs.label_images (
 	type TEXT,
 	width INTEGER,
 	height INTEGER);
-ALTER TABLE discogs.label_images ADD PRIMARY KEY (uri);
+--ALTER TABLE discogs.label_images ADD PRIMARY KEY (uri);
 
 CREATE TABLE discogs.image_of_label (
 	uri TEXT,
 	label_id INTEGER);
 ALTER TABLE discogs.image_of_label ADD FOREIGN KEY (label_id) REFERENCES discogs.label(id);
-ALTER TABLE discogs.image_of_label ADD FOREIGN KEY (uri) REFERENCES discogs.label_images(uri);
+--ALTER TABLE discogs.image_of_label ADD FOREIGN KEY (uri) REFERENCES discogs.label_images(uri);
 
 --------------------------------------------------------------------------------
 -- MasterEntity

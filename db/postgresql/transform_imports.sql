@@ -44,23 +44,25 @@ INSERT INTO discogs.image_of_artist (id, uri)
 -- transformation for label tables
 
 INSERT INTO discogs.label (id, name, contactinfo, profile)
-    SELECT id, name, STRING_AGG(contactinfo, '''#'''), STRING_AGG(profile, '''#''')
+    SELECT id, name, contactinfo, profile
     FROM discogs.label_import
-    WHERE data_quality IN ('CORRECT', 'COMPLETE_AND_CORRECT')
-    GROUP BY id, name
-    ORDER BY id, name;
+    WHERE data_quality IN ('CORRECT', 'COMPLETE_AND_CORRECT');
 
 INSERT INTO discogs.label_urls (id, url)
     SELECT DISTINCT id, url
-    FROM discogs.label_urls_import;
+    FROM discogs.label_urls_import
+    WHERE id IN (SELECT id
+                 FROM discogs.label);
 
 INSERT INTO discogs.sublabel (id, name)
-    SELECT DISTINCT id, name
+    SELECT id, name
     FROM discogs.sublabel_import;
 
 INSERT INTO discogs.sublabel_of (label_id, sublabel_id)
     SELECT DISTINCT label_id, sublabel_id
-    FROM discogs.sublabel_of_import;
+    FROM discogs.sublabel_of_import
+    WHERE label_id IN (SELECT id
+                       FROM discogs.label);
 
 INSERT INTO discogs.label_images (uri, uri150, type, width, height)
     SELECT *
@@ -68,7 +70,9 @@ INSERT INTO discogs.label_images (uri, uri150, type, width, height)
 
 INSERT INTO discogs.image_of_label (uri, label_id)
     SELECT *
-    FROM discogs.image_of_label_import;
+    FROM discogs.image_of_label_import
+    WHERE label_id IN (SELECT id
+                       FROM discogs.label);
 
 -- transformation for master tables
 INSERT INTO discogs.master(id, year, title, main_release)
