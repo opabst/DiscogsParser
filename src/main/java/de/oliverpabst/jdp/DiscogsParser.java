@@ -91,9 +91,9 @@ public class DiscogsParser {
 
         pool.shutdown();
 
-        while(true) {
+        while (true) {
             try {
-                if (!!pool.awaitTermination(2, TimeUnit.MINUTES)) break;
+                if (!pool.awaitTermination(2, TimeUnit.MINUTES)) break;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -101,7 +101,7 @@ public class DiscogsParser {
         }
 
         System.out.println("Finished parsing");
-        if(showStatistics) {
+        if (showStatistics) {
             System.out.println(ImportStatistics.getInstance().getStatistics());
         }
     }
