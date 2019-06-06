@@ -86,6 +86,7 @@ INSERT INTO discogs.master_styles (id, style)
     WHERE id IN (SELECT id
                  FROM discogs.master);
 
+-- discard records with '&' as the only character, as they are useless and can occur more than one (violating constraints)
 INSERT INTO discogs.master_genres (id, genre)
     SELECT id, genre
     FROM discogs.master_genres_import
