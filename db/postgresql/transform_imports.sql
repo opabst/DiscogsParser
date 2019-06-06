@@ -77,15 +77,21 @@ INSERT INTO discogs.image_of_label (uri, label_id)
 -- transformation for master tables
 INSERT INTO discogs.master(id, year, title, main_release)
     SELECT id, year, title, main_release
-    FROM discogs.master_import;
+    FROM discogs.master_import
+    WHERE data_quality IN ('CORRECT', 'COMPLETE_AND_CORRECT');
 
-INSERT INTO discogs.master_style (id, style)
+INSERT INTO discogs.master_styles (id, style)
     SELECT DISTINCT id, style
-    FROM discogs.master_style_import;
+    FROM discogs.master_styles_import
+    WHERE id IN (SELECT id
+                 FROM discogs.master);
 
 INSERT INTO discogs.master_genres (id, genre)
     SELECT id, genre
-    FROM discogs.master_genres_import;
+    FROM discogs.master_genres_import
+    WHERE genre <> '&'
+      AND id IN (SELECT id
+                 FROM discogs.master);
 
 INSERT INTO discogs.master_images (uri, uri150, type, width, height)
     SELECT *
@@ -93,15 +99,23 @@ INSERT INTO discogs.master_images (uri, uri150, type, width, height)
 
 INSERT INTO discogs.images_of_master (uri, master_id)
     SELECT *
-    FROM discogs.images_of_master_import;
+    FROM discogs.images_of_master_import
+    WHERE master_id IN (SELECT id
+                        FROM discogs.master);
 
 INSERT INTO discogs.master_artist (id, name, role, join_att, anv)
-    SELECT DISTINCT id, name, role, join_att, anv
-    FROM discogs.master_artist_import;
+    SELECT id, STRING_AGG(name, ' ''#'' '), STRING_AGG(role, ' ''#'' '), STRING_AGG(join_att, ' ''#'' '), STRING_AGG(anv, ' ''#'' ')
+    FROM discogs.master_artist_import
+    GROUP BY id;
 
 INSERT INTO discogs.master_artist_performs (master_id, artist_id)
     SELECT DISTINCT master_id, artist_id
-    FROM discogs.master_artist_performs_import;
+    FROM discogs.master_artist_performs_import
+    WHERE master_id IN (SELECT id
+                        FROM discogs.master)
+      AND artist_id IN (SELECT id
+                        FROM discogs.master_artist);
+
 -- transformation for release tables
 
 INSERT INTO discogs.release (id, released, country, notes, status, title)

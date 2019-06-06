@@ -417,17 +417,19 @@ ALTER TABLE discogs.master_genres ADD PRIMARY KEY (id, genre);
 ALTER TABLE discogs.master_genres ADD FOREIGN KEY (id) REFERENCES discogs.master(id);
 
 CREATE TABLE discogs.master_images (
-	uri TEXT PRIMARY KEY,
+	uri TEXT,
 	uri150 TEXT,
 	type TEXT,
 	width INTEGER,
 	height INTEGER);
 
+-- ALTER TABLE discogs.master_images ADD PRIMARY KEY (uri);
+
 CREATE TABLE discogs.images_of_master (
 	uri TEXT,
 	master_id INTEGER);
 ALTER TABLE discogs.images_of_master ADD FOREIGN KEY (master_id) REFERENCES discogs.master(id);
-ALTER TABLE discogs.images_of_master ADD FOREIGN KEY (uri) REFERENCES discogs.master_images(uri);
+--ALTER TABLE discogs.images_of_master ADD FOREIGN KEY (uri) REFERENCES discogs.master_images(uri);
 
 CREATE TABLE discogs.master_artist (
 	id INTEGER PRIMARY KEY,
