@@ -543,13 +543,15 @@ CREATE TABLE discogs.release_image (
 	uri150 TEXT,
 	type TEXT,
 	width INTEGER,
-	heigth INTEGER);
+	height INTEGER);
+
+ALTER TABLE discogs.release_image ADD PRIMARY KEY (uri);
 
 CREATE TABLE discogs.image_of_release (
 	uri TEXT,
 	release_id INTEGER);
-ALTER TABLE discogs.image_of_release ADD PRIMARY KEY (uri, release_id);
-ALTER TABLE discogs.image_of_release ADD FOREIGN KEY (uri) REFERENCES discogs.release_image(uri);
+--ALTER TABLE discogs.image_of_release ADD PRIMARY KEY (uri, release_id);
+--ALTER TABLE discogs.image_of_release ADD FOREIGN KEY (uri) REFERENCES discogs.release_image(uri);
 ALTER TABLE discogs.image_of_release ADD FOREIGN KEY (release_id) REFERENCES discogs.release(id);
 
 CREATE TABLE discogs.release_label (

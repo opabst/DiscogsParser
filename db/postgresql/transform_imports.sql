@@ -120,36 +120,51 @@ INSERT INTO discogs.master_artist_performs (master_id, artist_id)
 -- transformation for release tables
 
 INSERT INTO discogs.release (id, released, country, notes, status, title)
-    SELECT id, released, country, STRING_AGG(notes, '''#'''), status, title
+    SELECT id, released, country, notes, status, title
     FROM discogs.release_import
-    WHERE data_quality IN ('CORRECT', 'COMPLETE_AND_CORRECT')
-    GROUP BY id
-    ORDER BY id;
+    WHERE data_quality IN ('CORRECT', 'COMPLETE_AND_CORRECT');
 
 INSERT INTO discogs.release_styles (id, style)
     SELECT DISTINCT id, style
-    FROM discogs.release_styles_import;
+    FROM discogs.release_styles_import
+    WHERE id IN (SELECT id
+                 FROM discogs.release);
 
 INSERT INTO discogs.release_genres (id, genre)
     SELECT DISTINCT id, genre
-    FROM discogs.release_genres_import;
+    FROM discogs.release_genres_import
+    WHERE id IN (SELECT id
+                 FROM discogs.release);
 
 INSERT INTO discogs.release_artist (id, name, role, join_att, anv)
-    SELECT DISTINCT id, name, role, join_att, anv
-    FROM discogs.release_artist_import;
+    SELECT id, STRING_AGG(name, ' ''#'' '), STRING_AGG(role, ' ''#'' '), STRING_AGG(join_att, ' ''#'' '), STRING_AGG(anv, ' ''#'' ')
+    FROM discogs.release_artist_import
+    GROUP BY id;
 
 INSERT INTO discogs.artist_of_release (release_id, artist_id)
     SELECT DISTINCT release_id, artist_id
-    FROM discogs.artist_of_release_import;
+    FROM discogs.artist_of_release_import
+    WHERE release_id IN (SELECT id
+			             FROM discogs.release)
+      AND artist_id IN (SELECT id
+			            FROM discogs.release_artist);
 
 INSERT INTO discogs.release_extraartist (id, name, role, join_att, anv)
-    SELECT DISTINCT id, name, role, join_att, anv
-    FROM discogs.release_extraartist_import;
+    SELECT id, STRING_AGG(name, ' ''#'' '), STRING_AGG(role, ' ''#'' '), STRING_AGG(join_att, ' ''#'' '), STRING_AGG(anv, ' ''#'' ')
+    FROM discogs.release_extraartist_import
+    GROUP BY id;
 
 INSERT INTO discogs.extraartist_of_release (release_id, artist_id)
     SELECT DISTINCT release_id, artist_id
-    FROM discogs.extraartist_of_release_import;
+    FROM discogs.extraartist_of_release_import
+    WHERE release_id IN (SELECT id
+			 FROM discogs.release)
+      AND artist_id IN (SELECT id
+			FROM discogs.release_extraartist);
 
+-----------------------
+-- FIX AND REWORK------
+-----------------------
 INSERT INTO discogs.release_identifier (value, type, description)
     SELECT DISTINCT value, type, description
     FROM discogs.release_identifier_import;
@@ -158,6 +173,13 @@ INSERT INTO discogs.identifies (release_id, identifier_value)
     SELECT release_id, identifier_value
     FROM discogs.identifies_import;
 
+------------------------
+------------------------
+------------------------
+
+-----------------------
+-- FIX AND REWORK------
+-----------------------
 INSERT INTO discogs.release_video (src, duration, description, title, embed)
     SELECT src, duration, description, title, embed
     FROM discogs.release_video_import;
@@ -165,7 +187,13 @@ INSERT INTO discogs.release_video (src, duration, description, title, embed)
 INSERT INTO discogs.video_of_release (release_id, video_src)
     SELECT release_id, video_src
     FROM discogs.video_of_release_import;
+------------------------
+------------------------
+------------------------
 
+-----------------------
+-- FIX AND REWORK------
+-----------------------
 INSERT INTO discogs.release_company (id, resource_url, name, entity_type, entity_type_value, catno)
     SELECT id, resource_url, name, entity_type, entity_type_value, catno
     FROM discogs.release_company_import;
@@ -173,6 +201,10 @@ INSERT INTO discogs.release_company (id, resource_url, name, entity_type, entity
 INSERT INTO discogs.company_of_release (release_id, company_id)
     SELECT release_id, company_id
     FROM discogs.company_of_release_import;
+------------------------
+------------------------
+------------------------
+
 
 INSERT INTO discogs.release_image (uri, uri150, type, width, height)
     SELECT uri, uri150, type, width, heigth
@@ -180,12 +212,19 @@ INSERT INTO discogs.release_image (uri, uri150, type, width, height)
 
 INSERT INTO discogs.image_of_release (uri, release_id)
     SELECT uri, release_id
-    FROM discogs.image_of_release_import;
+    FROM discogs.image_of_release_import
+    WHERE release_id IN (SELECT id
+                         FROM discogs.release);
 
 INSERT INTO discogs.release_label (id, catno, name)
-    SELECT id, catno, name
-    FROM discogs.release_label_import;
+    SELECT id, STRING_AGG(catno,' ''#'' '), STRING_AGG(name, ' ''#'' ')
+    FROM discogs.release_label_import
+    GROUP BY id;
 
 INSERT INTO discogs.label_of_release (label_id, release_id)
-    SELECT label_id, release_id
-    FROM discogs.label_of_release_import;
+    SELECT DISTINCT label_id, release_id
+    FROM discogs.label_of_release_import
+    WHERE label_id IN (SELECT id
+		       FROM discogs.label)
+      AND release_id IN (SELECT id
+			 FROM discogs.release);
