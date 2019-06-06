@@ -312,7 +312,6 @@ CREATE TABLE discogs.artist (
 	name TEXT,
 	realname TEXT,
 	profile TEXT);
--- TODO: add check clause for dataquality
 
 CREATE TABLE discogs.artist_namevariations (
 	id INTEGER,

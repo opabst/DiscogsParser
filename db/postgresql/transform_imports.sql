@@ -2,24 +2,34 @@
 -- transformation for artist tables
 -- '#' used as delimiter to seperate realnames and profiles from different records
 
+-- There can be more than one record for an id, but with different names; these records will aggregated by aggregating
+-- the atributes with a delimiter. 
 INSERT INTO discogs.artist (id, name, realname, profile)
-    SELECT id, name, STRING_AGG(REPLACE(realname, ',', ' ''#'' '), ' ''#'' '), STRING_AGG(profile, '''#''')
+    SELECT id, STRING_AGG(name, ' ''#'' '), STRING_AGG(REPLACE(realname, ',', ' ''#'' '), ' ''#'' '), STRING_AGG(profile, '''#''')
     FROM discogs.artist_import
     WHERE data_quality IN ('CORRECT', 'COMPLETE_AND_CORRECT')
-    GROUP BY id, name
-    ORDER BY id, name;
+    GROUP BY id
+    ORDER BY id;
 
 INSERT INTO discogs.artist_namevariations (id, name_variation)
     SELECT DISTINCT id, name_variation
-    FROM discogs.artist_namevariations_import;
+    FROM discogs.artist_namevariations_import
+    WHERE id IN (SELECT id
+                 FROM discogs.artist);
 
 INSERT INTO discogs.artist_alias (id, alias)
     SELECT DISTINCT id, alias
-    FROM discogs.artist_alias_import;
+    FROM discogs.artist_alias_import
+    WHERE alias IS NOT NULL;
 
 INSERT INTO discogs.alias_of_artist (artist_id, alias_id, alias_name)
     SELECT DISTINCT artist_id, alias_id, alias_name
-    FROM discogs.alias_of_artist_import;
+    FROM discogs.alias_of_artist_import
+    WHERE alias_name IS NOT NULL
+      AND artist_id IN (SELECT id
+                        FROM discogs.artist)
+      AND alias_id IN (SELECT id
+                       FROM discogs.artist_alias);
 
 INSERT INTO discogs.artist_image (uri, uri150, type, width, height)
     SELECT *
@@ -27,7 +37,9 @@ INSERT INTO discogs.artist_image (uri, uri150, type, width, height)
 
 INSERT INTO discogs.image_of_artist (id, uri)
     SELECT *
-    FROM discogs.image_of_artist_import;
+    FROM discogs.image_of_artist_import
+    WHERE id IN (SELECT id
+                 FROM discogs.artist);
 
 -- transformation for label tables
 
