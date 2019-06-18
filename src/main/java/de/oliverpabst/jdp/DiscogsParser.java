@@ -3,7 +3,6 @@ package de.oliverpabst.jdp;
 import de.oliverpabst.jdp.database.ConnectionParameters;
 import de.oliverpabst.jdp.database.SchemaDoesNotExistException;
 import de.oliverpabst.jdp.database.postgresql.PostgreSQLConnection;
-import de.oliverpabst.jdp.parser.ReleaseParser;
 import de.oliverpabst.jdp.thread.ArtistThread;
 import de.oliverpabst.jdp.thread.LabelThread;
 import de.oliverpabst.jdp.thread.MasterThread;
