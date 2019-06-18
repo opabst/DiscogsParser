@@ -539,7 +539,7 @@ ALTER TABLE discogs.company_of_release ADD FOREIGN KEY (release_id) REFERENCES d
 ALTER TABLE discogs.company_of_release ADD FOREIGN KEY (company_id) REFERENCES discogs.release_company(id);
 
 CREATE TABLE discogs.release_image (
-	uri TEXT PRIMARY KEY,
+	uri TEXT,
 	uri150 TEXT,
 	type TEXT,
 	width INTEGER,
