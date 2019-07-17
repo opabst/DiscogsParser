@@ -37,7 +37,7 @@ public class ReleaseWriter {
     private PreparedStatement insReleaseLabel;
     private PreparedStatement insLabelOfRelease;
 
-    private Integer insertTrigger = 50000;
+    private Integer insertTrigger = 10000;
 
     private Integer releaseCnt = 0;
     private Integer releaseStylesCnt = 0;
@@ -100,6 +100,8 @@ public class ReleaseWriter {
 
     public void finalBatchExecute() throws SQLException {
         executeReleaseBatchs();
+        con.commit();
+
         ImportStatistics.getInstance().setValue("Release", releaseCnt);
         ImportStatistics.getInstance().setValue("ReleaseStyles", releaseStylesCnt);
         ImportStatistics.getInstance().setValue("ReleaseGenres", releaseGenresCnt);
@@ -117,6 +119,7 @@ public class ReleaseWriter {
         ImportStatistics.getInstance().setValue("ReleaseImageOf", releaseImageOfCnt);
         ImportStatistics.getInstance().setValue("ReleaseLabel", releaseLabelCnt);
         ImportStatistics.getInstance().setValue("ReleaseLabelOf", releaseLabelOfCnt);
+
         con.setAutoCommit(true);
     }
 
@@ -272,7 +275,6 @@ public class ReleaseWriter {
         objectCounter++;
         if(objectCounter % insertTrigger == 0) {
             executeReleaseBatchs();
-            con.commit();
         }
     }
 

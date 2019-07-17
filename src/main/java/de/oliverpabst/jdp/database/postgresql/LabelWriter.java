@@ -28,7 +28,7 @@ public class LabelWriter {
     private PreparedStatement insImageOfLabel;
 
 
-    private Integer insertTrigger = 50000;
+    private Integer insertTrigger = 10000;
 
     private Integer labelCnt = 0;
     private Integer labelUrlsCnt = 0;
@@ -68,12 +68,15 @@ public class LabelWriter {
 
     public void finalBatchExecute() throws SQLException {
         executeLabelBatchs();
+        con.commit();
+
         ImportStatistics.getInstance().setValue("Label", labelCnt);
         ImportStatistics.getInstance().setValue("LabelUrls", labelUrlsCnt);
         ImportStatistics.getInstance().setValue("LabelSublabel", sublabelCnt);
         ImportStatistics.getInstance().setValue("LabelSublabelOf", sublabelOfCnt);
         ImportStatistics.getInstance().setValue("LabelImage", labelImageCnt);
         ImportStatistics.getInstance().setValue("LabelImageOf", imageOfLabelCnt);
+
         con.setAutoCommit(true);
     }
 
@@ -133,7 +136,6 @@ public class LabelWriter {
         objectCounter++;
         if(objectCounter % insertTrigger == 0) {
             executeLabelBatchs();
-            con.commit();
         }
     }
 

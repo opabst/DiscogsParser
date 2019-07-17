@@ -27,7 +27,7 @@ public class ArtistWriter {
     private PreparedStatement insArtistImage;
     private PreparedStatement insImageOfArtist;
 
-    private final Integer insertTrigger = 50000;
+    private final Integer insertTrigger = 10000;
 
     private Integer artistCnt = 0;
     private Integer artistNameVariationCnt = 0;
@@ -68,12 +68,15 @@ public class ArtistWriter {
 
     public void finalBatchExecute() throws SQLException {
         executeArtistBatchs();
+        con.commit();
+
         ImportStatistics.getInstance().setValue("Artist", artistCnt);
         ImportStatistics.getInstance().setValue("ArtistNameVariation", artistNameVariationCnt);
         ImportStatistics.getInstance().setValue("ArtistAlias", artistAliasCnt);
         ImportStatistics.getInstance().setValue("AliasOfArtist", aliasOfArtistCnt);
         ImportStatistics.getInstance().setValue("ArtistImage", artistImageCnt);
         ImportStatistics.getInstance().setValue("ArtistImageOf", imageOfArtistCnt);
+
         con.setAutoCommit(true);
     }
 
@@ -134,7 +137,6 @@ public class ArtistWriter {
         objectCounter++;
         if(objectCounter % insertTrigger == 0) {
             executeArtistBatchs();
-            con.commit();
         }
     }
 

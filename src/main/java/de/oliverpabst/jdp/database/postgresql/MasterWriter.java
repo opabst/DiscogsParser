@@ -28,7 +28,7 @@ public class MasterWriter {
     private PreparedStatement insMasterArtist;
     private PreparedStatement insMasterArtistPerforms;
 
-    private Integer insertTrigger = 50000;
+    private Integer insertTrigger = 10000;
 
     private Integer masterCnt = 0;
     private Integer masterStylesCnt = 0;
@@ -70,6 +70,8 @@ public class MasterWriter {
 
     public void finalBatchExecute() throws SQLException {
         executeMasterBatchs();
+        con.commit();
+
         ImportStatistics.getInstance().setValue("Master", masterCnt);
         ImportStatistics.getInstance().setValue("MasterStyles", masterStylesCnt);
         ImportStatistics.getInstance().setValue("MasterGenres", masterGenresCnt);
@@ -77,6 +79,7 @@ public class MasterWriter {
         ImportStatistics.getInstance().setValue("MasterImageOf", imageOfMasterCnt);
         ImportStatistics.getInstance().setValue("MasterArtist", masterArtistCnt);
         ImportStatistics.getInstance().setValue("MasterArtistPerforms", masterArtistPerformsCnt);
+
         con.setAutoCommit(true);
     }
 
@@ -147,7 +150,6 @@ public class MasterWriter {
         objectCounter++;
         if(objectCounter % insertTrigger == 0) {
             executeMasterBatchs();
-            con.commit();
         }
     }
 

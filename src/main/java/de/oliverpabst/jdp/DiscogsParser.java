@@ -92,7 +92,9 @@ public class DiscogsParser {
 
         while (true) {
             try {
-                if (!pool.awaitTermination(2, TimeUnit.MINUTES)) break;
+                if (pool.awaitTermination(2, TimeUnit.MINUTES)) {
+                    break;
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
