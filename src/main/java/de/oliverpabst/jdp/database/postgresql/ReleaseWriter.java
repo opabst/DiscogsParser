@@ -130,9 +130,9 @@ public class ReleaseWriter {
         insArtistOfRelease = con.prepareStatement("INSERT INTO discogs.artist_of_release_import (release_id, artist_id) VALUES (?, ?)");
         insReleaseExtraartist = con.prepareStatement("INSERT INTO discogs.release_extraartist_import (id, name, role, join_att, anv) VALUES (?, ?, ?, ?, ?)");
         insExtraartistOfRelease = con.prepareStatement("INSERT INTO discogs.extraartist_of_release_import (release_id, artist_id) VALUES (?, ?)");
-        insReleaseIdentifier = con.prepareStatement("INSERT INTO discogs.release_identifier_import (id, value, type, description) VALUES (?, ?, ?)");
+        insReleaseIdentifier = con.prepareStatement("INSERT INTO discogs.release_identifier_import (id, value, type, description) VALUES (?, ?, ?, ?)");
         insIdentifies = con.prepareStatement("INSERT INTO discogs.identifies_import (release_id, identifier_id) VALUES (?, ?)");
-        insReleaseVideo = con.prepareStatement("INSERT INTO discogs.release_video_import (id, src, duration, description, title, embed) VALUES (?, ?, ?, ?, ?)");
+        insReleaseVideo = con.prepareStatement("INSERT INTO discogs.release_video_import (id, src, duration, description, title, embed) VALUES (?, ?, ?, ?, ?, ?)");
         insVideoOfRelease = con.prepareStatement("INSERT INTO discogs.video_of_release_import (release_id, video_id) VALUES (?, ?)");
         insReleaseCompany = con.prepareStatement("INSERT INTO discogs.release_company_import (id, resource_url, name, entity_type, entity_type_value, catno) VALUES (?, ?, ?, ?, ?, ?)");
         insCompanyOfRelease = con.prepareStatement("INSERT INTO discogs.company_of_release_import (release_id, company_id) VALUES (?, ?)");
