@@ -222,20 +222,22 @@ CREATE TABLE discogs.extraartist_of_release_import (
 
 --Note: primary key removed
 CREATE TABLE discogs.release_identifier_import (
+    id NUMERIC,
 	value TEXT,
 	type TEXT,
 	description TEXT);
 
 CREATE TABLE discogs.identifies_import (
 	release_id INTEGER,
-	identifier_value TEXT);
+	identifier_id NUMERIC);
 
---ALTER TABLE discogs.identifies_import ADD PRIMARY KEY (release_id, identifier_value);
---ALTER TABLE discogs.identifies_import ADD FOREIGN KEY (release_id) REFERENCES discogs.release(id);
---ALTER TABLE discogs.identifies_import ADD FOREIGN KEY (identifier_value) REFERENCES discogs.release_identifier(value);
+--ALTER TABLE discogs.identifies_import ADD PRIMARY KEY (release_id, identifier_id);
+--ALTER TABLE discogs.identifies_import ADD FOREIGN KEY (release_id) REFERENCES discogs.release_import(id);
+--ALTER TABLE discogs.identifies_import ADD FOREIGN KEY (identifier_id) REFERENCES discogs.release_identifier_import(id);
 
 --Note: primary key removed
 CREATE TABLE discogs.release_video_import (
+    id NUMERIC,
 	src TEXT,
 	duration TEXT,
 	description TEXT,
@@ -244,11 +246,11 @@ CREATE TABLE discogs.release_video_import (
 
 CREATE TABLE discogs.video_of_release_import (
 	release_id INTEGER,
-	video_src TEXT);
+	video_id NUMERIC);
 
---ALTER TABLE discogs.video_of_release_import ADD PRIMARY KEY (release_id, video_src);
---ALTER TABLE discogs.video_of_release_import ADD FOREIGN KEY (release_id) REFERENCES discogs.release(id);
---ALTER TABLE discogs.video_of_release_import ADD FOREIGN KEY (video_src) REFERENCES discogs.release_video(src);
+--ALTER TABLE discogs.video_of_release_import ADD PRIMARY KEY (release_id, video_id);
+--ALTER TABLE discogs.video_of_release_import ADD FOREIGN KEY (release_id) REFERENCES discogs.release_import(id);
+--ALTER TABLE discogs.video_of_release_import ADD FOREIGN KEY (video_id) REFERENCES discogs.release_video_import(id);
 
 --Note: primary key removed
 CREATE TABLE discogs.release_company_import (
@@ -296,4 +298,3 @@ CREATE TABLE discogs.label_of_release_import (
 --ALTER TABLE discogs.label_of_release_import ADD PRIMARY KEY (label_id, release_id);
 --ALTER TABLE discogs.label_of_release_import ADD FOREIGN KEY (label_id) REFERENCES discogs.release_label(id);
 --ALTER TABLE discogs.label_of_release_import ADD FOREIGN KEY (release_id) REFERENCES discogs.release(id);
- 

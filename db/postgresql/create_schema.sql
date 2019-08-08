@@ -199,19 +199,21 @@ ALTER TABLE discogs.extraartist_of_release ADD FOREIGN KEY (release_id) REFERENC
 ALTER TABLE discogs.extraartist_of_release ADD FOREIGN KEY (artist_id) REFERENCES discogs.release_extraartist(id);
 
 CREATE TABLE discogs.release_identifier (
-	value TEXT PRIMARY KEY,
+    id NUMERIC PRIMARY KEY,
+	value TEXT,
 	type TEXT,
 	description TEXT);
 
 CREATE TABLE discogs.identifies (
 	release_id INTEGER,
-	identifier_value TEXT);
-ALTER TABLE discogs.identifies ADD PRIMARY KEY (release_id, identifier_value);
+	identifier_id NUMERIC);
+ALTER TABLE discogs.identifies ADD PRIMARY KEY (release_id, identifier_id);
 ALTER TABLE discogs.identifies ADD FOREIGN KEY (release_id) REFERENCES discogs.release(id);
-ALTER TABLE discogs.identifies ADD FOREIGN KEY (identifier_value) REFERENCES discogs.release_identifier(value);
+ALTER TABLE discogs.identifies ADD FOREIGN KEY (identifier_id) REFERENCES discogs.release_identifier(id);
 
 CREATE TABLE discogs.release_video (
-	src TEXT PRIMARY KEY,
+    id NUMERIC PRIMARY KEY,
+	src TEXT,
 	duration TEXT,
 	description TEXT,
 	title TEXT,
@@ -219,10 +221,10 @@ CREATE TABLE discogs.release_video (
 
 CREATE TABLE discogs.video_of_release (
 	release_id INTEGER,
-	video_src TEXT);
-ALTER TABLE discogs.video_of_release ADD PRIMARY KEY (release_id, video_src);
+	video_id NUMERIC);
+ALTER TABLE discogs.video_of_release ADD PRIMARY KEY (release_id, video_id);
 ALTER TABLE discogs.video_of_release ADD FOREIGN KEY (release_id) REFERENCES discogs.release(id);
-ALTER TABLE discogs.video_of_release ADD FOREIGN KEY (video_src) REFERENCES discogs.release_video(src);
+ALTER TABLE discogs.video_of_release ADD FOREIGN KEY (video_id) REFERENCES discogs.release_video(id);
 
 CREATE TABLE discogs.release_company (
 	id INTEGER PRIMARY KEY,
