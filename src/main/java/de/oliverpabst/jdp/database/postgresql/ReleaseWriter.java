@@ -37,8 +37,6 @@ public class ReleaseWriter {
     private PreparedStatement insReleaseLabel;
     private PreparedStatement insLabelOfRelease;
 
-    private Integer insertTrigger = 10000;
-
     private Integer releaseCnt = 0;
     private Integer releaseStylesCnt = 0;
     private Integer releaseGenresCnt = 0;
@@ -78,7 +76,7 @@ public class ReleaseWriter {
         return instance;
     }
 
-    public void executeReleaseBatchs() throws SQLException {
+    private void executeReleaseBatchs() throws SQLException {
         insRelease.executeBatch();
         insReleaseStyles.executeBatch();
         insReleaseGenres.executeBatch();
@@ -123,7 +121,7 @@ public class ReleaseWriter {
         con.setAutoCommit(true);
     }
 
-    public void setupPreparedStatements() throws SQLException {
+    private void setupPreparedStatements() throws SQLException {
         con.setAutoCommit(false);
         insRelease = con.prepareStatement("INSERT INTO discogs.release_import (id, released, country, notes, status, title, data_quality) VALUES (?, ?, ?, ?, ?, ?, ?)");
         insReleaseStyles = con.prepareStatement("INSERT INTO discogs.release_styles_import (id, style) VALUES (?, ?)");
@@ -132,10 +130,10 @@ public class ReleaseWriter {
         insArtistOfRelease = con.prepareStatement("INSERT INTO discogs.artist_of_release_import (release_id, artist_id) VALUES (?, ?)");
         insReleaseExtraartist = con.prepareStatement("INSERT INTO discogs.release_extraartist_import (id, name, role, join_att, anv) VALUES (?, ?, ?, ?, ?)");
         insExtraartistOfRelease = con.prepareStatement("INSERT INTO discogs.extraartist_of_release_import (release_id, artist_id) VALUES (?, ?)");
-        insReleaseIdentifier = con.prepareStatement("INSERT INTO discogs.release_identifier_import (value, type, description) VALUES (?, ?, ?)");
-        insIdentifies = con.prepareStatement("INSERT INTO discogs.identifies_import (release_id, identifier_value) VALUES (?, ?)");
-        insReleaseVideo = con.prepareStatement("INSERT INTO discogs.release_video_import (src, duration, description, title, embed) VALUES (?, ?, ?, ?, ?)");
-        insVideoOfRelease = con.prepareStatement("INSERT INTO discogs.video_of_release_import (release_id, video_src) VALUES (?, ?)");
+        insReleaseIdentifier = con.prepareStatement("INSERT INTO discogs.release_identifier_import (id, value, type, description) VALUES (?, ?, ?)");
+        insIdentifies = con.prepareStatement("INSERT INTO discogs.identifies_import (release_id, identifier_id) VALUES (?, ?)");
+        insReleaseVideo = con.prepareStatement("INSERT INTO discogs.release_video_import (id, src, duration, description, title, embed) VALUES (?, ?, ?, ?, ?)");
+        insVideoOfRelease = con.prepareStatement("INSERT INTO discogs.video_of_release_import (release_id, video_id) VALUES (?, ?)");
         insReleaseCompany = con.prepareStatement("INSERT INTO discogs.release_company_import (id, resource_url, name, entity_type, entity_type_value, catno) VALUES (?, ?, ?, ?, ?, ?)");
         insCompanyOfRelease = con.prepareStatement("INSERT INTO discogs.company_of_release_import (release_id, company_id) VALUES (?, ?)");
         insReleaseImage = con.prepareStatement("INSERT INTO discogs.release_image_import (uri, uri150, type, width, heigth) VALUES (?, ?, ?, ?, ?)");
@@ -200,29 +198,31 @@ public class ReleaseWriter {
         }
 
         for(ReleaseIdentifier ri: _re.getIdentifiers()) {
-            insReleaseIdentifier.setString(1, ri.getValue());
-            insReleaseIdentifier.setString(2, ri.getType());
-            insReleaseIdentifier.setString(3, ri.getDescription());
+            insReleaseIdentifier.setInt(1, releaseIdentifierCnt+1);
+            insReleaseIdentifier.setString(2, ri.getValue());
+            insReleaseIdentifier.setString(3, ri.getType());
+            insReleaseIdentifier.setString(4, ri.getDescription());
             insReleaseIdentifier.addBatch();
             releaseIdentifierCnt++;
 
             insIdentifies.setInt(1, Integer.parseInt(_re.getId()));
-            insIdentifies.setString(2, ri.getValue());
+            insIdentifies.setInt(2, releaseIdentifierCnt+1);
             insIdentifies.addBatch();
             releaseIdentifiesCnt++;
         }
 
         for(ReleaseVideo rv: _re.getVideos()) {
-            insReleaseVideo.setString(1, rv.getSrc());
-            insReleaseVideo.setString(2, rv.getDuration());
-            insReleaseVideo.setString(3, rv.getDescription());
-            insReleaseVideo.setString(4, rv.getTitle());
-            insReleaseVideo.setBoolean(5, rv.getEmbed());
+            insReleaseVideo.setInt(1, releaseVideoCnt+1);
+            insReleaseVideo.setString(2, rv.getSrc());
+            insReleaseVideo.setString(3, rv.getDuration());
+            insReleaseVideo.setString(4, rv.getDescription());
+            insReleaseVideo.setString(5, rv.getTitle());
+            insReleaseVideo.setBoolean(6, rv.getEmbed());
             insReleaseVideo.addBatch();
             releaseVideoCnt++;
 
             insVideoOfRelease.setInt(1, Integer.parseInt(_re.getId()));
-            insVideoOfRelease.setString(2, rv.getSrc());
+            insVideoOfRelease.setInt(2, releaseVideoOfCnt+1);
             insVideoOfRelease.addBatch();
             releaseVideoOfCnt++;
         }
@@ -273,7 +273,9 @@ public class ReleaseWriter {
 
 
         objectCounter++;
-        if(objectCounter % insertTrigger == 0) {
+
+        // Execute the batches after 10000 adds
+        if(objectCounter % 10000 == 0) {
             executeReleaseBatchs();
         }
     }
