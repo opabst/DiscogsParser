@@ -3,7 +3,7 @@
 -- '#' used as delimiter to seperate realnames and profiles from different records
 
 -- There can be more than one record for an id, but with different names; these records will aggregated by aggregating
--- the atributes with a delimiter. 
+-- the atributes with a delimiter.
 INSERT INTO discogs.artist (id, name, realname, profile)
     SELECT id, STRING_AGG(name, ' ''#'' '), STRING_AGG(REPLACE(realname, ',', ' ''#'' '), ' ''#'' '), STRING_AGG(profile, '''#''')
     FROM discogs.artist_import
@@ -162,16 +162,15 @@ INSERT INTO discogs.extraartist_of_release (release_id, artist_id)
       AND artist_id IN (SELECT id
 			FROM discogs.release_extraartist);
 
------------------------
--- FIX AND REWORK------
------------------------
-INSERT INTO discogs.release_identifier (value, type, description)
-    SELECT DISTINCT value, type, description
+INSERT INTO discogs.release_identifier (id, value, type, description)
+    SELECT DISTINCT id, value, type, description
     FROM discogs.release_identifier_import;
 
-INSERT INTO discogs.identifies (release_id, identifier_value)
-    SELECT release_id, identifier_value
-    FROM discogs.identifies_import;
+INSERT INTO discogs.identifies (release_id, identifier_id)
+    SELECT release_id, identifier_id
+    FROM discogs.identifies_import
+    WHERE release_id IN (SELECT id FROM discogs.release)
+      AND identifier_id IN (SELECT id FROM discogs.release_identifier);
 
 ------------------------
 ------------------------
@@ -180,8 +179,8 @@ INSERT INTO discogs.identifies (release_id, identifier_value)
 -----------------------
 -- FIX AND REWORK------
 -----------------------
-INSERT INTO discogs.release_video (src, duration, description, title, embed)
-    SELECT src, duration, description, title, embed
+INSERT INTO discogs.release_video (id, src, duration, description, title, embed)
+    SELECT id, src, duration, description, title, embed
     FROM discogs.release_video_import;
 
 INSERT INTO discogs.video_of_release (release_id, video_src)
