@@ -1,0 +1,42 @@
+-- ARTIST TABLES
+DROP TABLE discogs.artist;
+DROP TABLE discogs.artist_namevariations;
+DROP TABLE discogs.artist_alias;
+DROP TABLE discogs.alias_of_artist;
+DROP TABLE discogs.artist_image;
+DROP TABLE discogs.image_of_artist;
+
+-- LABEL TABLES
+DROP TABLE discogs.label;
+DROP TABLE discogs.label_urls;
+DROP TABLE discogs.sublabel;
+DROP TABLE discogs.sublabel_of;
+DROP TABLE discogs.label_images;
+DROP TABLE discogs.image_of_label;
+
+-- MASTER TABLES
+DROP TABLE discogs.master_import;
+DROP TABLE discogs.master_styles;
+DROP TABLE discogs.master_genres;
+DROP TABLE discogs.master_images;
+DROP TABLE discogs.master_artist;
+DROP TABLE discogs.master_artist_performs;
+
+-- RELEASE TABLES
+DROP TABLE discogs.release;
+DROP TABLE discogs.release_styles;
+DROP TABLE discogs.release_genres;
+DROP TABLE discogs.release_artist;
+DROP TABLE discogs.artist_of_release;
+DROP TABLE discogs.release_extraartist;
+DROP TABLE discogs.extraartist_of_release;
+DROP TABLE discogs.release_identifier;
+DROP TABLE discogs.identifies;
+DROP TABLE discogs.release_video;
+DROP TABLE discogs.video_of_release;
+DROP TABLE discogs.release_company;
+DROP TABLE discogs.company_of_release;
+DROP TABLE discogs.release_image;
+DROP TABLE discogs.image_of_release;
+DROP TABLE discogs.release_label;
+DROP TABLE discogs.label_of_release;
