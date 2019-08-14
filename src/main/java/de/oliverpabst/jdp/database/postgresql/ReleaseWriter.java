@@ -136,8 +136,8 @@ public class ReleaseWriter {
         insVideoOfRelease = con.prepareStatement("INSERT INTO discogs.video_of_release_import (release_id, video_id) VALUES (?, ?)");
         insReleaseCompany = con.prepareStatement("INSERT INTO discogs.release_company_import (id, resource_url, name, entity_type, entity_type_value, catno) VALUES (?, ?, ?, ?, ?, ?)");
         insCompanyOfRelease = con.prepareStatement("INSERT INTO discogs.company_of_release_import (release_id, company_id) VALUES (?, ?)");
-        insReleaseImage = con.prepareStatement("INSERT INTO discogs.release_image_import (uri, uri150, type, width, heigth) VALUES (?, ?, ?, ?, ?)");
-        insImageOfRelease = con.prepareStatement("INSERT INTO discogs.image_of_release_import (uri, release_id) VALUES (?, ?)");
+        insReleaseImage = con.prepareStatement("INSERT INTO discogs.release_image_import (id, uri, uri150, type, width, heigth) VALUES (?, ?, ?, ?, ?, ?)");
+        insImageOfRelease = con.prepareStatement("INSERT INTO discogs.image_of_release_import (image_id, release_id) VALUES (?, ?)");
         insReleaseLabel = con.prepareStatement("INSERT INTO discogs.release_label_import (id, catno, name) VALUES (?, ?, ?)");
         insLabelOfRelease = con.prepareStatement("INSERT INTO discogs.label_of_release_import (label_id, release_id) VALUES (?, ?)");
     }
@@ -206,7 +206,7 @@ public class ReleaseWriter {
             releaseIdentifierCnt++;
 
             insIdentifies.setInt(1, Integer.parseInt(_re.getId()));
-            insIdentifies.setInt(2, releaseIdentifierCnt+1);
+            insIdentifies.setInt(2, releaseIdentifiesCnt+1);
             insIdentifies.addBatch();
             releaseIdentifiesCnt++;
         }
@@ -244,15 +244,16 @@ public class ReleaseWriter {
         }
 
         for(Image i: _re.getImages()) {
-            insReleaseImage.setString(1, i.getUri());
-            insReleaseImage.setString(2, i.getUri150());
-            insReleaseImage.setString(3, i.getType().toString());
-            insReleaseImage.setInt(4, i.getWidth());
-            insReleaseImage.setInt(5, i.getHeight());
+            insReleaseImage.setInt(1, releaseImageCnt+1);
+            insReleaseImage.setString(2, i.getUri());
+            insReleaseImage.setString(3, i.getUri150());
+            insReleaseImage.setString(4, i.getType().toString());
+            insReleaseImage.setInt(5, i.getWidth());
+            insReleaseImage.setInt(6, i.getHeight());
             insReleaseImage.addBatch();
             releaseImageCnt++;
 
-            insImageOfRelease.setString(1, i.getUri());
+            insImageOfRelease.setInt(1, releaseImageOfCnt+1);
             insImageOfRelease.setInt(2, Integer.parseInt(_re.getId()));
             insImageOfRelease.addBatch();
             releaseImageOfCnt++;
@@ -275,7 +276,7 @@ public class ReleaseWriter {
         objectCounter++;
 
         // Execute the batches after 10000 adds
-        if(objectCounter % 10000 == 0) {
+        if(objectCounter % 1000 == 0) {
             executeReleaseBatchs();
         }
     }

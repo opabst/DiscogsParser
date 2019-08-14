@@ -28,7 +28,7 @@ public class MasterWriter {
     private PreparedStatement insMasterArtist;
     private PreparedStatement insMasterArtistPerforms;
 
-    private Integer insertTrigger = 10000;
+    private Integer insertTrigger = 1000;
 
     private Integer masterCnt = 0;
     private Integer masterStylesCnt = 0;
@@ -88,8 +88,8 @@ public class MasterWriter {
         insMaster = con.prepareStatement("INSERT INTO discogs.master_import (id, year, data_quality, title, main_release) VALUES (?, ?, ?, ?, ?)");
         insMasterStyles = con.prepareStatement("INSERT INTO discogs.master_styles_import (id, style) VALUES (?, ?)");
         insMasterGenres = con.prepareStatement("INSERT INTO discogs.master_genres_import (id, genre) VALUES (?, ?)");
-        insMasterImages = con.prepareStatement("INSERT INTO discogs.master_images_import (uri, uri150, type, width, height) VALUES (?, ?, ?, ?, ?)");
-        insImagesOfMaster = con.prepareStatement("INSERT INTO discogs.images_of_master_import (uri, master_id) VALUES (?, ?)");
+        insMasterImages = con.prepareStatement("INSERT INTO discogs.master_images_import (id, uri, uri150, type, width, height) VALUES (?, ?, ?, ?, ?, ?)");
+        insImagesOfMaster = con.prepareStatement("INSERT INTO discogs.images_of_master_import (image_id, master_id) VALUES (?, ?)");
         insMasterArtist = con.prepareStatement("INSERT INTO discogs.master_artist_import (id, name, role, join_att, anv) VALUES (?, ?, ?, ?, ?)");
         insMasterArtistPerforms = con.prepareStatement("INSERT INTO discogs.master_artist_performs_import (master_id, artist_id) VALUES (?, ?)");
     }
@@ -98,7 +98,7 @@ public class MasterWriter {
         insMaster.setInt(1, Integer.parseInt(_me.getId()));
         insMaster.setInt(2, Integer.parseInt(_me.getYear()));
         insMaster.setString(3, _me.getDataQuality().toString());
-        insMaster.setString(4, _me.getTitle());// title
+        insMaster.setString(4, _me.getTitle());
         insMaster.setInt(5, Integer.parseInt(_me.getMainRelease()));
         insMaster.addBatch();
         masterCnt++;
@@ -118,15 +118,16 @@ public class MasterWriter {
         }
 
         for(Image i: _me.getImages()) {
-            insMasterImages.setString(1, i.getUri());
-            insMasterImages.setString(2, i.getUri150());
-            insMasterImages.setString(3, i.getType().toString());
-            insMasterImages.setInt(4, i.getWidth());
-            insMasterImages.setInt(5, i.getHeight());
+            insMasterImages.setInt(1, masterImageCnt+1);
+            insMasterImages.setString(2, i.getUri());
+            insMasterImages.setString(3, i.getUri150());
+            insMasterImages.setString(4, i.getType().toString());
+            insMasterImages.setInt(5, i.getWidth());
+            insMasterImages.setInt(6, i.getHeight());
             insMasterImages.addBatch();
             masterImageCnt++;
 
-            insImagesOfMaster.setString(1, i.getUri());
+            insImagesOfMaster.setInt(1, imageOfMasterCnt+1);
             insImagesOfMaster.setInt(2, Integer.parseInt(_me.getId()));
             insImagesOfMaster.addBatch();
             imageOfMasterCnt++;

@@ -28,7 +28,7 @@ public class LabelWriter {
     private PreparedStatement insImageOfLabel;
 
 
-    private Integer insertTrigger = 10000;
+    private Integer insertTrigger = 1000;
 
     private Integer labelCnt = 0;
     private Integer labelUrlsCnt = 0;
@@ -86,8 +86,8 @@ public class LabelWriter {
         insLabelUrls = con.prepareStatement("INSERT INTO discogs.label_urls_import (id, url) VALUES (?, ?)");
         insSublabel = con.prepareStatement("INSERT INTO discogs.sublabel_import (id, name) VALUES (?, ?)");
         insSublabelOf = con.prepareStatement("INSERT INTO discogs.sublabel_of_import (label_id, sublabel_id) VALUES (?, ?)");
-        insLabelImages = con.prepareStatement("INSERT INTO discogs.label_images_import (uri, uri150, type, width, height) VALUES (?, ?, ?, ?, ?)");
-        insImageOfLabel = con.prepareStatement("INSERT INTO discogs.image_of_label_import (uri, label_id) VALUES (?, ?)");
+        insLabelImages = con.prepareStatement("INSERT INTO discogs.label_images_import (id, uri, uri150, type, width, height) VALUES (?, ?, ?, ?, ?, ?)");
+        insImageOfLabel = con.prepareStatement("INSERT INTO discogs.image_of_label_import (image_id, label_id) VALUES (?, ?)");
     }
 
     public void insertLabel(LabelEntity _le) throws SQLException{
@@ -119,15 +119,16 @@ public class LabelWriter {
         }
 
         for(Image i: _le.getImages()) {
-            insLabelImages.setString(1, i.getUri());
-            insLabelImages.setString(2, i.getUri150());
-            insLabelImages.setString(3, i.getType().toString());
-            insLabelImages.setInt(4, i.getWidth());
-            insLabelImages.setInt(5, i.getHeight());
+            insLabelImages.setInt(1, labelImageCnt+1);
+            insLabelImages.setString(2, i.getUri());
+            insLabelImages.setString(3, i.getUri150());
+            insLabelImages.setString(4, i.getType().toString());
+            insLabelImages.setInt(5, i.getWidth());
+            insLabelImages.setInt(6, i.getHeight());
             insLabelImages.addBatch();
             labelImageCnt++;
 
-            insImageOfLabel.setString(1, i.getUri());
+            insImageOfLabel.setInt(1, imageOfLabelCnt+1);
             insImageOfLabel.setInt(2, Integer.parseInt(_le.getId()));
             insImageOfLabel.addBatch();
             imageOfLabelCnt++;

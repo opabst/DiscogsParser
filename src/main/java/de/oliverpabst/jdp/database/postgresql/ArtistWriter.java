@@ -27,7 +27,7 @@ public class ArtistWriter {
     private PreparedStatement insArtistImage;
     private PreparedStatement insImageOfArtist;
 
-    private final Integer insertTrigger = 10000;
+    private final Integer insertTrigger = 1000;
 
     private Integer artistCnt = 0;
     private Integer artistNameVariationCnt = 0;
@@ -86,8 +86,8 @@ public class ArtistWriter {
         insArtistNameVariations = con.prepareStatement("INSERT INTO discogs.artist_namevariations_import (id, name_variation) VALUES (?, ?)");
         insArtistAlias = con.prepareStatement("INSERT INTO discogs.artist_alias_import (id, alias) VALUES (?, ?)");
         insAliasOfArtist = con.prepareStatement("INSERT INTO discogs.alias_of_artist_import(artist_id, alias_id, alias_name) VALUES (?, ?, ?)");
-        insArtistImage = con.prepareStatement("INSERT INTO discogs.artist_image_import (uri, uri150, type, width, height) VALUES (?, ?, ?, ?, ?)");
-        insImageOfArtist = con.prepareStatement("INSERT INTO discogs.image_of_artist_import (id, uri) VALUES (?, ?)");
+        insArtistImage = con.prepareStatement("INSERT INTO discogs.artist_image_import (id, uri, uri150, type, width, height) VALUES (?, ?, ?, ?, ?, ?)");
+        insImageOfArtist = con.prepareStatement("INSERT INTO discogs.image_of_artist_import (image_id, artist_id) VALUES (?, ?)");
     }
 
     public void insertArtist(ArtistEntity _ae) throws SQLException {
@@ -120,16 +120,17 @@ public class ArtistWriter {
         }
 
         for(Image i: _ae.getImages()) {
-            insArtistImage.setString(1, i.getUri());
-            insArtistImage.setString(2, i.getUri150());
-            insArtistImage.setString(3, i.getType().toString());
-            insArtistImage.setInt(4, i.getWidth());
-            insArtistImage.setInt(5, i.getHeight());
+            insArtistImage.setInt(1, artistImageCnt+1);
+            insArtistImage.setString(2, i.getUri());
+            insArtistImage.setString(3, i.getUri150());
+            insArtistImage.setString(4, i.getType().toString());
+            insArtistImage.setInt(5, i.getWidth());
+            insArtistImage.setInt(6, i.getHeight());
             insArtistImage.addBatch();
             artistImageCnt++;
 
-            insImageOfArtist.setInt(1, Integer.parseInt(_ae.getId()));
-            insImageOfArtist.setString(2, i.getUri());
+            insImageOfArtist.setInt(1, imageOfArtistCnt+1);
+            insImageOfArtist.setInt(2, Integer.parseInt(_ae.getId()));
             insImageOfArtist.addBatch();
             imageOfArtistCnt++;
         }
