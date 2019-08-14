@@ -135,7 +135,7 @@ INSERT INTO discogs.release_genres (id, genre)
                  FROM discogs.release);
 
 INSERT INTO discogs.release_artist (id, name, role, join_att, anv)
-    SELECT id, ARRAY_AGG(name), ARRAY_AGG(role,), ARRAY_AGG(join_att), ARRAY_AGG(anv)
+    SELECT id, ARRAY_AGG(name), ARRAY_AGG(role), ARRAY_AGG(join_att), ARRAY_AGG(anv)
     FROM discogs.release_artist_import
     GROUP BY id;
 
