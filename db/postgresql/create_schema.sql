@@ -84,7 +84,7 @@ ALTER TABLE discogs.sublabel_of ADD FOREIGN KEY (label_id) REFERENCES discogs.la
 ALTER TABLE discogs.sublabel_of ADD FOREIGN KEY (sublabel_id) REFERENCES discogs.sublabel(id);
 
 CREATE TABLE discogs.label_images (
-    id PRIMARY KEY,
+    id INTEGER PRIMARY KEY,
 	uri TEXT,
 	uri150 TEXT,
 	type TEXT,
@@ -134,7 +134,7 @@ CREATE TABLE discogs.images_of_master (
 	image_id INTEGER,
 	master_id INTEGER);
 
-ALTER TABLE discogs.images_of_master ADD FOREIGN KEY (image_id, master_id);
+ALTER TABLE discogs.images_of_master ADD PRIMARY KEY (image_id, master_id);
 ALTER TABLE discogs.images_of_master ADD FOREIGN KEY (master_id) REFERENCES discogs.master(id);
 ALTER TABLE discogs.images_of_master ADD FOREIGN KEY (image_id) REFERENCES discogs.master_images(id);
 
