@@ -1,9 +1,7 @@
 
 -- transformation for artist tables
--- '#' used as delimiter to seperate realnames and profiles from different records
+-- the data of multiple occurences of a single id are aggregated into an array
 
--- There can be more than one record for an id, but with different names; these records will aggregated by aggregating
--- the atributes with a delimiter.
 INSERT INTO discogs.artist (id, name, realname, profile)
     SELECT id, ARRAY_AGG(name), ARRAY_AGG(realname), ARRAY_AGG(profile)
     FROM discogs.artist_import
@@ -31,15 +29,15 @@ INSERT INTO discogs.alias_of_artist (artist_id, alias_id, alias_name)
       AND alias_id IN (SELECT id
                        FROM discogs.artist_alias);
 
-INSERT INTO discogs.artist_image (uri, uri150, type, width, height)
+INSERT INTO discogs.artist_image (id, uri, uri150, type, width, height)
     SELECT *
     FROM discogs.artist_image_import;
 
-INSERT INTO discogs.image_of_artist (id, uri)
+INSERT INTO discogs.image_of_artist (image_id, artist_id)
     SELECT *
     FROM discogs.image_of_artist_import
-    WHERE id IN (SELECT id
-                 FROM discogs.artist);
+    WHERE image_id IN (SELECT id FROM discogs.artist_image)
+      AND artist_id IN (SELECT id FROM discogs.artist);
 
 -- transformation for label tables
 
@@ -64,15 +62,15 @@ INSERT INTO discogs.sublabel_of (label_id, sublabel_id)
     WHERE label_id IN (SELECT id
                        FROM discogs.label);
 
-INSERT INTO discogs.label_images (uri, uri150, type, width, height)
+INSERT INTO discogs.label_images (id, uri, uri150, type, width, height)
     SELECT *
     FROM discogs.label_images_import;
 
-INSERT INTO discogs.image_of_label (uri, label_id)
+INSERT INTO discogs.image_of_label (image_id, label_id)
     SELECT *
     FROM discogs.image_of_label_import
-    WHERE label_id IN (SELECT id
-                       FROM discogs.label);
+    WHERE label_id IN (SELECT id FROM discogs.label)
+      AND image_id IN (SELECT id FROM discogs.label_images);
 
 -- transformation for master tables
 INSERT INTO discogs.master(id, year, title, main_release)
@@ -94,15 +92,15 @@ INSERT INTO discogs.master_genres (id, genre)
       AND id IN (SELECT id
                  FROM discogs.master);
 
-INSERT INTO discogs.master_images (uri, uri150, type, width, height)
+INSERT INTO discogs.master_images (id, uri, uri150, type, width, height)
     SELECT *
     FROM discogs.master_images_import;
 
-INSERT INTO discogs.images_of_master (uri, master_id)
+INSERT INTO discogs.images_of_master (image_id, master_id)
     SELECT *
     FROM discogs.images_of_master_import
-    WHERE master_id IN (SELECT id
-                        FROM discogs.master);
+    WHERE master_id IN (SELECT id FROM discogs.master)
+      AND image_id IN (SELECT id FROM discogs.master_images);
 
 INSERT INTO discogs.master_artist (id, name, role, join_att, anv)
     SELECT id, ARRAY_AGG(name), ARRAY_AGG(role), ARRAY_AGG(join_att), ARRAY_AGG(anv)
@@ -205,15 +203,15 @@ INSERT INTO discogs.company_of_release (release_id, company_id)
 ------------------------
 
 
-INSERT INTO discogs.release_image (uri, uri150, type, width, height)
+INSERT INTO discogs.release_image (id, uri, uri150, type, width, height)
     SELECT uri, uri150, type, width, heigth
     FROM discogs.release_image_import;
 
-INSERT INTO discogs.image_of_release (uri, release_id)
-    SELECT uri, release_id
+INSERT INTO discogs.image_of_release (image_id, release_id)
+    SELECT image_id, release_id
     FROM discogs.image_of_release_import
-    WHERE release_id IN (SELECT id
-                         FROM discogs.release);
+    WHERE release_id IN (SELECT id FROM discogs.release)
+      AND image_id IN (SELECT id FROM discogs.relase_image);
 
 INSERT INTO discogs.release_label (id, catno, name)
     SELECT id, ARRAY_AGG(catno), ARRAY_AGG(name)
