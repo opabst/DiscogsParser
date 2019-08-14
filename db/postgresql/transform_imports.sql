@@ -5,7 +5,7 @@
 -- There can be more than one record for an id, but with different names; these records will aggregated by aggregating
 -- the atributes with a delimiter.
 INSERT INTO discogs.artist (id, name, realname, profile)
-    SELECT id, STRING_AGG(name, ' ''#'' '), STRING_AGG(REPLACE(realname, ',', ' ''#'' '), ' ''#'' '), STRING_AGG(profile, '''#''')
+    SELECT id, ARRAY_AGG(name), ARRAY_AGG(realname), ARRAY_AGG(profile)
     FROM discogs.artist_import
     WHERE data_quality IN ('CORRECT', 'COMPLETE_AND_CORRECT')
     GROUP BY id
@@ -86,7 +86,7 @@ INSERT INTO discogs.master_styles (id, style)
     WHERE id IN (SELECT id
                  FROM discogs.master);
 
--- discard records with '&' as the only character, as they are useless and can occur more than one (violating constraints)
+-- discard records with '&' as the only character, as they are useless and can occur more than once (violating constraints)
 INSERT INTO discogs.master_genres (id, genre)
     SELECT id, genre
     FROM discogs.master_genres_import
@@ -105,7 +105,7 @@ INSERT INTO discogs.images_of_master (uri, master_id)
                         FROM discogs.master);
 
 INSERT INTO discogs.master_artist (id, name, role, join_att, anv)
-    SELECT id, STRING_AGG(name, ' ''#'' '), STRING_AGG(role, ' ''#'' '), STRING_AGG(join_att, ' ''#'' '), STRING_AGG(anv, ' ''#'' ')
+    SELECT id, ARRAY_AGG(name), ARRAY_AGG(role), ARRAY_AGG(join_att), ARRAY_AGG(anv)
     FROM discogs.master_artist_import
     GROUP BY id;
 
@@ -137,7 +137,7 @@ INSERT INTO discogs.release_genres (id, genre)
                  FROM discogs.release);
 
 INSERT INTO discogs.release_artist (id, name, role, join_att, anv)
-    SELECT id, STRING_AGG(name, ' ''#'' '), STRING_AGG(role, ' ''#'' '), STRING_AGG(join_att, ' ''#'' '), STRING_AGG(anv, ' ''#'' ')
+    SELECT id, ARRAY_AGG(name), ARRAY_AGG(role,), ARRAY_AGG(join_att), ARRAY_AGG(anv)
     FROM discogs.release_artist_import
     GROUP BY id;
 
@@ -150,7 +150,7 @@ INSERT INTO discogs.artist_of_release (release_id, artist_id)
 			            FROM discogs.release_artist);
 
 INSERT INTO discogs.release_extraartist (id, name, role, join_att, anv)
-    SELECT id, STRING_AGG(name, ' ''#'' '), STRING_AGG(role, ' ''#'' '), STRING_AGG(join_att, ' ''#'' '), STRING_AGG(anv, ' ''#'' ')
+    SELECT id, ARRAY_AGG(name), ARRAY_AGG(role), ARRAY_AGG(join_att), ARRAY_AGG(anv)
     FROM discogs.release_extraartist_import
     GROUP BY id;
 
@@ -216,7 +216,7 @@ INSERT INTO discogs.image_of_release (uri, release_id)
                          FROM discogs.release);
 
 INSERT INTO discogs.release_label (id, catno, name)
-    SELECT id, STRING_AGG(catno,' ''#'' '), STRING_AGG(name, ' ''#'' ')
+    SELECT id, ARRAY_AGG(catno), ARRAY_AGG(name)
     FROM discogs.release_label_import
     GROUP BY id;
 

@@ -33,6 +33,7 @@ CREATE TABLE discogs.alias_of_artist_import (
 
 -- TODO: primary key?
 CREATE TABLE discogs.artist_image_import (
+    id INTEGER,
 	uri TEXT,
 	uri150 TEXT,
 	type TEXT,
@@ -41,8 +42,8 @@ CREATE TABLE discogs.artist_image_import (
 -- NOTE: the URIs are empty, so no suitable primary key can be selected!
 
 CREATE TABLE discogs.image_of_artist_import (
-	id INTEGER,
-	uri TEXT);
+	image_id INTEGER,
+	artist_id INTEGER);
 
 --ALTER TABLE discogs.image_of_artist_import ADD FOREIGN KEY (id) REFERENCES discogs.artist(id);
 
@@ -70,6 +71,7 @@ CREATE TABLE discogs.sublabel_of_import (
 	sublabel_id INTEGER);
 
 CREATE TABLE discogs.label_images_import (
+    id INTEGER,
 	uri TEXT,
 	uri150 TEXT,
 	type TEXT,
@@ -77,7 +79,7 @@ CREATE TABLE discogs.label_images_import (
 	height INTEGER);
 
 CREATE TABLE discogs.image_of_label_import (
-	uri TEXT,
+	image_id INTEGER,
 	label_id INTEGER);
 
 --------------------------------------------------------------------------------
@@ -100,6 +102,7 @@ CREATE TABLE discogs.master_genres_import (
 	genre TEXT);
 
 CREATE TABLE discogs.master_images_import (
+    id INTEGER,
 	uri TEXT,
 	uri150 TEXT,
 	type TEXT,
@@ -107,7 +110,7 @@ CREATE TABLE discogs.master_images_import (
 	height INTEGER);
 
 CREATE TABLE discogs.images_of_master_import (
-	uri TEXT,
+	image_id INTEGER,
 	master_id INTEGER);
 
 CREATE TABLE discogs.master_artist_import (
@@ -202,6 +205,7 @@ CREATE TABLE discogs.company_of_release_import (
 	company_id INTEGER);
 
 CREATE TABLE discogs.release_image_import (
+    id INTEGER,
 	uri TEXT,
 	uri150 TEXT,
 	type TEXT,
@@ -209,7 +213,7 @@ CREATE TABLE discogs.release_image_import (
 	heigth INTEGER);
 
 CREATE TABLE discogs.image_of_release_import (
-	uri TEXT,
+	image_id INTEGER,
 	release_id INTEGER);
 
 CREATE TABLE discogs.release_label_import (

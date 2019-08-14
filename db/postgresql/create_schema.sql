@@ -10,9 +10,9 @@
 
 CREATE TABLE discogs.artist (
 	id INTEGER PRIMARY KEY,
-	name TEXT,
-	realname TEXT,
-	profile TEXT);
+	name TEXT[],
+	realname TEXT[],
+	profile TEXT[]);
 
 CREATE TABLE discogs.artist_namevariations (
 	id INTEGER,
@@ -37,6 +37,7 @@ ALTER TABLE discogs.alias_of_artist ADD FOREIGN KEY (artist_id) REFERENCES disco
 ALTER TABLE discogs.alias_of_artist ADD FOREIGN KEY (alias_id, alias_name) REFERENCES discogs.artist_alias(id, alias);
 
 CREATE TABLE discogs.artist_image (
+    id INTEGER PRIMARY KEY,
 	uri TEXT,
 	uri150 TEXT,
 	type TEXT,
@@ -45,10 +46,12 @@ CREATE TABLE discogs.artist_image (
 -- NOTE: the URIs are empty, so no suitable primary key can be selected!
 
 CREATE TABLE discogs.image_of_artist (
-	id INTEGER,
-	uri TEXT);
+	artist_id INTEGER,
+	image_id INTEGER);
 
-ALTER TABLE discogs.image_of_artist ADD FOREIGN KEY (id) REFERENCES discogs.artist(id);
+ALTER TABLE discogs.image_of_artist ADD PRIMARY KEY (artist_id, image_id);
+ALTER TABLE discogs.image_of_artist ADD FOREIGN KEY (artist_id) REFERENCES discogs.artist(id);
+ALTER TABLE discogs.image_of_artist ADD FOREIGN KEY (image_id) REFERENCES discogs.artist_image(id);
 
 --------------------------------------------------------------------------------
 -- LabelEntity
@@ -81,18 +84,20 @@ ALTER TABLE discogs.sublabel_of ADD FOREIGN KEY (label_id) REFERENCES discogs.la
 ALTER TABLE discogs.sublabel_of ADD FOREIGN KEY (sublabel_id) REFERENCES discogs.sublabel(id);
 
 CREATE TABLE discogs.label_images (
+    id PRIMARY KEY,
 	uri TEXT,
 	uri150 TEXT,
 	type TEXT,
 	width INTEGER,
 	height INTEGER);
---ALTER TABLE discogs.label_images ADD PRIMARY KEY (uri);
 
 CREATE TABLE discogs.image_of_label (
-	uri TEXT,
+	image_id INTEGER,
 	label_id INTEGER);
+
+ALTER TABLE discogs.image_of_label ADD PRIMARY KEY (image_id, label_id);
 ALTER TABLE discogs.image_of_label ADD FOREIGN KEY (label_id) REFERENCES discogs.label(id);
---ALTER TABLE discogs.image_of_label ADD FOREIGN KEY (uri) REFERENCES discogs.label_images(uri);
+ALTER TABLE discogs.image_of_label ADD FOREIGN KEY (image_id) REFERENCES discogs.label_images(id);
 
 --------------------------------------------------------------------------------
 -- MasterEntity
@@ -118,30 +123,32 @@ ALTER TABLE discogs.master_genres ADD PRIMARY KEY (id, genre);
 ALTER TABLE discogs.master_genres ADD FOREIGN KEY (id) REFERENCES discogs.master(id);
 
 CREATE TABLE discogs.master_images (
+    id INTEGER PRIMARY KEY,
 	uri TEXT,
 	uri150 TEXT,
 	type TEXT,
 	width INTEGER,
 	height INTEGER);
 
--- ALTER TABLE discogs.master_images ADD PRIMARY KEY (uri);
-
 CREATE TABLE discogs.images_of_master (
-	uri TEXT,
+	image_id INTEGER,
 	master_id INTEGER);
+
+ALTER TABLE discogs.images_of_master ADD FOREIGN KEY (image_id, master_id);
 ALTER TABLE discogs.images_of_master ADD FOREIGN KEY (master_id) REFERENCES discogs.master(id);
---ALTER TABLE discogs.images_of_master ADD FOREIGN KEY (uri) REFERENCES discogs.master_images(uri);
+ALTER TABLE discogs.images_of_master ADD FOREIGN KEY (image_id) REFERENCES discogs.master_images(id);
 
 CREATE TABLE discogs.master_artist (
 	id INTEGER PRIMARY KEY,
-	name TEXT,
-	role TEXT,
-	join_att TEXT,
-	anv TEXT);
+	name TEXT[],
+	role TEXT[],
+	join_att TEXT[],
+	anv TEXT[]);
 
 CREATE TABLE discogs.master_artist_performs(
 	master_id INTEGER,
 	artist_id INTEGER);
+
 ALTER TABLE discogs.master_artist_performs ADD PRIMARY KEY (master_id, artist_id);
 ALTER TABLE discogs.master_artist_performs ADD FOREIGN KEY (master_id) REFERENCES discogs.master(id);
 ALTER TABLE discogs.master_artist_performs ADD FOREIGN KEY (artist_id) REFERENCES discogs.master_artist(id);
@@ -172,28 +179,30 @@ ALTER TABLE discogs.release_genres ADD FOREIGN KEY (id) REFERENCES discogs.relea
 
 CREATE TABLE discogs.release_artist (
 	id INTEGER PRIMARY KEY,
-	name TEXT,
-	role TEXT,
-	join_att TEXT,
-	anv TEXT);
+	name TEXT[],
+	role TEXT[],
+	join_att TEXT[],
+	anv TEXT[]);
 
 CREATE TABLE discogs.artist_of_release (
 	release_id INTEGER,
 	artist_id INTEGER);
+
 ALTER TABLE discogs.artist_of_release ADD PRIMARY KEY (release_id, artist_id);
 ALTER TABLE discogs.artist_of_release ADD FOREIGN KEY (release_id) REFERENCES discogs.release(id);
 ALTER TABLE discogs.artist_of_release ADD FOREIGN KEY (artist_id) REFERENCES discogs.release_artist(id);
 
 CREATE TABLE discogs.release_extraartist (
 	id INTEGER PRIMARY KEY,
-	name TEXT,
-	role TEXT,
-	join_att TEXT,
-	anv TEXT);
+	name TEXT[],
+	role TEXT[],
+	join_att TEXT[],
+	anv TEXT[]);
 
 CREATE TABLE discogs.extraartist_of_release (
 	release_id INTEGER,
 	artist_id INTEGER);
+
 ALTER TABLE discogs.extraartist_of_release ADD PRIMARY KEY (release_id, artist_id);
 ALTER TABLE discogs.extraartist_of_release ADD FOREIGN KEY (release_id) REFERENCES discogs.release(id);
 ALTER TABLE discogs.extraartist_of_release ADD FOREIGN KEY (artist_id) REFERENCES discogs.release_extraartist(id);
@@ -207,6 +216,7 @@ CREATE TABLE discogs.release_identifier (
 CREATE TABLE discogs.identifies (
 	release_id INTEGER,
 	identifier_id NUMERIC);
+
 ALTER TABLE discogs.identifies ADD PRIMARY KEY (release_id, identifier_id);
 ALTER TABLE discogs.identifies ADD FOREIGN KEY (release_id) REFERENCES discogs.release(id);
 ALTER TABLE discogs.identifies ADD FOREIGN KEY (identifier_id) REFERENCES discogs.release_identifier(id);
@@ -222,6 +232,7 @@ CREATE TABLE discogs.release_video (
 CREATE TABLE discogs.video_of_release (
 	release_id INTEGER,
 	video_id NUMERIC);
+
 ALTER TABLE discogs.video_of_release ADD PRIMARY KEY (release_id, video_id);
 ALTER TABLE discogs.video_of_release ADD FOREIGN KEY (release_id) REFERENCES discogs.release(id);
 ALTER TABLE discogs.video_of_release ADD FOREIGN KEY (video_id) REFERENCES discogs.release_video(id);
@@ -242,29 +253,29 @@ ALTER TABLE discogs.company_of_release ADD FOREIGN KEY (release_id) REFERENCES d
 ALTER TABLE discogs.company_of_release ADD FOREIGN KEY (company_id) REFERENCES discogs.release_company(id);
 
 CREATE TABLE discogs.release_image (
+    id INTEGER PRIMARY KEY,
 	uri TEXT,
 	uri150 TEXT,
 	type TEXT,
 	width INTEGER,
 	height INTEGER);
 
-ALTER TABLE discogs.release_image ADD PRIMARY KEY (uri);
-
 CREATE TABLE discogs.image_of_release (
-	uri TEXT,
+	image_id INTEGER,
 	release_id INTEGER);
---ALTER TABLE discogs.image_of_release ADD PRIMARY KEY (uri, release_id);
---ALTER TABLE discogs.image_of_release ADD FOREIGN KEY (uri) REFERENCES discogs.release_image(uri);
+ALTER TABLE discogs.image_of_release ADD PRIMARY KEY (image_id, release_id);
+ALTER TABLE discogs.image_of_release ADD FOREIGN KEY (image_id) REFERENCES discogs.release_image(id);
 ALTER TABLE discogs.image_of_release ADD FOREIGN KEY (release_id) REFERENCES discogs.release(id);
 
 CREATE TABLE discogs.release_label (
 	id INTEGER PRIMARY KEY,
-	catno TEXT,
-	name TEXT);
+	catno TEXT[],
+	name TEXT[]);
 
 CREATE TABLE discogs.label_of_release (
 	label_id INTEGER,
 	release_id INTEGER);
+
 ALTER TABLE discogs.label_of_release ADD PRIMARY KEY (label_id, release_id);
 ALTER TABLE discogs.label_of_release ADD FOREIGN KEY (label_id) REFERENCES discogs.release_label(id);
 ALTER TABLE discogs.label_of_release ADD FOREIGN KEY (release_id) REFERENCES discogs.release(id);
