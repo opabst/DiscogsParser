@@ -192,12 +192,13 @@ INSERT INTO discogs.video_of_release (release_id, video_id)
 -----------------------
 -- FIX AND REWORK------
 -----------------------
+-- release_id is primary key, but obviously there is more that one record with the key id 0
 INSERT INTO discogs.release_company (id, resource_url, name, entity_type, entity_type_value, catno)
     SELECT DISTINCT id, resource_url, name, entity_type, entity_type_value, catno
     FROM discogs.release_company_import;
 
 INSERT INTO discogs.company_of_release (release_id, company_id)
-    SELECT release_id, company_id
+    SELECT DISTINCT release_id, company_id
     FROM discogs.company_of_release_import
     WHERE release_id IN (SELECT id FROM discogs.release);
 ------------------------
