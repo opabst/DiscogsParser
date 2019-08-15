@@ -181,8 +181,8 @@ INSERT INTO discogs.release_video (id, src, duration, description, title, embed)
     SELECT id, src, duration, description, title, embed
     FROM discogs.release_video_import;
 
-INSERT INTO discogs.video_of_release (release_id, video_src)
-    SELECT release_id, video_src
+INSERT INTO discogs.video_of_release (release_id, video_id)
+    SELECT release_id, video_id
     FROM discogs.video_of_release_import;
 ------------------------
 ------------------------
@@ -204,14 +204,14 @@ INSERT INTO discogs.company_of_release (release_id, company_id)
 
 
 INSERT INTO discogs.release_image (id, uri, uri150, type, width, height)
-    SELECT uri, uri150, type, width, heigth
+    SELECT id, uri, uri150, type, width, heigth
     FROM discogs.release_image_import;
 
 INSERT INTO discogs.image_of_release (image_id, release_id)
     SELECT image_id, release_id
     FROM discogs.image_of_release_import
     WHERE release_id IN (SELECT id FROM discogs.release)
-      AND image_id IN (SELECT id FROM discogs.relase_image);
+      AND image_id IN (SELECT id FROM discogs.release_image);
 
 INSERT INTO discogs.release_label (id, catno, name)
     SELECT id, ARRAY_AGG(catno), ARRAY_AGG(name)
