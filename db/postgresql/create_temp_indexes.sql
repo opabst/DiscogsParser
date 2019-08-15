@@ -12,7 +12,7 @@ ALTER TABLE discogs.alias_of_artist_import ADD PRIMARY KEY (artist_id, alias_id,
 ALTER TABLE discogs.alias_of_artist_import ADD FOREIGN KEY (artist_id) REFERENCES discogs.artist_import(id);
 ALTER TABLE discogs.alias_of_artist_import ADD FOREIGN KEY (alias_id, alias_name) REFERENCES discogs.artist_alias_import(id, alias);
 
---ALTER TABLE discogs.arist_image_import ADD PRIMARY KEY (bla);
+ALTER TABLE discogs.artist_image_import ADD PRIMARY KEY (id);
 
 ALTER TABLE discogs.image_of_artist_import ADD FOREIGN KEY (id) REFERENCES discogs.artist_import(id);
 
@@ -31,10 +31,10 @@ ALTER TABLE discogs.sublabel_of_import ADD PRIMARY KEY (label_id, sublabel_id);
 ALTER TABLE discogs.sublabel_of_import ADD FOREIGN KEY (label_id) REFERENCES discogs.label_import(id);
 ALTER TABLE discogs.sublabel_of_import ADD FOREIGN KEY (sublabel_id) REFERENCES discogs.sublabel_import(id);
 
---ALTER TABLE discogs.label_images_import ADD PRIMARY KEY (uri);
+ALTER TABLE discogs.label_images_import ADD PRIMARY KEY (uri);
 
---ALTER TABLE discogs.image_of_label_import ADD FOREIGN KEY (label_id) REFERENCES discogs.label_import(id);
---ALTER TABLE discogs.image_of_label_import ADD FOREIGN KEY (uri) REFERENCES discogs.label_images_import(uri);
+ALTER TABLE discogs.image_of_label_import ADD FOREIGN KEY (label_id) REFERENCES discogs.label_import(id);
+ALTER TABLE discogs.image_of_label_import ADD FOREIGN KEY (uri) REFERENCES discogs.label_images_import(uri);
 
 -------------------
 -- MASTER ---------
