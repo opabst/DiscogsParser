@@ -53,6 +53,8 @@ public class ImportStatistics {
         statistics.put("ReleaseImageOf", 0);
         statistics.put("ReleaseLabel", 0);
         statistics.put("ReleaseLabelOf", 0);
+        statistics.put("ReleaseTrack", 0);
+        statistics.put("ReleaseTrackOf", 0);
     }
 
     public static ImportStatistics getInstance() {
@@ -131,6 +133,8 @@ public class ImportStatistics {
         sb.append("ReleaseImageOf: " + statistics.get("ReleaseImageOf") + "\n");
         sb.append("ReleaseLabel: " + statistics.get("ReleaseLabel") + "\n");
         sb.append("ReleaseLabelOf: " + statistics.get("ReleaseLabelOf") + "\n");
+        sb.append("ReleaseTrack: " + statistics.get("ReleaseTrack") + "\n");
+        sb.append("ReleaseTrackOf: " + statistics.get("ReleaseTrackOf") + "\n");
         sb.append("====================");
         return sb.toString();
     }

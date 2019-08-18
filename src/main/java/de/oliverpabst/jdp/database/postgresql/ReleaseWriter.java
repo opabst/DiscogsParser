@@ -36,6 +36,8 @@ public class ReleaseWriter {
     private PreparedStatement insImageOfRelease;
     private PreparedStatement insReleaseLabel;
     private PreparedStatement insLabelOfRelease;
+    private PreparedStatement insReleaseTrack;
+    private PreparedStatement insTrackOfRelease;
 
     private Integer releaseCnt = 0;
     private Integer releaseStylesCnt = 0;
@@ -54,6 +56,8 @@ public class ReleaseWriter {
     private Integer releaseImageOfCnt = 0;
     private Integer releaseLabelCnt = 0;
     private Integer releaseLabelOfCnt = 0;
+    private Integer releaseTrackCnt = 0;
+    private Integer releaseTrackOfCnt = 0;
 
     private ReleaseWriter() {
         try {
@@ -94,6 +98,8 @@ public class ReleaseWriter {
         insImageOfRelease.executeBatch();
         insReleaseLabel.executeBatch();
         insLabelOfRelease.executeBatch();
+        insReleaseTrack.executeBatch();
+        insTrackOfRelease.executeBatch();
     }
 
     public void finalBatchExecute() throws SQLException {
@@ -140,6 +146,8 @@ public class ReleaseWriter {
         insImageOfRelease = con.prepareStatement("INSERT INTO discogs.image_of_release_import (image_id, release_id) VALUES (?, ?)");
         insReleaseLabel = con.prepareStatement("INSERT INTO discogs.release_label_import (id, catno, name) VALUES (?, ?, ?)");
         insLabelOfRelease = con.prepareStatement("INSERT INTO discogs.label_of_release_import (label_id, release_id) VALUES (?, ?)");
+        insReleaseTrack = con.prepareStatement("INSERT INTO discogs.release_track_import (id, position, title, duration) VALUES (?, ?, ?, ?)");
+        insTrackOfRelease = con.prepareStatement("INSERT INTO discogs.track_of_release_import (track_id, release_id) VALUES (?, ?)");
     }
 
     public void insertRelease(ReleaseEntity _re) throws SQLException {
@@ -270,6 +278,20 @@ public class ReleaseWriter {
             insLabelOfRelease.setInt(2, Integer.parseInt(_re.getId()));
             insLabelOfRelease.addBatch();
             releaseLabelOfCnt++;
+        }
+
+        for(ReleaseTrack rt: _re.getTracks()) {
+            insReleaseTrack.setInt(1, releaseTrackCnt+1);
+            insReleaseTrack.setInt(2, Integer.parseInt(rt.getPosition()));
+            insReleaseTrack.setString(3, rt.getTitle());
+            insReleaseTrack.setString(4, rt.getDuration());
+            insReleaseTrack.addBatch();
+            releaseTrackCnt++;
+
+            insTrackOfRelease.setInt(1, releaseTrackOfCnt+1);
+            insTrackOfRelease.setInt(2, Integer.parseInt(_re.getId()));
+            insTrackOfRelease.addBatch();
+            releaseTrackOfCnt++;
         }
 
 
