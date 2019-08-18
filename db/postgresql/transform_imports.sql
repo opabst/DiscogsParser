@@ -228,3 +228,14 @@ INSERT INTO discogs.label_of_release (label_id, release_id)
 		       FROM discogs.label)
       AND release_id IN (SELECT id
 			 FROM discogs.release);
+
+
+INSERT INTO discogs.release_track (id, position, title, duration)
+    SELECT id, posititon, title, duration
+    FROM discogs.release_track_import;
+
+INSERT INTO discogs.track_of_release (track_id, release_id)
+    SELECT track_id, release_id
+    FROM discogs.track_of_release_import
+    WHERE track_id IN (SELECT id FROM discogs.release_track)
+      AND release_id IN (SELECT id FROM discogs.release);
