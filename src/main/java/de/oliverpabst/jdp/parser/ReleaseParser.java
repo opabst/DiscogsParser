@@ -366,7 +366,7 @@ public class ReleaseParser {
                     } else if (videos && video && title) {
                         rv.setTitle(xmlParser.getText());
                     } else if (videos && video && description) {
-                        rv.setTitle(xmlParser.getText());
+                        rv.setDescription(xmlParser.getText());
                     } else if (companies && company && id) {
                         rc.setId(xmlParser.getText());
                     } else if (companies && company && name) {
