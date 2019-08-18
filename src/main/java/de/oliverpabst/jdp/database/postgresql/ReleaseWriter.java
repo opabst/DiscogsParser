@@ -251,6 +251,10 @@ public class ReleaseWriter {
             releaseCompanyOfCnt++;
         }
 
+        for(ReleaseFormat rf: _re.getFormats()) {
+            // TODO: implement (+ prepared statement + statistics)
+        }
+
         for(Image i: _re.getImages()) {
             insReleaseImage.setInt(1, releaseImageCnt+1);
             insReleaseImage.setString(2, i.getUri());

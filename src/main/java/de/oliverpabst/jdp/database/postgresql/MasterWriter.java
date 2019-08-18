@@ -6,6 +6,7 @@ import de.oliverpabst.jdp.database.SchemaDoesNotExistException;
 import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.master.MasterArtist;
 import de.oliverpabst.jdp.model.master.MasterEntity;
+import de.oliverpabst.jdp.model.master.MasterVideo;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -146,6 +147,10 @@ public class MasterWriter {
             insMasterArtistPerforms.setInt(2, Integer.parseInt(ma.getId()));
             insMasterArtistPerforms.addBatch();
             masterArtistPerformsCnt++;
+        }
+
+        for(MasterVideo mv: _me.getVideos()) {
+            // TODO: implement (prepared statements + statistics)
         }
 
         objectCounter++;
