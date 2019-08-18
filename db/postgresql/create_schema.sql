@@ -279,3 +279,17 @@ CREATE TABLE discogs.label_of_release (
 ALTER TABLE discogs.label_of_release ADD PRIMARY KEY (label_id, release_id);
 ALTER TABLE discogs.label_of_release ADD FOREIGN KEY (label_id) REFERENCES discogs.release_label(id);
 ALTER TABLE discogs.label_of_release ADD FOREIGN KEY (release_id) REFERENCES discogs.release(id);
+
+CREATE TABLE discogs.release_track (
+	id INTEGER PRIMARY KEY,
+	position INTEGER,
+	title TEXT,
+	duration TEXT);
+
+CREATE TABLE discogs.track_of_release(
+	track_id INTEGER,
+	release_id INTEGER);
+
+ALTER TABLE discogs.track_of_release ADD PRIMARY KEY (track_id, release_id);
+ALTER TABLE discogs.track_of_release ADD FOREIGN KEY (track_id) REFERENCES discogs.track(id);
+ALTER TABLE discogs.track_of_release ADD FOREIGN KEY (release_id) REFERENCES discogs.release(id);

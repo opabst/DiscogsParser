@@ -224,3 +224,13 @@ CREATE TABLE discogs.release_label_import (
 CREATE TABLE discogs.label_of_release_import (
 	label_id INTEGER,
 	release_id INTEGER);
+
+CREATE TABLE discogs.release_track_import (
+	id INTEGER,
+	position INTEGER,
+	title TEXT,
+	duration TEXT);
+
+CREATE TABLE discogs.track_of_release_import(
+	track_id INTEGER,
+	release_id INTEGER);
