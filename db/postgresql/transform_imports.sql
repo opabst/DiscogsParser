@@ -168,6 +168,18 @@ INSERT INTO discogs.extraartist_of_release (release_id, artist_id)
       AND artist_id IN (SELECT id
 			FROM discogs.release_extraartist);
 
+INSERT INTO discogs.release_format (id, name, qty, fmt_text)
+    SELECT id, name, qty, fmt_text
+    FROM discogs.release_format_import;
+
+INSERT INTO discogs.release_format_descripton (format_id, description)
+    SELECT format_id, description
+    FROM discogs.release_format_description_import;
+
+INSERT INTO discogs.format_of_release (format_id, release_id)
+    SELECT format_id, release_id
+    FROM discogs.format_of_release_import;
+
 INSERT INTO discogs.release_identifier (id, value, type, description)
     SELECT DISTINCT id, value, type, description
     FROM discogs.release_identifier_import;
