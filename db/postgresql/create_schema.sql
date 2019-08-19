@@ -298,7 +298,7 @@ ALTER TABLE discogs.label_of_release ADD FOREIGN KEY (release_id) REFERENCES dis
 
 CREATE TABLE discogs.release_track (
 	id INTEGER PRIMARY KEY,
-	position INTEGER,
+	position TEXT,
 	title TEXT,
 	duration TEXT);
 

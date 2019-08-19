@@ -3,8 +3,9 @@ package de.oliverpabst.jdp.thread;
 import de.oliverpabst.jdp.parser.LabelParser;
 
 import java.io.File;
+import java.util.concurrent.Callable;
 
-public class LabelThread implements Runnable {
+public class LabelThread implements Callable<String> {
     private File file;
 
     public LabelThread(File _file) {
@@ -12,7 +13,9 @@ public class LabelThread implements Runnable {
     }
 
     @Override
-    public void run() {
+    public String call() {
         new LabelParser(file);
+
+        return "Parsing labels completed";
     }
 }

@@ -237,7 +237,7 @@ CREATE TABLE discogs.label_of_release_import (
 
 CREATE TABLE discogs.release_track_import (
 	id INTEGER,
-	position INTEGER,
+	position TEXT,
 	title TEXT,
 	duration TEXT);
 

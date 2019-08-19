@@ -3,8 +3,9 @@ package de.oliverpabst.jdp.thread;
 import de.oliverpabst.jdp.parser.MasterParser;
 
 import java.io.File;
+import java.util.concurrent.Callable;
 
-public class MasterThread implements Runnable {
+public class MasterThread implements Callable<String> {
     private File file;
 
     public MasterThread(File _file) {
@@ -12,7 +13,9 @@ public class MasterThread implements Runnable {
     }
 
     @Override
-    public void run() {
+    public String call() {
         new MasterParser(file);
+
+        return "Parsing masters completed";
     }
 }
