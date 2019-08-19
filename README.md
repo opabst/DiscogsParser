@@ -1,14 +1,16 @@
 # DiscogsParser
-Java project to efficiently parse the database dumps from the discogs music database and marketplace (https://www.discogs.com/)
+DiscogsParser is a java-project based on the StAX-api to parse the xml-based database dumps
+from the discogs music database and marketplace (https://www.discogs.com/)
 
-## Contents
-- parsers for all 4 dump files (artists, labels, masters, releases), based on StAX
-- unit tests to verfiy the correctness of the implemented parsers
-- relational database schema to store the data
-- database backend to write the parsed files into a database 
+The project contains four parsers, one for each dump file, to parse the information of artists, labels, masters and
+releases. Additionally writers are implemented to store the parsed informations in a relational database, in this case
+PostgreSQL. SQL-scripts are provided to create the required database schemas and scripts to transform the schema in a more
+usable format using integrity constraints and indizes.
 
 ## Folders
 - db/
-  - sqlscripts to create or drop the database
+  - sqlscripts to create or drop the database and transform the data
+- doc/
+  - er-diagrams that describe the database schema
 - src/
   - java files for parsing the xml dumps and writing the parsed data to the database
