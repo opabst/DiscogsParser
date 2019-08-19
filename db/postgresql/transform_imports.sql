@@ -121,7 +121,9 @@ INSERT INTO discogs.master_video (id, embed, source, description, duration, titl
 
 INSERT INTO discogs.video_of_master (video_id, master_id)
     SELECT video_id, master_id
-    FROM discogs.video_of_master_import;
+    FROM discogs.video_of_master_import
+    WHERE video_id IN (SELECT id FROM discogs.master_video)
+      AND master_id IN (SELECT id FROM discogs.master);
 
 -- transformation for release tables
 
