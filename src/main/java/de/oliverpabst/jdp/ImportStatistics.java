@@ -137,7 +137,7 @@ public class ImportStatistics {
         sb.append("ReleaseCompany: " + statistics.get("ReleaseCompany") + "\n");
         sb.append("ReleaseCompanyOf: " + statistics.get("ReleaseCompanyOf") + "\n");
         sb.append("ReleaseFormat: " + statistics.get("ReleaseFormat") + "\n");
-        sb.append("ReleaseFormatDescription" + statistics.get("ReleaseFormatDescription") + "\n");
+        sb.append("ReleaseFormatDescription: " + statistics.get("ReleaseFormatDescription") + "\n");
         sb.append("ReleaseFormatOf: " + statistics.get("ReleaseFormatOf") + "\n");
         sb.append("ReleaseImage: " + statistics.get("ReleaseImage") + "\n");
         sb.append("ReleaseImageOf: " + statistics.get("ReleaseImageOf") + "\n");
