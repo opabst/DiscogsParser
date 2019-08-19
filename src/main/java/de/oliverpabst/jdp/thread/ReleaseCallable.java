@@ -4,6 +4,7 @@ import de.oliverpabst.jdp.parser.ReleaseParser;
 
 import java.io.File;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 public class ReleaseCallable implements Callable<String> {
     private File file;
@@ -14,8 +15,13 @@ public class ReleaseCallable implements Callable<String> {
 
     @Override
     public String call() {
+        Long startTime = System.nanoTime();
+
         new ReleaseParser(file);
 
-        return "Parsing releases completed";
+        Long endTime = System.nanoTime();
+        Long duration = TimeUnit.SECONDS.convert(endTime - startTime, TimeUnit.NANOSECONDS);
+
+        return "Parsing releases completed -|- duration: " + duration + "sec";
     }
 }
