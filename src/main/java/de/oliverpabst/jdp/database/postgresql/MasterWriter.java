@@ -1,6 +1,5 @@
 package de.oliverpabst.jdp.database.postgresql;
 
-import com.sun.jndi.ldap.LdapURL;
 import de.oliverpabst.jdp.DiscogsParser;
 import de.oliverpabst.jdp.ImportStatistics;
 import de.oliverpabst.jdp.database.SchemaDoesNotExistException;
