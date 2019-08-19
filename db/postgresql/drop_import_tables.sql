@@ -21,6 +21,8 @@ DROP TABLE discogs.master_genres_import;
 DROP TABLE discogs.master_images_import;
 DROP TABLE discogs.master_artist_import;
 DROP TABLE discogs.master_artist_performs_import;
+DROP TABLE discogs.master_video_import;
+DROP TABLE discogs.video_of_master_import;
 
 -- RELEASE TABLES
 DROP TABLE discogs.release_import;
@@ -40,3 +42,8 @@ DROP TABLE discogs.release_image_import;
 DROP TABLE discogs.image_of_release_import;
 DROP TABLE discogs.release_label_import;
 DROP TABLE discogs.label_of_release_import;
+DROP TABLE discogs.release_format_import;
+DROP TABLE discogs.format_of_release_import;
+DROP TABLE discogs.release_format_description_import;
+DROP TABLE discogs.release_track_import;
+DROP TABLE discogs.track_of_release_import;

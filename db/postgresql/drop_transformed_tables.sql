@@ -22,6 +22,8 @@ DROP TABLE discogs.master_images CASCADE;
 DROP TABLE discogs.images_of_master CASCADE;
 DROP TABLE discogs.master_artist CASCADE;
 DROP TABLE discogs.master_artist_performs CASCADE;
+DROP TABLE discogs.master_video CASCADE;
+DROP TABLE discogs.video_of_master CASCADE;
 
 -- RELEASE TABLES
 DROP TABLE discogs.release CASCADE;
@@ -41,3 +43,8 @@ DROP TABLE discogs.release_image CASCADE;
 DROP TABLE discogs.image_of_release CASCADE;
 DROP TABLE discogs.release_label CASCADE;
 DROP TABLE discogs.label_of_release CASCADE;
+DROP TABLE discogs.release_track CASCADE;
+DROP TABLE discogs.track_of_release CASCADE;
+DROP TABLE discogs.release_format CASCADE;
+DROP TABLE discogs.format_of_release CASCADE;
+DROP TABLE discogs.release_format_description CASCADE;
