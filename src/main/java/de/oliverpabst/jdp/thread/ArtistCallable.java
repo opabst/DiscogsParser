@@ -5,10 +5,10 @@ import de.oliverpabst.jdp.parser.ArtistParser;
 import java.io.File;
 import java.util.concurrent.Callable;
 
-public class ArtistThread implements Callable<String> {
+public class ArtistCallable implements Callable<String> {
     private File file;
 
-    public ArtistThread(File _file) {
+    public ArtistCallable(File _file) {
         file = _file;
     }
     @Override

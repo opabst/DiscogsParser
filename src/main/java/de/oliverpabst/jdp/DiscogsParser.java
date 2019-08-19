@@ -3,16 +3,16 @@ package de.oliverpabst.jdp;
 import de.oliverpabst.jdp.database.ConnectionParameters;
 import de.oliverpabst.jdp.database.SchemaDoesNotExistException;
 import de.oliverpabst.jdp.database.postgresql.PostgreSQLConnection;
-import de.oliverpabst.jdp.thread.ArtistThread;
-import de.oliverpabst.jdp.thread.LabelThread;
-import de.oliverpabst.jdp.thread.MasterThread;
-import de.oliverpabst.jdp.thread.ReleaseThread;
+import de.oliverpabst.jdp.thread.ArtistCallable;
+import de.oliverpabst.jdp.thread.LabelCallable;
+import de.oliverpabst.jdp.thread.MasterCallable;
+import de.oliverpabst.jdp.thread.ReleaseCallable;
 import org.apache.commons.cli.*;
 
 import java.io.File;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.*;
 
 public class DiscogsParser {
     private static ConnectionParameters params;
@@ -76,38 +76,41 @@ public class DiscogsParser {
         int poolsize = Runtime.getRuntime().availableProcessors();
         pool = Executors.newFixedThreadPool(poolsize);
 
-        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> System.out.println("Caught " + throwable));
 
-            @Override
-            public void uncaughtException(Thread thread, Throwable throwable) {
-                System.out.println("Caught " + throwable);
+        ArrayList<Callable<String>> threads = new ArrayList<>();
+        threads.add(new ArtistCallable(artistsFile));
+        threads.add(new LabelCallable(labelsFile));
+        threads.add(new MasterCallable(mastersFile));
+        threads.add(new ReleaseCallable(releasesFile));
+
+        List<Future<String>> results = null;
+        try {
+            results = pool.invokeAll(threads);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        for(Future<String> future: results) {
+            try {
+                System.out.println(future.get());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
-
-        Thread at = new Thread(new ArtistThread(artistsFile));
-        pool.submit(at);
-
-        Thread lt = new Thread(new LabelThread(labelsFile));
-        pool.submit(lt);
-
-        Thread mt = new Thread(new MasterThread(mastersFile));
-        pool.submit(mt);
-
-        Thread rt = new Thread(new ReleaseThread(releasesFile));
-        pool.submit(rt);
+        }
 
         pool.shutdown();
 
-        while (true) {
-            try {
-                if (pool.awaitTermination(2, TimeUnit.MINUTES)) {
-                    break;
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("Waiting for completion");
-        }
+//        while (true) {
+//            try {
+//                if (pool.awaitTermination(2, TimeUnit.MINUTES)) {
+//                    break;
+//                }
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            System.out.println("Waiting for completion");
+//        }
 
         System.out.println("Finished parsing");
         if (showStatistics) {

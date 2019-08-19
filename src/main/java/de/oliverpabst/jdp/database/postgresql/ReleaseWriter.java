@@ -320,7 +320,7 @@ public class ReleaseWriter {
 
         for(ReleaseTrack rt: _re.getTracks()) {
             insReleaseTrack.setInt(1, releaseTrackCnt+1);
-            insReleaseTrack.setInt(2, Integer.parseInt(rt.getPosition()));
+            insReleaseTrack.setString(2, rt.getPosition());
             insReleaseTrack.setString(3, rt.getTitle());
             insReleaseTrack.setString(4, rt.getDuration());
             insReleaseTrack.addBatch();

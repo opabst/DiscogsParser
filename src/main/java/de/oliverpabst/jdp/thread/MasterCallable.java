@@ -5,10 +5,10 @@ import de.oliverpabst.jdp.parser.MasterParser;
 import java.io.File;
 import java.util.concurrent.Callable;
 
-public class MasterThread implements Callable<String> {
+public class MasterCallable implements Callable<String> {
     private File file;
 
-    public MasterThread(File _file) {
+    public MasterCallable(File _file) {
         file = _file;
     }
 

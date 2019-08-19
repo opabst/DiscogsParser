@@ -5,10 +5,10 @@ import de.oliverpabst.jdp.parser.LabelParser;
 import java.io.File;
 import java.util.concurrent.Callable;
 
-public class LabelThread implements Callable<String> {
+public class LabelCallable implements Callable<String> {
     private File file;
 
-    public LabelThread(File _file) {
+    public LabelCallable(File _file) {
         file = _file;
     }
 

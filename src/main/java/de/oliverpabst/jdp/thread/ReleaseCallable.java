@@ -5,10 +5,10 @@ import de.oliverpabst.jdp.parser.ReleaseParser;
 import java.io.File;
 import java.util.concurrent.Callable;
 
-public class ReleaseThread implements Callable<String> {
+public class ReleaseCallable implements Callable<String> {
     private File file;
 
-    public ReleaseThread(File _file) {
+    public ReleaseCallable(File _file) {
         file = _file;
     }
 
