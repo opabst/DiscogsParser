@@ -325,10 +325,10 @@ ALTER TABLE discogs.format_of_release ADD FOREIGN KEY (format_id) REFERENCES dis
 ALTER TABLE discogs.format_of_release ADD FOREIGN KEY (release_id) REFERENCES discogs.release(id);
 
 
-CREATE TABLE discogs.release_format_descriptions (
+CREATE TABLE discogs.release_format_description (
 	format_id INTEGER,
 	description TEXT);
 
 
-ALTER TABLE discgogs.release_format_description ADD PRIMARY KEY (format_id, description);
+ALTER TABLE discogs.release_format_description ADD PRIMARY KEY (format_id, description);
 ALTER TABLE discogs.release_format_description ADD FOREIGN KEY (format_id) REFERENCES discogs.release_format(id);
