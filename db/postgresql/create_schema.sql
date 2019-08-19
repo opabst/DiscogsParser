@@ -152,6 +152,22 @@ CREATE TABLE discogs.master_artist_performs(
 ALTER TABLE discogs.master_artist_performs ADD PRIMARY KEY (master_id, artist_id);
 ALTER TABLE discogs.master_artist_performs ADD FOREIGN KEY (master_id) REFERENCES discogs.master(id);
 ALTER TABLE discogs.master_artist_performs ADD FOREIGN KEY (artist_id) REFERENCES discogs.master_artist(id);
+
+CREATE TABLE discogs.master_video (
+	id INTEGER PRIMARY KEY,
+	embed TEXT,
+	source TEXT,
+	description TEXT,
+	duration TEXT,
+	title TEXT);
+
+CREATE TABLE discogs.video_of_master (
+	video_id INTEGER,
+	master_id INTEGER);
+
+ALTER TABLE discogs.video_of_master ADD PRIMARY KEY (video_id, master_id);
+ALTER TABLE discogs.video_of_master ADD FOREIGN KEY (video_id) REFERENCES discogs.master_video (id);
+ALTER TABLE discogs.video_of_master ADD FOREIGN KEY (master_id) REFERENCES discogs.master(id);
 --------------------------------------------------------------------------------
 -- ReleaseEntity
 --------------------------------------------------------------------------------
@@ -291,5 +307,28 @@ CREATE TABLE discogs.track_of_release(
 	release_id INTEGER);
 
 ALTER TABLE discogs.track_of_release ADD PRIMARY KEY (track_id, release_id);
-ALTER TABLE discogs.track_of_release ADD FOREIGN KEY (track_id) REFERENCES discogs.track(id);
+ALTER TABLE discogs.track_of_release ADD FOREIGN KEY (track_id) REFERENCES discogs.release_track(id);
 ALTER TABLE discogs.track_of_release ADD FOREIGN KEY (release_id) REFERENCES discogs.release(id);
+
+CREATE TABLE discogs.release_format (
+	id INTEGER PRIMARY KEY,
+	name TEXT,
+	qty TEXT,
+	fmt_text TEXT);
+
+CREATE TABLE discogs.format_of_release (
+	format_id INTEGER,
+	release_id INTEGER);
+
+ALTER TABLE discogs.format_of_release ADD PRIMARY KEY (format_id, release_id);
+ALTER TABLE discogs.format_of_release ADD FOREIGN KEY (format_id) REFERENCES discogs.release_format(id);
+ALTER TABLE discogs.format_of_release ADD FOREIGN KEY (release_id) REFERENCES discogs.release(id);
+
+
+CREATE TABLE discogs.release_format_descriptions (
+	format_id INTEGER,
+	description TEXT);
+
+
+ALTER TABLE discgogs.release_format_description ADD PRIMARY KEY (format_id, description);
+ALTER TABLE discogs.release_format_description ADD FOREIGN KEY (format_id) REFERENCES discogs.release_format(id);

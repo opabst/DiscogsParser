@@ -124,7 +124,17 @@ CREATE TABLE discogs.master_artist_performs_import (
 	master_id INTEGER,
 	artist_id INTEGER);
 
+CREATE TABLE discogs.master_video_import (
+	id INTEGER,
+	embed TEXT,
+	source TEXT,
+	description TEXT,
+	duration TEXT,
+	title TEXT);
 
+CREATE TABLE discogs.video_of_master_import (
+	video_id INTEGER,
+	master_id INTEGER);
 
 --------------------------------------------------------------------------------
 -- ReleaseEntity
@@ -234,3 +244,17 @@ CREATE TABLE discogs.release_track_import (
 CREATE TABLE discogs.track_of_release_import(
 	track_id INTEGER,
 	release_id INTEGER);
+
+CREATE TABLE discogs.release_format_import (
+	id INTEGER,
+	name TEXT,
+	qty TEXT,
+	fmt_text TEXT);
+
+CREATE TABLE discogs.format_of_release_import (
+	format_id INTEGER,
+	release_id INTEGER);
+
+CREATE TABLE discogs.release_format_description_import (
+	format_id INTEGER,
+	description TEXT);

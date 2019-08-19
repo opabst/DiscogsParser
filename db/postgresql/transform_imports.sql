@@ -115,6 +115,14 @@ INSERT INTO discogs.master_artist_performs (master_id, artist_id)
       AND artist_id IN (SELECT id
                         FROM discogs.master_artist);
 
+INSERT INTO discogs.master_video (id, embed, source, description, duration, title)
+    SELECT id, embed, source, description, duration, title
+    FROM discogs.master_video_import;
+
+INSERT INTO discogs.video_of_master (video_id, master_id)
+    SELECT video_id, master_id
+    FROM discogs.video_of_master_import;
+
 -- transformation for release tables
 
 INSERT INTO discogs.release (id, released, country, notes, status, title)
