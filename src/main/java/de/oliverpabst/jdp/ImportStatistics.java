@@ -34,6 +34,8 @@ public class ImportStatistics {
         statistics.put("MasterImageOf", 0);
         statistics.put("MasterArtist", 0);
         statistics.put("MasterArtistPerforms", 0);
+        statistics.put("MasterVideo", 0);
+        statistics.put("MasterVideoOf", 0);
 
         // release
         statistics.put("Release", 0);
@@ -49,6 +51,9 @@ public class ImportStatistics {
         statistics.put("ReleaseVideoOf", 0);
         statistics.put("ReleaseCompany", 0);
         statistics.put("ReleaseCompanyOf", 0);
+        statistics.put("ReleaseFormat", 0);
+        statistics.put("ReleaseFormatDescription", 0);
+        statistics.put("ReleaseFormatOf", 0);
         statistics.put("ReleaseImage", 0);
         statistics.put("ReleaseImageOf", 0);
         statistics.put("ReleaseLabel", 0);
@@ -114,6 +119,8 @@ public class ImportStatistics {
         sb.append("MasterImagesOf: " + statistics.get("MasterImageOf") + "\n");
         sb.append("MasterArtist: " + statistics.get("MasterArtist") + "\n");
         sb.append("MasterArtistPerforms: " + statistics.get("MasterArtistPerforms") + "\n");
+        sb.append("MasterVideo: " + statistics.get("MasterVideo") + "\n");
+        sb.append("MasterVideoOf: " + statistics.get("MasterVideoOf") + "\n");
         sb.append("====================\n");
         sb.append("RELEASE\n");
         sb.append("Release: " + statistics.get("Release") + "\n");
@@ -129,6 +136,9 @@ public class ImportStatistics {
         sb.append("ReleaseVideoOf: " + statistics.get("ReleaseVideoOf") + "\n");
         sb.append("ReleaseCompany: " + statistics.get("ReleaseCompany") + "\n");
         sb.append("ReleaseCompanyOf: " + statistics.get("ReleaseCompanyOf") + "\n");
+        sb.append("ReleaseFormat: " + statistics.get("ReleaseFormat") + "\n");
+        sb.append("ReleaseFormatDescription" + statistics.get("ReleaseFormatDescritption") + "\n");
+        sb.append("ReleaseFormatOf: " + statistics.get("ReleaseFormatOf") + "\n");
         sb.append("ReleaseImage: " + statistics.get("ReleaseImage") + "\n");
         sb.append("ReleaseImageOf: " + statistics.get("ReleaseImageOf") + "\n");
         sb.append("ReleaseLabel: " + statistics.get("ReleaseLabel") + "\n");

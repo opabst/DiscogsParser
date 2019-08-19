@@ -1,7 +1,7 @@
 package de.oliverpabst.jdp.model.master;
 
 public class MasterVideo {
-    private boolean embed;
+    private String embed;
     private String sourceUrl;
     private String description;
     private String duration;
@@ -11,13 +11,7 @@ public class MasterVideo {
     public MasterVideo(String _duration, String _embed, String _src) {
         duration = _duration;
 
-        if(_embed.equals("true")) {
-            embed = true;
-        } else if (_embed.equals("false")) {
-            embed = false;
-        } else {
-            System.err.println("Unknown embed value: " + _embed);
-        }
+        embed = _embed;
 
         sourceUrl = _src;
     }
@@ -39,7 +33,7 @@ public class MasterVideo {
         return description;
     }
 
-    public boolean getEmbed() {
+    public String getEmbed() {
         return embed;
     }
 

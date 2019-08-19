@@ -1,5 +1,6 @@
 package de.oliverpabst.jdp.database.postgresql;
 
+import com.sun.jndi.ldap.LdapURL;
 import de.oliverpabst.jdp.DiscogsParser;
 import de.oliverpabst.jdp.ImportStatistics;
 import de.oliverpabst.jdp.database.SchemaDoesNotExistException;
@@ -28,6 +29,8 @@ public class MasterWriter {
     private PreparedStatement insImagesOfMaster;
     private PreparedStatement insMasterArtist;
     private PreparedStatement insMasterArtistPerforms;
+    private PreparedStatement insMasterVideo;
+    private PreparedStatement insMasterVideoOf;
 
     private Integer insertTrigger = 1000;
 
@@ -38,6 +41,8 @@ public class MasterWriter {
     private Integer imageOfMasterCnt = 0;
     private Integer masterArtistCnt = 0;
     private Integer masterArtistPerformsCnt = 0;
+    private Integer masterVideoCnt = 0;
+    private Integer masterVideoOfCnt = 0;
 
     private MasterWriter() {
         try {
@@ -67,6 +72,8 @@ public class MasterWriter {
         insImagesOfMaster.executeBatch();
         insMasterArtist.executeBatch();
         insMasterArtistPerforms.executeBatch();
+        insMasterVideo.executeBatch();
+        insMasterVideoOf.executeBatch();
     }
 
     public void finalBatchExecute() throws SQLException {
@@ -80,6 +87,8 @@ public class MasterWriter {
         ImportStatistics.getInstance().setValue("MasterImageOf", imageOfMasterCnt);
         ImportStatistics.getInstance().setValue("MasterArtist", masterArtistCnt);
         ImportStatistics.getInstance().setValue("MasterArtistPerforms", masterArtistPerformsCnt);
+        ImportStatistics.getInstance().setValue("MasterVideo", masterVideoCnt);
+        ImportStatistics.getInstance().setValue("MasterVideoOf", masterVideoOfCnt);
 
         con.setAutoCommit(true);
     }
@@ -93,6 +102,8 @@ public class MasterWriter {
         insImagesOfMaster = con.prepareStatement("INSERT INTO discogs.images_of_master_import (image_id, master_id) VALUES (?, ?)");
         insMasterArtist = con.prepareStatement("INSERT INTO discogs.master_artist_import (id, name, role, join_att, anv) VALUES (?, ?, ?, ?, ?)");
         insMasterArtistPerforms = con.prepareStatement("INSERT INTO discogs.master_artist_performs_import (master_id, artist_id) VALUES (?, ?)");
+        insMasterVideo = con.prepareStatement("INSERT INTO discogs.master_video_import (id, embed, source, description, duration, title) VALUES (?, ?, ?, ?, ?, ?)");
+        insMasterVideoOf = con.prepareStatement("INSERT INTO discogs.video_of_master_import (video_id, master_id) VALUES (?, ?)");
     }
 
     public void insertMaster(MasterEntity _me) throws SQLException {
@@ -150,7 +161,19 @@ public class MasterWriter {
         }
 
         for(MasterVideo mv: _me.getVideos()) {
-            // TODO: implement (prepared statements + statistics)
+            insMasterVideo.setInt(1, masterVideoCnt+1);
+            insMasterVideo.setString(2, mv.getEmbed());
+            insMasterVideo.setString(3, mv.getSourceUrl());
+            insMasterVideo.setString(4, mv.getDescription());
+            insMasterVideo.setString(5, mv.getDuration());
+            insMasterVideo.setString(6, mv.getTitle());
+            insMasterVideo.addBatch();
+            masterVideoCnt++;
+
+            insMasterVideoOf.setInt(1, masterVideoOfCnt+1);
+            insMasterVideoOf.setInt(2, Integer.parseInt(_me.getId()));
+            insMasterVideoOf.addBatch();
+            masterVideoOfCnt++;
         }
 
         objectCounter++;

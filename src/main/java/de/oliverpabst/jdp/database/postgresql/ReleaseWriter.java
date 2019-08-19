@@ -32,6 +32,9 @@ public class ReleaseWriter {
     private PreparedStatement insVideoOfRelease;
     private PreparedStatement insReleaseCompany;
     private PreparedStatement insCompanyOfRelease;
+    private PreparedStatement insReleaseFormat;
+    private PreparedStatement insReleaseFormatDescription;
+    private PreparedStatement insFormatOfRelease;
     private PreparedStatement insReleaseImage;
     private PreparedStatement insImageOfRelease;
     private PreparedStatement insReleaseLabel;
@@ -58,6 +61,9 @@ public class ReleaseWriter {
     private Integer releaseLabelOfCnt = 0;
     private Integer releaseTrackCnt = 0;
     private Integer releaseTrackOfCnt = 0;
+    private Integer releaseFormatCnt = 0;
+    private Integer releaseFormatDescriptionCnt = 0;
+    private Integer releaseFormatOfCnt = 0;
 
     private ReleaseWriter() {
         try {
@@ -94,6 +100,9 @@ public class ReleaseWriter {
         insVideoOfRelease.executeBatch();
         insReleaseCompany.executeBatch();
         insCompanyOfRelease.executeBatch();
+        insReleaseFormat.executeBatch();
+        insReleaseFormatDescription.executeBatch();
+        insFormatOfRelease.executeBatch();
         insReleaseImage.executeBatch();
         insImageOfRelease.executeBatch();
         insReleaseLabel.executeBatch();
@@ -119,10 +128,15 @@ public class ReleaseWriter {
         ImportStatistics.getInstance().setValue("ReleaseVideoOf", releaseVideoOfCnt);
         ImportStatistics.getInstance().setValue("ReleaseCompany", releaseCompanyCnt);
         ImportStatistics.getInstance().setValue("ReleaseCompanyOf", releaseCompanyOfCnt);
+        ImportStatistics.getInstance().setValue("ReleaseFormat", releaseFormatCnt);
+        ImportStatistics.getInstance().setValue("ReleaseFormatDescription", releaseFormatDescriptionCnt);
+        ImportStatistics.getInstance().setValue("ReleaseFormatOf", releaseArtistOfCnt);
         ImportStatistics.getInstance().setValue("ReleaseImage", releaseImageCnt);
         ImportStatistics.getInstance().setValue("ReleaseImageOf", releaseImageOfCnt);
         ImportStatistics.getInstance().setValue("ReleaseLabel", releaseLabelCnt);
         ImportStatistics.getInstance().setValue("ReleaseLabelOf", releaseLabelOfCnt);
+        ImportStatistics.getInstance().setValue("ReleaseTrack", releaseTrackCnt);
+        ImportStatistics.getInstance().setValue("ReleaeTrackof", releaseTrackOfCnt);
 
         con.setAutoCommit(true);
     }
@@ -142,6 +156,9 @@ public class ReleaseWriter {
         insVideoOfRelease = con.prepareStatement("INSERT INTO discogs.video_of_release_import (release_id, video_id) VALUES (?, ?)");
         insReleaseCompany = con.prepareStatement("INSERT INTO discogs.release_company_import (id, resource_url, name, entity_type, entity_type_value, catno) VALUES (?, ?, ?, ?, ?, ?)");
         insCompanyOfRelease = con.prepareStatement("INSERT INTO discogs.company_of_release_import (release_id, company_id) VALUES (?, ?)");
+        insReleaseFormat = con.prepareStatement("INSERT INTO discogs.release_format_import (id, name, qty, fmt_text) VALUES (?, ?, ?, ?)");
+        insReleaseFormatDescription = con.prepareStatement("INSERT INTO discogs.release_format_description_import (format_id, description) VALUES (?, ?)");
+        insFormatOfRelease = con.prepareStatement("INSERT INTO discogs.format_of_release_import (format_id, release_id) VALUES (?, ?)");
         insReleaseImage = con.prepareStatement("INSERT INTO discogs.release_image_import (id, uri, uri150, type, width, heigth) VALUES (?, ?, ?, ?, ?, ?)");
         insImageOfRelease = con.prepareStatement("INSERT INTO discogs.image_of_release_import (image_id, release_id) VALUES (?, ?)");
         insReleaseLabel = con.prepareStatement("INSERT INTO discogs.release_label_import (id, catno, name) VALUES (?, ?, ?)");
@@ -252,7 +269,24 @@ public class ReleaseWriter {
         }
 
         for(ReleaseFormat rf: _re.getFormats()) {
-            // TODO: implement (+ prepared statement + statistics)
+            insReleaseFormat.setInt(1, releaseFormatCnt+1);
+            insReleaseFormat.setString(2, rf.getName());
+            insReleaseFormat.setString(3, rf.getQty());
+            insReleaseFormat.setString(4, rf.getText());
+            insReleaseFormat.addBatch();
+            releaseFormatCnt++;
+
+            for(String description: rf.getDescriptions()) {
+                insReleaseFormatDescription.setInt(1, releaseFormatCnt);
+                insReleaseFormatDescription.setString(2, description);
+                insReleaseFormatDescription.addBatch();
+                releaseFormatDescriptionCnt++;
+            }
+
+            insFormatOfRelease.setInt(1,releaseFormatOfCnt+1);
+            insFormatOfRelease.setInt(2, Integer.parseInt(_re.getId()));
+            insFormatOfRelease.addBatch();
+            releaseFormatOfCnt++;
         }
 
         for(Image i: _re.getImages()) {
