@@ -76,6 +76,14 @@ public class DiscogsParser {
         int poolsize = Runtime.getRuntime().availableProcessors();
         pool = Executors.newFixedThreadPool(poolsize);
 
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+
+            @Override
+            public void uncaughtException(Thread thread, Throwable throwable) {
+                System.out.println("Caught " + throwable);
+            }
+        });
+
         Thread at = new Thread(new ArtistThread(artistsFile));
         pool.submit(at);
 
