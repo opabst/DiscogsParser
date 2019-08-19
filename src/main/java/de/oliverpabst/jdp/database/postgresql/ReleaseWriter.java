@@ -253,7 +253,7 @@ public class ReleaseWriter {
         }
 
         for(ReleaseCompany rc: _re.getCompanies()) {
-            insReleaseCompany.setInt(1, Integer.parseInt(rc.getId()));
+            insReleaseCompany.setInt(1, releaseCompanyCnt+1);
             insReleaseCompany.setString(2, rc.getResourceUrl());
             insReleaseCompany.setString(3, rc.getName());
             insReleaseCompany.setString(4, rc.getEntityType());
@@ -263,7 +263,7 @@ public class ReleaseWriter {
             releaseCompanyCnt++;
 
             insCompanyOfRelease.setInt(1, Integer.parseInt(_re.getId()));
-            insCompanyOfRelease.setInt(2, Integer.parseInt(rc.getId()));
+            insCompanyOfRelease.setInt(2, releaseCompanyOfCnt+1);
             insCompanyOfRelease.addBatch();
             releaseCompanyOfCnt++;
         }
