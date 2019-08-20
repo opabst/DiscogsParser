@@ -136,7 +136,7 @@ public class ReleaseWriter {
         ImportStatistics.getInstance().setValue("ReleaseLabel", releaseLabelCnt);
         ImportStatistics.getInstance().setValue("ReleaseLabelOf", releaseLabelOfCnt);
         ImportStatistics.getInstance().setValue("ReleaseTrack", releaseTrackCnt);
-        ImportStatistics.getInstance().setValue("ReleaseTrackof", releaseTrackOfCnt);
+        ImportStatistics.getInstance().setValue("ReleaseTrackOf", releaseTrackOfCnt);
 
         con.setAutoCommit(true);
     }
