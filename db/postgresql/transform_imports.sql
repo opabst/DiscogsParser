@@ -256,7 +256,7 @@ INSERT INTO discogs.label_of_release (label_id, release_id)
 
 
 INSERT INTO discogs.release_track (id, position, title, duration)
-    SELECT id, posititon, title, duration
+    SELECT id, position, title, duration
     FROM discogs.release_track_import;
 
 INSERT INTO discogs.track_of_release (track_id, release_id)
