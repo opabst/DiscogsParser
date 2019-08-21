@@ -34,7 +34,7 @@ BEGIN
         EXECUTE v_stmt INTO v_transformed_tuple_cnt;
 
         INSERT INTO discogs.processing_results (import_table, import_tuple_count, transformed_table, transformed_tuple_count, loss_cnt, loss_pct)
-            VALUES (v_table_name || '_import', v_imported_tuple_cnt, v_table_name, v_transformed_tuple_cnt, v_imported_tuple_cnt - v_transformed_tuple_cnt, 100.00 -  TRUNC(v_transformed_tuple_cnt / (v_imported_tuple_cnt/100), 2));
+            VALUES (v_table_name || '_import', v_imported_tuple_cnt, v_table_name, v_transformed_tuple_cnt, v_imported_tuple_cnt - v_transformed_tuple_cnt, 100.00 -  TRUNC(cast(v_transformed_tuple_cnt AS DECIMAL) / (v_imported_tuple_cnt/100), 2));
     END LOOP;
     CLOSE table_cursor;
 END;
