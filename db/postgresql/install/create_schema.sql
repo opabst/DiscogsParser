@@ -286,6 +286,7 @@ ALTER TABLE discogs.image_of_release ADD FOREIGN KEY (release_id) REFERENCES dis
 CREATE TABLE discogs.release_label (
 	id INTEGER PRIMARY KEY,
 	catno TEXT[],
+	label_id INTEGER[],
 	name TEXT[]);
 
 CREATE TABLE discogs.label_of_release (

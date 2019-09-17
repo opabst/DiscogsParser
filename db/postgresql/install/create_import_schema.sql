@@ -229,6 +229,7 @@ CREATE TABLE discogs.image_of_release_import (
 CREATE TABLE discogs.release_label_import (
 	id INTEGER,
 	catno TEXT,
+	label_id INTEGER,
 	name TEXT);
 
 CREATE TABLE discogs.label_of_release_import (
