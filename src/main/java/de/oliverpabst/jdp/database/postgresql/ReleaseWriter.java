@@ -161,7 +161,7 @@ public class ReleaseWriter {
         insFormatOfRelease = con.prepareStatement("INSERT INTO discogs.format_of_release_import (format_id, release_id) VALUES (?, ?)");
         insReleaseImage = con.prepareStatement("INSERT INTO discogs.release_image_import (id, uri, uri150, type, width, heigth) VALUES (?, ?, ?, ?, ?, ?)");
         insImageOfRelease = con.prepareStatement("INSERT INTO discogs.image_of_release_import (image_id, release_id) VALUES (?, ?)");
-        insReleaseLabel = con.prepareStatement("INSERT INTO discogs.release_label_import (id, catno, name) VALUES (?, ?, ?)");
+        insReleaseLabel = con.prepareStatement("INSERT INTO discogs.release_label_import (id, catno, label_id, name) VALUES (?, ?, ?, ?)");
         insLabelOfRelease = con.prepareStatement("INSERT INTO discogs.label_of_release_import (label_id, release_id) VALUES (?, ?)");
         insReleaseTrack = con.prepareStatement("INSERT INTO discogs.release_track_import (id, position, title, duration) VALUES (?, ?, ?, ?)");
         insTrackOfRelease = con.prepareStatement("INSERT INTO discogs.track_of_release_import (track_id, release_id) VALUES (?, ?)");
@@ -308,7 +308,8 @@ public class ReleaseWriter {
         for(ReleaseLabel rl: _re.getLabels()) {
             insReleaseLabel.setInt(1, Integer.parseInt(rl.getId()));
             insReleaseLabel.setString(2, rl.getCatno());
-            insReleaseLabel.setString(3, rl.getName());
+            insReleaseLabel.setInt(3, Integer.parseInt(rl.getId()));
+            insReleaseLabel.setString(4, rl.getName());
             insReleaseLabel.addBatch();
             releaseLabelCnt++;
 
