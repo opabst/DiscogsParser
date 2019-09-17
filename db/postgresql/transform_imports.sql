@@ -241,8 +241,8 @@ INSERT INTO discogs.image_of_release (image_id, release_id)
     WHERE release_id IN (SELECT id FROM discogs.release)
       AND image_id IN (SELECT id FROM discogs.release_image);
 
-INSERT INTO discogs.release_label (id, catno, name)
-    SELECT id, ARRAY_AGG(catno), ARRAY_AGG(name)
+INSERT INTO discogs.release_label (id, catno, label_id, name)
+    SELECT id, ARRAY_AGG(catno), ARRAY_AGG(label_id), ARRAY_AGG(name)
     FROM discogs.release_label_import
     GROUP BY id;
 
