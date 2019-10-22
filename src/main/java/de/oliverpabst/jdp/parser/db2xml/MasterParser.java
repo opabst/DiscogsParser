@@ -1,10 +1,11 @@
-package de.oliverpabst.jdp.parser;
+package de.oliverpabst.jdp.parser.db2xml;
 
 import de.oliverpabst.jdp.database.postgresql.MasterWriter;
 import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.master.MasterArtist;
 import de.oliverpabst.jdp.model.master.MasterEntity;
 import de.oliverpabst.jdp.model.master.MasterVideo;
+import de.oliverpabst.jdp.parser.AbstractMasterParser;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -51,30 +52,7 @@ import java.sql.SQLException;
 
 // TODO: Videos parsen
 
-public class MasterParser {
-
-    private boolean masters = false;
-    private boolean master = false;
-    private boolean mainRelease = false;
-    private boolean images = false;
-    private boolean artists = false;
-    private boolean artist = false;
-    private boolean tracks = false;
-    private boolean role = false;
-    private boolean name = false;
-    private boolean anv = false;
-    private boolean join = false;
-    private boolean id = false;
-    private boolean genres = false;
-    private boolean genre = false;
-    private boolean styles = false;
-    private boolean style = false;
-    private boolean year = false;
-    private boolean title = false;
-    private boolean dataQualitiy = false;
-    private boolean videos = false;
-    private boolean video = false;
-    private boolean description = false;
+public class MasterParser extends AbstractMasterParser {
 
     private MasterWriter writer;
 
@@ -87,7 +65,7 @@ public class MasterParser {
         }
     }
 
-    private void parse(File _masterFile) throws XMLStreamException {
+    protected void parse(File _masterFile) throws XMLStreamException {
         InputStream is = null;
         try {
             is = new FileInputStream(_masterFile);
@@ -280,3 +258,4 @@ public class MasterParser {
         }
     }
 }
+

@@ -19,6 +19,8 @@ public class DiscogsParser {
 
     private static Boolean showStatistics = true;
 
+    private static Boolean xml2dbSchema = false;
+
     private static ExecutorService pool;
 
     public static void main(String[] args) {
@@ -30,6 +32,7 @@ public class DiscogsParser {
         Option dbName = new Option("db", "database", true, "Name of the database");
         Option dbUser = new Option("u", "username", true, "Database username");
         Option dbPassword = new Option("pw", "password", true, "Corresponding password for database username");
+        Option db2xmlSchema = new Option("s", "db2xml", false, "If set, use old discogs-db2xml schema");
         dumpDate.setRequired(true);
         options.addOption(dumpDate);
         options.addOption(hostName);
@@ -61,6 +64,7 @@ public class DiscogsParser {
         String db = cmdLine.getOptionValue("db");
         String username = cmdLine.getOptionValue("u");
         String password = cmdLine.getOptionValue("pw");
+        Boolean useDb2xmlSchema = cmdLine.hasOption("s");
 
         params = new ConnectionParameters(hostname, port, db, username, password);
 
@@ -79,10 +83,10 @@ public class DiscogsParser {
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> System.out.println("Caught " + throwable));
 
         ArrayList<Callable<String>> threads = new ArrayList<>();
-        threads.add(new ArtistCallable(artistsFile));
-        threads.add(new LabelCallable(labelsFile));
-        threads.add(new MasterCallable(mastersFile));
-        threads.add(new ReleaseCallable(releasesFile));
+        threads.add(new ArtistCallable(artistsFile, useDb2xmlSchema));
+        threads.add(new LabelCallable(labelsFile, useDb2xmlSchema));
+        threads.add(new MasterCallable(mastersFile, useDb2xmlSchema));
+        threads.add(new ReleaseCallable(releasesFile, useDb2xmlSchema));
 
         List<Future<String>> results = null;
         try {
@@ -100,17 +104,6 @@ public class DiscogsParser {
         }
 
         pool.shutdown();
-
-//        while (true) {
-//            try {
-//                if (pool.awaitTermination(2, TimeUnit.MINUTES)) {
-//                    break;
-//                }
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            System.out.println("Waiting for completion");
-//        }
 
         System.out.println("Finished parsing");
         if (showStatistics) {

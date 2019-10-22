@@ -1,9 +1,10 @@
-package de.oliverpabst.jdp.parser;
+package de.oliverpabst.jdp.parser.jdp_schema;
 
 import de.oliverpabst.jdp.database.postgresql.ArtistWriter;
 import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.artist.ArtistAlias;
 import de.oliverpabst.jdp.model.artist.ArtistEntity;
+import de.oliverpabst.jdp.parser.AbstractArtistParser;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -38,17 +39,8 @@ import java.sql.SQLException;
  * </artists>
  */
 
-public class ArtistParser {
-    private boolean artists = false;
-    private boolean artist = false;
-    private boolean images = false; // at the moment unnecassary because images only contain more image objects
-    private boolean id = false;
-    private boolean name = false; // triple allocation: if namevariations/aliases is set, name will be a name variation or an alias
-    private boolean realname = false;
-    private boolean profile = false;
-    private boolean dataquality = false;
-    private boolean namevariations = false;
-    private boolean aliases = false;
+public class ArtistParser extends AbstractArtistParser {
+
 
     private ArtistWriter writer;
 
@@ -61,7 +53,7 @@ public class ArtistParser {
         }
     }
 
-    private void parse(File _artistFile) throws XMLStreamException {
+    protected void parse(File _artistFile) throws XMLStreamException {
         InputStream is = null;
 
         XMLInputFactory inFactory = null;

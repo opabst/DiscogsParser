@@ -1,23 +1,29 @@
 package de.oliverpabst.jdp.thread;
 
-import de.oliverpabst.jdp.parser.MasterParser;
+import de.oliverpabst.jdp.parser.jdp_schema.MasterParser;
 
 import java.io.File;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 public class MasterCallable implements Callable<String> {
-    private File file;
+    private final File file;
+    private final Boolean useXml2DbSchema;
 
-    public MasterCallable(File _file) {
+    public MasterCallable(File _file, Boolean _xml2db) {
         file = _file;
+        useXml2DbSchema = _xml2db;
     }
 
     @Override
     public String call() {
         Long startTime = System.nanoTime();
 
-        new MasterParser(file);
+        if(useXml2DbSchema) {
+            new de.oliverpabst.jdp.parser.db2xml.MasterParser(file);
+        } else {
+            new de.oliverpabst.jdp.parser.jdp_schema.MasterParser(file);
+        }
 
         Long endTime = System.nanoTime();
         Long duration = TimeUnit.SECONDS.convert(endTime - startTime, TimeUnit.NANOSECONDS);

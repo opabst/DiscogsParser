@@ -1,8 +1,9 @@
-package de.oliverpabst.jdp.parser;
+package de.oliverpabst.jdp.parser.db2xml;
 
 import de.oliverpabst.jdp.database.postgresql.ReleaseWriter;
 import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.release.*;
+import de.oliverpabst.jdp.parser.AbstractReleaseParser;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -91,50 +92,7 @@ import java.sql.SQLException;
  * </releases>
  */
 
-public class ReleaseParser {
-
-    private boolean releases = false;
-    private boolean release = false;
-    private boolean images = false;
-    private boolean image = false;
-    private boolean artists = false;
-    private boolean artist = false;
-    private boolean id = false;
-    private boolean name = false;
-    private boolean anv = false;
-    private boolean join = false;
-    private boolean role = false;
-    private boolean tracks = false;
-    private boolean title = false;
-    private boolean track = false;
-    private boolean video = false;
-    private boolean labels = false;
-    private boolean label = false;
-    private boolean extraartists = false;
-    private boolean formats = false;
-    private boolean format = false;
-    private boolean descriptions = false;
-    private boolean description = false;
-    private boolean genres = false;
-    private boolean genre = false;
-    private boolean styles = false;
-    private boolean style = false;
-    private boolean country = false;
-    private boolean released = false;
-    private boolean notes = false;
-    private boolean dataQuality = false;
-    private boolean tracklist = false;
-    private boolean position = false;
-    private boolean duration = false;
-    private boolean identifiers = false;
-    private boolean identifier = false;
-    private boolean videos = false;
-    private boolean companies = false;
-    private boolean company = false;
-    private boolean catno = false;
-    private boolean entityType = false;
-    private boolean entityTypeName = false;
-    private boolean resourceUrl = false;
+public class ReleaseParser extends AbstractReleaseParser {
 
     private ReleaseWriter writer;
 
@@ -147,7 +105,7 @@ public class ReleaseParser {
         }
     }
 
-    private void parse(File _releaseFile) throws XMLStreamException {
+    protected void parse(File _releaseFile) throws XMLStreamException {
         InputStream is = null;
 
         try {
@@ -523,3 +481,4 @@ public class ReleaseParser {
         }
     }
 }
+

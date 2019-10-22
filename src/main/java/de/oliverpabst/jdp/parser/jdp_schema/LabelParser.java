@@ -1,9 +1,10 @@
-package de.oliverpabst.jdp.parser;
+package de.oliverpabst.jdp.parser.jdp_schema;
 
 import de.oliverpabst.jdp.database.postgresql.LabelWriter;
 import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.label.LabelEntity;
 import de.oliverpabst.jdp.model.label.LabelSublabel;
+import de.oliverpabst.jdp.parser.AbstractLabelParser;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -36,20 +37,9 @@ import java.sql.SQLException;
  * </labels>
  */
 
-public class LabelParser {
+public class LabelParser extends AbstractLabelParser {
 
-    private boolean labels = false;
-    private boolean label = false;
-    private boolean images = false;
-    private boolean id = false;
-    private boolean name = true;
-    private boolean contactinfo = false;
-    private boolean profile = false;
-    private boolean dataquality = false;
-    private boolean urls = false;
-    private boolean url = false;
-    private boolean sublabels = false;
-    private boolean sublabel = false;
+
 
     private LabelWriter writer;
 
@@ -62,7 +52,7 @@ public class LabelParser {
         }
     }
 
-    private void parse(File _labelFile) throws XMLStreamException {
+    protected void parse(File _labelFile) throws XMLStreamException {
         InputStream is = null;
         try {
             is = new FileInputStream(_labelFile);
