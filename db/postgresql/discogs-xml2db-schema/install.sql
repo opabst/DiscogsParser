@@ -63,7 +63,7 @@ CREAE TABLE discogs.master (
     styles text,
     role text,
     data_quality text,
-    CONSTRAINT master_pkey PRIMARY KEY (id))
+    CONSTRAINT master_pkey PRIMARY KEY (id));
 
 CREATE TABLE discogs.master_artists (
     artist_name text,
@@ -115,7 +115,7 @@ CREATE TABLE discogs.releases_artists (
     artist_name text,
     anv text,
     join_relation text,
-        CONSTRAINT releases_artists_pkey PRIMARY KEY (release_id, "position"));
+    CONSTRAINT releases_artists_pkey PRIMARY KEY (release_id, "position"));
 
 CREATE TABLE discogs.releases_extraartists (
     release_id integer,
@@ -145,7 +145,7 @@ CREATE TABLE discogs.releases_images (
     CONSTRAINT releases_images_pkey PRIMARY KEY (release_id, type));
 
 CREATE TABLE discogs.releases_labels (
-    label text,
+    label text NOT NULL,
     release_id integer NOT NULL,
     catno text NOT NULL,
     CONSTRAINT releases_labels_pkey PRIMARY KEY (release_id, label, catno));
@@ -157,7 +157,7 @@ CREATE TABLE discogs.role (
 CREATE TABLE discogs.track (
     release_id integer,
     "position" text,
-    track_id textNOT NULL,
+    track_id text NOT NULL,
     title text,
     duration text,
     trackno integer,
