@@ -2,6 +2,8 @@ package de.oliverpabst.jdp;
 
 import de.oliverpabst.jdp.database.ConnectionParameters;
 import de.oliverpabst.jdp.database.SchemaDoesNotExistException;
+import de.oliverpabst.jdp.database.SchemaType;
+import de.oliverpabst.jdp.database.WrongSchemaTypeException;
 import de.oliverpabst.jdp.database.postgresql.PostgreSQLConnection;
 import de.oliverpabst.jdp.thread.ArtistCallable;
 import de.oliverpabst.jdp.thread.LabelCallable;
@@ -70,12 +72,18 @@ public class DiscogsParser {
 
         try {
             PostgreSQLConnection con = new PostgreSQLConnection(DiscogsParser.getConnectionParameters());
-        } catch (SchemaDoesNotExistException e) {
-            System.err.println(e.getMessage());
-            System.exit(1); // Exit because db schema does not exist in the specified database
-        } finally {
+            SchemaType st = con.getSchemaType();
 
+            if(useDb2xmlSchema && st.equals(SchemaType.JDP_SCHEMA)) {
+                throw new WrongSchemaTypeException("Parser set for xml2db-schema, but database schema is jdp!");
+            } else if (!useDb2xmlSchema && st.equals(SchemaType.XML2DB_SCHEMA)) {
+                throw new WrongSchemaTypeException("Parser set for jdp-schema, but database schema is xml2db!");
+            }
+        } catch (SchemaDoesNotExistException | WrongSchemaTypeException e) {
+            System.err.println(e.getMessage());
+            System.exit(1); // Exit because db schema does not exist in the specified database or selected parser does not match the database schema
         }
+
 
         int poolsize = Runtime.getRuntime().availableProcessors();
         pool = Executors.newFixedThreadPool(poolsize);
