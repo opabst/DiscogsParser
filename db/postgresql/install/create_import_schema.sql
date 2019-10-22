@@ -10,7 +10,7 @@ CREATE SCHEMA discogs;
 -- ArtistEntity
 --------------------------------------------------------------------------------
 
-CREATE TABLE discogs.artist_import (
+CREATE UNLOGGED TABLE discogs.artist_import (
 	id INTEGER,
 	name TEXT,
 	realname TEXT,
@@ -18,21 +18,21 @@ CREATE TABLE discogs.artist_import (
 	profile TEXT);
 -- TODO: add check clause for dataquality
 
-CREATE TABLE discogs.artist_namevariations_import (
+CREATE UNLOGGED TABLE discogs.artist_namevariations_import (
 	id INTEGER,
 	name_variation TEXT);
 
-CREATE TABLE discogs.artist_alias_import (
+CREATE UNLOGGED TABLE discogs.artist_alias_import (
 	id INTEGER,
 	alias TEXT);
 
-CREATE TABLE discogs.alias_of_artist_import (
+CREATE UNLOGGED TABLE discogs.alias_of_artist_import (
 	artist_id INTEGER,
 	alias_id INTEGER,
 	alias_name TEXT);
 
 -- TODO: primary key?
-CREATE TABLE discogs.artist_image_import (
+CREATE UNLOGGED TABLE discogs.artist_image_import (
     id INTEGER,
 	uri TEXT,
 	uri150 TEXT,
@@ -41,7 +41,7 @@ CREATE TABLE discogs.artist_image_import (
 	height INTEGER);
 -- NOTE: the URIs are empty, so no suitable primary key can be selected!
 
-CREATE TABLE discogs.image_of_artist_import (
+CREATE UNLOGGED TABLE discogs.image_of_artist_import (
 	image_id INTEGER,
 	artist_id INTEGER);
 
@@ -51,26 +51,26 @@ CREATE TABLE discogs.image_of_artist_import (
 -- LabelEntity
 --------------------------------------------------------------------------------
 
-CREATE TABLE discogs.label_import (
+CREATE UNLOGGED TABLE discogs.label_import (
 	id INTEGER,
 	name TEXT,
 	contactinfo TEXT,
 	profile TEXT,
 	data_quality TEXT);
 
-CREATE TABLE discogs.label_urls_import (
+CREATE UNLOGGED TABLE discogs.label_urls_import (
 	id INTEGER,
 	url TEXT);
 
-CREATE TABLE discogs.sublabel_import (
+CREATE UNLOGGED TABLE discogs.sublabel_import (
 	id INTEGER,
 	name TEXT);
 
-CREATE TABLE discogs.sublabel_of_import (
+CREATE UNLOGGED TABLE discogs.sublabel_of_import (
 	label_id INTEGER,
 	sublabel_id INTEGER);
 
-CREATE TABLE discogs.label_images_import (
+CREATE UNLOGGED TABLE discogs.label_images_import (
     id INTEGER,
 	uri TEXT,
 	uri150 TEXT,
@@ -78,7 +78,7 @@ CREATE TABLE discogs.label_images_import (
 	width INTEGER,
 	height INTEGER);
 
-CREATE TABLE discogs.image_of_label_import (
+CREATE UNLOGGED TABLE discogs.image_of_label_import (
 	image_id INTEGER,
 	label_id INTEGER);
 
@@ -86,22 +86,22 @@ CREATE TABLE discogs.image_of_label_import (
 -- MasterEntity
 --------------------------------------------------------------------------------
 
-CREATE TABLE discogs.master_import (
+CREATE UNLOGGED TABLE discogs.master_import (
 	id INTEGER,
 	year INTEGER,
 	data_quality TEXT,
 	title TEXT,
 	main_release INTEGER);
 
-CREATE TABLE discogs.master_styles_import (
+CREATE UNLOGGED TABLE discogs.master_styles_import (
 	id INTEGER,
 	style TEXT);
 
-CREATE TABLE discogs.master_genres_import (
+CREATE UNLOGGED TABLE discogs.master_genres_import (
 	id INTEGER,
 	genre TEXT);
 
-CREATE TABLE discogs.master_images_import (
+CREATE UNLOGGED TABLE discogs.master_images_import (
     id INTEGER,
 	uri TEXT,
 	uri150 TEXT,
@@ -109,22 +109,22 @@ CREATE TABLE discogs.master_images_import (
 	width INTEGER,
 	height INTEGER);
 
-CREATE TABLE discogs.images_of_master_import (
+CREATE UNLOGGED TABLE discogs.images_of_master_import (
 	image_id INTEGER,
 	master_id INTEGER);
 
-CREATE TABLE discogs.master_artist_import (
+CREATE UNLOGGED TABLE discogs.master_artist_import (
 	id INTEGER,
 	name TEXT,
 	role TEXT,
 	join_att TEXT,
 	anv TEXT);
 
-CREATE TABLE discogs.master_artist_performs_import (
+CREATE UNLOGGED TABLE discogs.master_artist_performs_import (
 	master_id INTEGER,
 	artist_id INTEGER);
 
-CREATE TABLE discogs.master_video_import (
+CREATE UNLOGGED TABLE discogs.master_video_import (
 	id INTEGER,
 	embed TEXT,
 	source TEXT,
@@ -132,7 +132,7 @@ CREATE TABLE discogs.master_video_import (
 	duration TEXT,
 	title TEXT);
 
-CREATE TABLE discogs.video_of_master_import (
+CREATE UNLOGGED TABLE discogs.video_of_master_import (
 	video_id INTEGER,
 	master_id INTEGER);
 
@@ -140,7 +140,7 @@ CREATE TABLE discogs.video_of_master_import (
 -- ReleaseEntity
 --------------------------------------------------------------------------------
 
-CREATE TABLE discogs.release_import (
+CREATE UNLOGGED TABLE discogs.release_import (
 	id INTEGER,
 	released TEXT,
 	country TEXT,
@@ -149,48 +149,48 @@ CREATE TABLE discogs.release_import (
 	title TEXT,
 	data_quality TEXT);
 
-CREATE TABLE discogs.release_styles_import (
+CREATE UNLOGGED TABLE discogs.release_styles_import (
 	id INTEGER,
 	style TEXT);
 
-CREATE TABLE discogs.release_genres_import (
+CREATE UNLOGGED TABLE discogs.release_genres_import (
 	id INTEGER,
 	genre TEXT);
 
-CREATE TABLE discogs.release_artist_import (
+CREATE UNLOGGED TABLE discogs.release_artist_import (
 	id INTEGER,
 	name TEXT,
 	role TEXT,
 	join_att TEXT,
 	anv TEXT);
 
-CREATE TABLE discogs.artist_of_release_import (
+CREATE UNLOGGED TABLE discogs.artist_of_release_import (
 	release_id INTEGER,
 	artist_id INTEGER);
 
-CREATE TABLE discogs.release_extraartist_import (
+CREATE UNLOGGED TABLE discogs.release_extraartist_import (
 	id INTEGER,
 	name TEXT,
 	role TEXT,
 	join_att TEXT,
 	anv TEXT);
 
-CREATE TABLE discogs.extraartist_of_release_import (
+CREATE UNLOGGED TABLE discogs.extraartist_of_release_import (
 	release_id INTEGER,
 	artist_id INTEGER);
 
-CREATE TABLE discogs.release_identifier_import (
+CREATE UNLOGGED TABLE discogs.release_identifier_import (
     id NUMERIC,
 	value TEXT,
 	type TEXT,
 	description TEXT);
 
-CREATE TABLE discogs.identifies_import (
+CREATE UNLOGGED TABLE discogs.identifies_import (
 	release_id INTEGER,
 	identifier_id NUMERIC);
 
 --Note: primary key removed
-CREATE TABLE discogs.release_video_import (
+CREATE UNLOGGED TABLE discogs.release_video_import (
     id NUMERIC,
 	src TEXT,
 	duration TEXT,
@@ -198,11 +198,11 @@ CREATE TABLE discogs.release_video_import (
 	title TEXT,
 	embed TEXT); -- maybe boolean
 
-CREATE TABLE discogs.video_of_release_import (
+CREATE UNLOGGED TABLE discogs.video_of_release_import (
 	release_id INTEGER,
 	video_id NUMERIC);
 
-CREATE TABLE discogs.release_company_import (
+CREATE UNLOGGED TABLE discogs.release_company_import (
 	id INTEGER,
 	resource_url TEXT,
 	name TEXT,
@@ -210,11 +210,11 @@ CREATE TABLE discogs.release_company_import (
 	entity_type_value TEXT,
 	catno TEXT);
 
-CREATE TABLE discogs.company_of_release_import (
+CREATE UNLOGGED TABLE discogs.company_of_release_import (
 	release_id INTEGER,
 	company_id INTEGER);
 
-CREATE TABLE discogs.release_image_import (
+CREATE UNLOGGED TABLE discogs.release_image_import (
     id INTEGER,
 	uri TEXT,
 	uri150 TEXT,
@@ -222,40 +222,40 @@ CREATE TABLE discogs.release_image_import (
 	width INTEGER,
 	heigth INTEGER);
 
-CREATE TABLE discogs.image_of_release_import (
+CREATE UNLOGGED TABLE discogs.image_of_release_import (
 	image_id INTEGER,
 	release_id INTEGER);
 
-CREATE TABLE discogs.release_label_import (
+CREATE UNLOGGED TABLE discogs.release_label_import (
 	id INTEGER,
 	catno TEXT,
 	label_id INTEGER,
 	name TEXT);
 
-CREATE TABLE discogs.label_of_release_import (
+CREATE UNLOGGED TABLE discogs.label_of_release_import (
 	label_id INTEGER,
 	release_id INTEGER);
 
-CREATE TABLE discogs.release_track_import (
+CREATE UNLOGGED TABLE discogs.release_track_import (
 	id INTEGER,
 	position TEXT,
 	title TEXT,
 	duration TEXT);
 
-CREATE TABLE discogs.track_of_release_import(
+CREATE UNLOGGED TABLE discogs.track_of_release_import(
 	track_id INTEGER,
 	release_id INTEGER);
 
-CREATE TABLE discogs.release_format_import (
+CREATE UNLOGGED TABLE discogs.release_format_import (
 	id INTEGER,
 	name TEXT,
 	qty TEXT,
 	fmt_text TEXT);
 
-CREATE TABLE discogs.format_of_release_import (
+CREATE UNLOGGED TABLE discogs.format_of_release_import (
 	format_id INTEGER,
 	release_id INTEGER);
 
-CREATE TABLE discogs.release_format_description_import (
+CREATE UNLOGGED TABLE discogs.release_format_description_import (
 	format_id INTEGER,
 	description TEXT);
