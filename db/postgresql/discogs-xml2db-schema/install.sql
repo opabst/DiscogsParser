@@ -53,7 +53,7 @@ CREATE TABLE discogs.labels_images (
     width integer,
     image_uri text);
 
-CREAE TABLE discogs.master (
+CREATE TABLE discogs.master (
     id integer NOT NULL,
     title text,
     main_release integer NOT NULL,
