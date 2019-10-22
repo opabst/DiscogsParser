@@ -88,7 +88,7 @@ CREATE UNLOGGED TABLE discogs.masters_formats (
 
 CREATE UNLOGGED TABLE discogs.masters_images (
     master_id integer NOT NULL,
-    type text COLLATE,
+    type text,
     height integer,
     width integer,
     image_uri text,
