@@ -1,6 +1,6 @@
 package de.oliverpabst.jdp.parser.db2xml;
 
-import de.oliverpabst.jdp.database.postgresql.LabelWriter;
+import de.oliverpabst.jdp.database.postgresql.jdp.LabelWriter;
 import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.label.LabelEntity;
 import de.oliverpabst.jdp.model.label.LabelSublabel;

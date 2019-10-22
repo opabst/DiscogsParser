@@ -1,6 +1,6 @@
 package de.oliverpabst.jdp.parser.jdp_schema;
 
-import de.oliverpabst.jdp.database.postgresql.ReleaseWriter;
+import de.oliverpabst.jdp.database.postgresql.jdp.ReleaseWriter;
 import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.release.*;
 import de.oliverpabst.jdp.parser.AbstractReleaseParser;

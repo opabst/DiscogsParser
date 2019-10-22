@@ -1,8 +1,9 @@
-package de.oliverpabst.jdp.database.postgresql;
+package de.oliverpabst.jdp.database.postgresql.jdp;
 
 import de.oliverpabst.jdp.DiscogsParser;
 import de.oliverpabst.jdp.ImportStatistics;
 import de.oliverpabst.jdp.database.SchemaDoesNotExistException;
+import de.oliverpabst.jdp.database.postgresql.PostgreSQLConnection;
 import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.master.MasterArtist;
 import de.oliverpabst.jdp.model.master.MasterEntity;

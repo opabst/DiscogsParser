@@ -1,6 +1,6 @@
 package de.oliverpabst.jdp.parser.jdp_schema;
 
-import de.oliverpabst.jdp.database.postgresql.ArtistWriter;
+import de.oliverpabst.jdp.database.postgresql.jdp.ArtistWriter;
 import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.artist.ArtistAlias;
 import de.oliverpabst.jdp.model.artist.ArtistEntity;

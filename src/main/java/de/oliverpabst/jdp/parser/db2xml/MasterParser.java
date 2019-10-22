@@ -1,6 +1,6 @@
 package de.oliverpabst.jdp.parser.db2xml;
 
-import de.oliverpabst.jdp.database.postgresql.MasterWriter;
+import de.oliverpabst.jdp.database.postgresql.jdp.MasterWriter;
 import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.master.MasterArtist;
 import de.oliverpabst.jdp.model.master.MasterEntity;
