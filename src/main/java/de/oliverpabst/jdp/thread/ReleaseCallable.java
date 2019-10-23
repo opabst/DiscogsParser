@@ -1,7 +1,5 @@
 package de.oliverpabst.jdp.thread;
 
-import de.oliverpabst.jdp.parser.jdp_schema.ReleaseParser;
-
 import java.io.File;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
@@ -20,7 +18,7 @@ public class ReleaseCallable implements Callable<String> {
         Long startTime = System.nanoTime();
 
         if(useXml2DbSchema) {
-            new de.oliverpabst.jdp.parser.db2xml.ReleaseParser(file);
+            new de.oliverpabst.jdp.parser.xml2db_schema.ReleaseParser(file);
         } else {
             new de.oliverpabst.jdp.parser.jdp_schema.ReleaseParser(file);
         }

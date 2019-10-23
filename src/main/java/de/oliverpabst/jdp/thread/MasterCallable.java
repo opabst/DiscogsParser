@@ -1,7 +1,5 @@
 package de.oliverpabst.jdp.thread;
 
-import de.oliverpabst.jdp.parser.jdp_schema.MasterParser;
-
 import java.io.File;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
@@ -20,7 +18,7 @@ public class MasterCallable implements Callable<String> {
         Long startTime = System.nanoTime();
 
         if(useXml2DbSchema) {
-            new de.oliverpabst.jdp.parser.db2xml.MasterParser(file);
+            new de.oliverpabst.jdp.parser.xml2db_schema.MasterParser(file);
         } else {
             new de.oliverpabst.jdp.parser.jdp_schema.MasterParser(file);
         }

@@ -1,7 +1,7 @@
-package de.oliverpabst.jdp.parser.jdp_schema;
+package de.oliverpabst.jdp.parser.xml2db_schema;
 
-import de.oliverpabst.jdp.database.postgresql.jdp_schema.LabelWriter;
-import de.oliverpabst.jdp.model.jdp_schema.Image;
+import de.oliverpabst.jdp.database.postgresql.xml2db_schema.LabelWriter;
+import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.jdp_schema.label.LabelEntity;
 import de.oliverpabst.jdp.model.jdp_schema.label.LabelSublabel;
 import de.oliverpabst.jdp.parser.AbstractLabelParser;
@@ -39,9 +39,7 @@ import java.sql.SQLException;
 
 public class LabelParser extends AbstractLabelParser {
 
-
-
-    private de.oliverpabst.jdp.database.postgresql.jdp_schema.LabelWriter writer;
+    private LabelWriter writer;
 
     public LabelParser(File _file) {
         writer = LabelWriter.getInstance();
@@ -190,3 +188,4 @@ public class LabelParser extends AbstractLabelParser {
         }
     }
 }
+

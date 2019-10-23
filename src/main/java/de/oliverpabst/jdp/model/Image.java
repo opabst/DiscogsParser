@@ -2,13 +2,12 @@ package de.oliverpabst.jdp.model;
 
 public class Image {
 
-    private Integer height;
-    private Integer width;
-    private String uri;
-    private String uri150;
-    private ImageType type;
+    protected Integer height;
+    protected Integer width;
+    protected String uri;
+    protected ImageType type;
 
-    public Image(String _height, String _width, String _uri, String _uri150, String _type) {
+    public Image(String _height, String _width, String _uri, String _type) {
         if(_height.length() > 0) {
             height = Integer.parseInt(_height);
         } else {
@@ -22,7 +21,6 @@ public class Image {
         }
 
         uri = _uri;
-        uri150 = _uri150;
 
         if(_type.equals("primary")) {
             type = ImageType.PRIMARY;
@@ -46,10 +44,6 @@ public class Image {
         return uri;
     }
 
-    public String getUri150() {
-        return uri150;
-    }
-
     public ImageType getType() {
         return type;
     }
@@ -60,7 +54,6 @@ public class Image {
         sb.append(" height: " + height);
         sb.append(" width: " + width);
         sb.append(" uri: " + uri);
-        sb.append(" uri150: " + uri150);
         sb.append(" type: " + type.name());
         sb.append("]");
         return sb.toString();

@@ -1,8 +1,8 @@
-package de.oliverpabst.jdp.parser.jdp_schema;
+package de.oliverpabst.jdp.parser.xml2db_schema;
 
-import de.oliverpabst.jdp.database.postgresql.jdp_schema.ReleaseWriter;
-import de.oliverpabst.jdp.model.jdp_schema.Image;
-import de.oliverpabst.jdp.model.jdp_schema.release.*;
+import de.oliverpabst.jdp.database.postgresql.xml2db_schema.ReleaseWriter;
+import de.oliverpabst.jdp.model.Image;
+import de.oliverpabst.jdp.model.xml2db_schema;
 import de.oliverpabst.jdp.parser.AbstractReleaseParser;
 
 import javax.xml.stream.XMLInputFactory;
@@ -94,9 +94,7 @@ import java.sql.SQLException;
 
 public class ReleaseParser extends AbstractReleaseParser {
 
-
-
-    private de.oliverpabst.jdp.database.postgresql.jdp_schema.ReleaseWriter writer;
+    private ReleaseWriter writer;
 
     public ReleaseParser(File _file) {
         writer = ReleaseWriter.getInstance();
@@ -483,3 +481,4 @@ public class ReleaseParser extends AbstractReleaseParser {
         }
     }
 }
+

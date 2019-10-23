@@ -1,9 +1,9 @@
-package de.oliverpabst.jdp.parser.jdp_schema;
+package de.oliverpabst.jdp.parser.xml2db_schema;
 
-import de.oliverpabst.jdp.database.postgresql.jdp_schema.ArtistWriter;
-import de.oliverpabst.jdp.model.jdp_schema.Image;
-import de.oliverpabst.jdp.model.jdp_schema.artist.ArtistAlias;
-import de.oliverpabst.jdp.model.jdp_schema.artist.ArtistEntity;
+import de.oliverpabst.jdp.database.postgresql.xml2db_schema.ArtistWriter;
+import de.oliverpabst.jdp.model.Image;
+import de.oliverpabst.jdp.model.xml2db_schema.artist.Artist;
+import de.oliverpabst.jdp.model.xml2db_schema.artist.ArtistsImage;
 import de.oliverpabst.jdp.parser.AbstractArtistParser;
 
 import javax.xml.stream.XMLInputFactory;
@@ -41,8 +41,7 @@ import java.sql.SQLException;
 
 public class ArtistParser extends AbstractArtistParser {
 
-
-    private de.oliverpabst.jdp.database.postgresql.jdp_schema.ArtistWriter writer;
+    private ArtistWriter writer;
 
     public ArtistParser(File _file) {
         writer = ArtistWriter.getInstance();
@@ -60,9 +59,9 @@ public class ArtistParser extends AbstractArtistParser {
 
         XMLStreamReader xmlParser = null;
 
-        ArtistEntity ae = new ArtistEntity();
+        Artist a = new Artist();
 
-        ArtistAlias aa = new ArtistAlias();
+        ArtistsImage ai = new ArtistsImage();
 
 
         try {
@@ -94,25 +93,24 @@ public class ArtistParser extends AbstractArtistParser {
                         artists = true;
                     } else if (xmlParser.getLocalName().equals("artist")) {
                         artist = true;
-                        ae = new ArtistEntity();
+                        a = new Artist();
                     } else if (xmlParser.getLocalName().equals("images")) {
                         images = true;
                     } else if (xmlParser.getLocalName().equals("image") && images == true) {
+                        image = true;
                         // subelement of images reached - values are attached as attributes to <image ... />
                         String height = xmlParser.getAttributeValue(null, "height");
                         String type = xmlParser.getAttributeValue(null, "type");
                         String uri = xmlParser.getAttributeValue(null, "uri");
-                        String uri150 = xmlParser.getAttributeValue(null, "uri150");
                         String width = xmlParser.getAttributeValue(null, "width");
-                        Image image = new Image(height, width, uri, uri150, type);
-                        ae.addImage(image);
+                        Image image = new Image(height, width, uri, type);
+                        ai.setArtistId(a.getId());
+                        ai.setImage(image);
                     } else if (xmlParser.getLocalName().equals("id")) {
                         id = true;
                     } else if (xmlParser.getLocalName().equals("name") && !aliases) {
                         name = true;
                     } else if (xmlParser.getLocalName().equals("name") && aliases) {
-                        aa = new ArtistAlias();
-                        aa.setAliasID(xmlParser.getAttributeValue(null, "id"));
                         name = true;
                     } else if (xmlParser.getLocalName().equals("realname")) {
                         realname = true;
@@ -129,25 +127,25 @@ public class ArtistParser extends AbstractArtistParser {
                     break;
                 case XMLStreamConstants.CHARACTERS:
                     if (id) {
-                        ae.setId(xmlParser.getText());
+                        a.setId(Integer.parseInt(xmlParser.getText()));
                         id = false;
                     } else if (name && !namevariations && !aliases) {
-                        ae.setName(xmlParser.getText());
+                        a.setName(xmlParser.getText());
                         name = false;
                     } else if (realname) {
-                        ae.setRealName(xmlParser.getText());
+                        a.setRealname(xmlParser.getText());
                         realname = false;
                     } else if (profile) {
-                        ae.setProfile(xmlParser.getText());
+                        a.setProfile(xmlParser.getText());
                         profile = false;
                     } else if (dataquality) {
-                        ae.setDataQuality(xmlParser.getText());
+                        a.setDataQuality(xmlParser.getText());
                         dataquality = false;
                     } else if (name && namevariations && !aliases) {
-                        ae.addNameVariation(xmlParser.getText());
+                        a.addNamevariation(xmlParser.getText());
                         name = false;
                     } else if (name && !namevariations && aliases) {
-                        aa.setAlias(xmlParser.getText());
+                        a.addAlias(xmlParser.getText());
                     }
                     break;
                 case XMLStreamConstants.END_ELEMENT:
@@ -156,16 +154,23 @@ public class ArtistParser extends AbstractArtistParser {
                     } else if (xmlParser.getLocalName().equals("artist")) {
                         artist = false;
                         try {
-                            writer.insertArtist(ae);
+                            writer.insertArtist(a);
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
                     } else if (xmlParser.getLocalName().equals("images")) {
                         images = false;
+                    } else if (xmlParser.getLocalName().equals("image") && images) {
+                        image = false;
+                        try {
+                            writer.insertArtistImage(ai);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                        ai = new ArtistsImage();
                     } else if (xmlParser.getLocalName().equals("namevariations")) {
                         namevariations = false;
                     } else if (xmlParser.getLocalName().equals("aliases")) {
-                        ae.addAlias(aa);
                         aliases = false;
                     } else if (xmlParser.getLocalName().equals("profile")) {
                         profile = false;
@@ -194,3 +199,4 @@ public class ArtistParser extends AbstractArtistParser {
         }
     }
 }
+

@@ -1,8 +1,5 @@
 package de.oliverpabst.jdp.thread;
 
-import de.oliverpabst.jdp.DiscogsParser;
-import de.oliverpabst.jdp.parser.jdp_schema.ArtistParser;
-
 import java.io.File;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
@@ -20,7 +17,7 @@ public class ArtistCallable implements Callable<String> {
         Long startTime = System.nanoTime();
 
         if(useXml2DbSchema) {
-            new de.oliverpabst.jdp.parser.db2xml.ArtistParser(file);
+            new de.oliverpabst.jdp.parser.xml2db_schema.ArtistParser(file);
         } else {
             new de.oliverpabst.jdp.parser.jdp_schema.ArtistParser(file);
         }

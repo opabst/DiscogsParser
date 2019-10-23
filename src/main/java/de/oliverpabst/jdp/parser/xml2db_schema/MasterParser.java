@@ -1,7 +1,7 @@
-package de.oliverpabst.jdp.parser.jdp_schema;
+package de.oliverpabst.jdp.parser.xml2db_schema;
 
-import de.oliverpabst.jdp.database.postgresql.jdp_schema.MasterWriter;
-import de.oliverpabst.jdp.model.jdp_schema.Image;
+import de.oliverpabst.jdp.database.postgresql.xml2db_schema.MasterWriter;
+import de.oliverpabst.jdp.model.Image;
 import de.oliverpabst.jdp.model.jdp_schema.master.MasterArtist;
 import de.oliverpabst.jdp.model.jdp_schema.master.MasterEntity;
 import de.oliverpabst.jdp.model.jdp_schema.master.MasterVideo;
@@ -54,9 +54,7 @@ import java.sql.SQLException;
 
 public class MasterParser extends AbstractMasterParser {
 
-
-
-    private de.oliverpabst.jdp.database.postgresql.jdp_schema.MasterWriter writer;
+    private MasterWriter writer;
 
     public MasterParser(File _file) {
         writer = MasterWriter.getInstance();
@@ -260,3 +258,4 @@ public class MasterParser extends AbstractMasterParser {
         }
     }
 }
+
