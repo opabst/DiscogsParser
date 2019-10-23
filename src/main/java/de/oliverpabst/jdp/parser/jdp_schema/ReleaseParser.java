@@ -96,7 +96,7 @@ public class ReleaseParser extends AbstractReleaseParser {
 
 
 
-    private ReleaseWriter writer;
+    private de.oliverpabst.jdp.database.postgresql.jdp.ReleaseWriter writer;
 
     public ReleaseParser(File _file) {
         writer = ReleaseWriter.getInstance();

@@ -56,7 +56,7 @@ public class MasterParser extends AbstractMasterParser {
 
 
 
-    private MasterWriter writer;
+    private de.oliverpabst.jdp.database.postgresql.jdp.MasterWriter writer;
 
     public MasterParser(File _file) {
         writer = MasterWriter.getInstance();

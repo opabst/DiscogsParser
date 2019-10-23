@@ -41,7 +41,7 @@ public class LabelParser extends AbstractLabelParser {
 
 
 
-    private LabelWriter writer;
+    private de.oliverpabst.jdp.database.postgresql.jdp.LabelWriter writer;
 
     public LabelParser(File _file) {
         writer = LabelWriter.getInstance();

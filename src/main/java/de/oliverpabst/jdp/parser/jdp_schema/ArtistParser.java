@@ -42,7 +42,7 @@ import java.sql.SQLException;
 public class ArtistParser extends AbstractArtistParser {
 
 
-    private ArtistWriter writer;
+    private de.oliverpabst.jdp.database.postgresql.jdp.ArtistWriter writer;
 
     public ArtistParser(File _file) {
         writer = ArtistWriter.getInstance();
