@@ -10,4 +10,45 @@ public class ReleasesExtraartists {
     public ReleasesExtraartists() {
 
     }
+
+    public void setReleaseId(Integer _id) {
+        release_id = _id;
+    }
+
+    public Integer getReleaseId() {
+        return release_id;
+    }
+
+    public void setArtistId(Integer _id) {
+        artist_id = _id;
+    }
+
+    public Integer getArtistId() {
+        return artist_id;
+    }
+
+    public void setArtistName(String _name) {
+        artist_name = _name;
+    }
+
+    public String getArtistName() {
+        return artist_name;
+    }
+
+    public void setAnv(String _anv) {
+        anv = _anv;
+    }
+
+    public String getAnv() {
+        return anv;
+    }
+
+    public void setRole(String _role)
+    {
+        role = _role;
+    }
+
+    public String getRole() {
+        return role;
+    }
 }

@@ -10,4 +10,28 @@ public class MastersExtraartists {
     public MastersExtraartists() {
         roles = new ArrayList<>();
     }
+
+    public void setMasterId(Integer _id) {
+        master_id = _id;
+    }
+
+    public Integer getMasterId() {
+        return master_id;
+    }
+
+    public void setArtistName(String _name) {
+        artist_name = _name;
+    }
+
+    public String getArtistName() {
+        return artist_name;
+    }
+
+    public void addRole(String _role) {
+        roles.add(_role);
+    }
+
+    public ArrayList<String> getRoles() {
+        return roles;
+    }
 }

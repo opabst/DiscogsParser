@@ -9,4 +9,20 @@ public class ReleasesImages {
     public ReleasesImages() {
 
     }
+
+    public void setReleaseId(Integer _id) {
+        release_id = _id;
+    }
+
+    public Integer getReleaseId() {
+        return release_id;
+    }
+
+    public void setImage(Image _image) {
+        image = _image;
+    }
+
+    public Image getImage() {
+        return image;
+    }
 }

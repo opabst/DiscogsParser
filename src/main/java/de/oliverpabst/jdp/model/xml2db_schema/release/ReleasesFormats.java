@@ -13,4 +13,44 @@ public class ReleasesFormats {
     public ReleasesFormats() {
         descriptions = new ArrayList<>();
     }
+
+    public void setReleaseId(Integer _id) {
+        release_id = _id;
+    }
+
+    public Integer getReleaseId() {
+        return release_id;
+    }
+
+    public void setPosition(Integer _position) {
+        position = _position;
+    }
+
+    public Integer getPosition() {
+        return position;
+    }
+
+    public void setFormatName(String _name) {
+        format_name = _name;
+    }
+
+    public String getFormatName() {
+        return format_name;
+    }
+
+    public void setQty(Integer _qty) {
+        qty = _qty;
+    }
+
+    public Integer getQty() {
+        return qty;
+    }
+
+    public void addDescription(String _description) {
+        descriptions.add(_description);
+    }
+
+    public ArrayList<String> getDescriptions() {
+        return descriptions;
+    }
 }
