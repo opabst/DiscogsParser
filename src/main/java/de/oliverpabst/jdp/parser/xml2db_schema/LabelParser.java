@@ -2,8 +2,9 @@ package de.oliverpabst.jdp.parser.xml2db_schema;
 
 import de.oliverpabst.jdp.database.postgresql.xml2db_schema.LabelWriter;
 import de.oliverpabst.jdp.model.Image;
-import de.oliverpabst.jdp.model.jdp_schema.label.LabelEntity;
-import de.oliverpabst.jdp.model.jdp_schema.label.LabelSublabel;
+
+import de.oliverpabst.jdp.model.xml2db_schema.label.Label;
+import de.oliverpabst.jdp.model.xml2db_schema.label.LabelsImage;
 import de.oliverpabst.jdp.parser.AbstractLabelParser;
 
 import javax.xml.stream.XMLInputFactory;
@@ -62,9 +63,8 @@ public class LabelParser extends AbstractLabelParser {
 
         XMLStreamReader xmlParser = inFactory.createXMLStreamReader(is);
 
-        LabelEntity le = new LabelEntity();
-
-        LabelSublabel ls = new LabelSublabel();
+        Label l = new Label();
+        LabelsImage li = new LabelsImage();
 
         while(xmlParser.hasNext()) {
             switch(xmlParser.getEventType()) {
@@ -82,7 +82,7 @@ public class LabelParser extends AbstractLabelParser {
                         labels = true;
                     } else if (labels && !sublabels && xmlParser.getLocalName().equals("label")) {
                         label = true;
-                        le = new LabelEntity();
+                        l = new Label();
                     } else if (xmlParser.getLocalName().equals("images")) {
                         images = true;
                     } else if (xmlParser.getLocalName().equals("image") && images) {
@@ -91,8 +91,9 @@ public class LabelParser extends AbstractLabelParser {
                         String uri = xmlParser.getAttributeValue(null, "uri");
                         String uri150 = xmlParser.getAttributeValue(null, "uri150");
                         String width = xmlParser.getAttributeValue(null, "width");
-                        Image image = new Image(height, width, uri, uri150, type);
-                        le.addImage(image);
+                        Image image = new Image(height, width, uri, type);
+                        li.setImage(image);
+                        li.setLabelId(l.getId());
                     } else if (label && xmlParser.getLocalName().equals("id")) {
                         id = true;
                     } else if (label && xmlParser.getLocalName().equals("name")) {
@@ -111,27 +112,25 @@ public class LabelParser extends AbstractLabelParser {
                         sublabels = true;
                     } else if (label && sublabels && xmlParser.getLocalName().equals("label")) {
                         sublabel = true;
-                        ls = new LabelSublabel();
-                        ls.setSublabelID(xmlParser.getAttributeValue(0));
                     }
                     break;
 
                 case XMLStreamConstants.CHARACTERS:
                     String chars = xmlParser.getText();
                     if (id) {
-                        le.setId(xmlParser.getText());
+                        l.setId(Integer.parseInt(xmlParser.getText()));
                     } else if (name) {
-                        le.setName(xmlParser.getText());
+                        l.setName(xmlParser.getText());
                     } else if (contactinfo) {
-                        le.setContactinfo(xmlParser.getText());
+                        l.setContactinfo(xmlParser.getText());
                     } else if (profile) {
-                        le.setProfile(xmlParser.getText());
+                        l.setProfile(xmlParser.getText());
                     } else if (dataquality) {
-                        le.setDataQuality(xmlParser.getText());
+                        l.setDataQuality(xmlParser.getText());
                     } else if (url) {
-                        le.addUrl(xmlParser.getText());
+                        l.addUrl(xmlParser.getText());
                     } else if (sublabel) {
-                        ls.setSublabelName(xmlParser.getText());
+                        l.addSublabel(xmlParser.getText());
                     }
                     break;
 
@@ -141,12 +140,11 @@ public class LabelParser extends AbstractLabelParser {
                     } else if (labels && !sublabels && xmlParser.getLocalName().equals("label")) {
                         label = false;
                         try {
-                            writer.insertLabel(le);
+                            writer.insertLabel(l);
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
                     } else if (sublabels && xmlParser.getLocalName().equals("label")) {
-                        le.addSublabel(ls);
                         sublabel = false;
                     } else if (xmlParser.getLocalName().equals("name")) {
                         name = false;
@@ -158,6 +156,12 @@ public class LabelParser extends AbstractLabelParser {
                         profile = false;
                     } else if (xmlParser.getLocalName().equals("data_quality")) {
                         dataquality = false;
+                    } else if (xmlParser.getLocalName().equals("image") && images) {
+                        try {
+                            writer.insertLabelsImage(li);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                     } else if (xmlParser.getLocalName().equals("images")) {
                         images = false;
                     } else if (urls && xmlParser.getLocalName().equals("url")) {

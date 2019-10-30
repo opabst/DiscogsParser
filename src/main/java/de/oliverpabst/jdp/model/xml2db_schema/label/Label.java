@@ -19,59 +19,59 @@ public class Label {
         urls = new ArrayList<>();
     }
 
-    private void setId(Integer _id) {
+    public void setId(Integer _id) {
         id = _id;
     }
 
-    private Integer getId() {
+    public Integer getId() {
         return id;
     }
 
-    private void setName(String _name) {
+    public void setName(String _name) {
         name = name;
     }
 
-    private String getName() {
+    public String getName() {
         return name;
     }
 
-    private void setContactinfo(String _contactinfo) {
+    public void setContactinfo(String _contactinfo) {
         contactinfo = _contactinfo;
     }
 
-    private String getContactinfo() {
+    public String getContactinfo() {
         return contactinfo;
     }
 
-    private void setProfile(String _profile) {
+    public void setProfile(String _profile) {
         profile = _profile;
     }
 
-    private String getProfile() {
+    public String getProfile() {
         return profile;
     }
 
-    private void setParentLabel(String _parentLabel) {
+    public void setParentLabel(String _parentLabel) {
         parent_label = _parentLabel;
     }
 
-    private String getParentLabel() {
+    public String getParentLabel() {
         return parent_label;
     }
 
-    private void addSublabel(String _sublabel) {
+    public void addSublabel(String _sublabel) {
         sublabels.add(_sublabel);
     }
 
-    private ArrayList<String> getSublabels() {
+    public ArrayList<String> getSublabels() {
         return sublabels;
     }
 
-    private void addUrl(String _url) {
+    public void addUrl(String _url) {
         urls.add(_url);
     }
 
-    private ArrayList<String> getUrls() {
+    public ArrayList<String> getUrls() {
         return urls;
     }
 
@@ -94,7 +94,7 @@ public class Label {
         }
     }
 
-    private DataQuality getDataQuality() {
+    public DataQuality getDataQuality() {
         return data_quality;
     }
 }

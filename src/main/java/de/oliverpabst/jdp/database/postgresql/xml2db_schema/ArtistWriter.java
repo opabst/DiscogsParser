@@ -57,6 +57,8 @@ public class ArtistWriter {
         Array aliases = con.createArrayOf("text", _a.getAliases().toArray());
         insArtist.setArray(6, aliases);
         insArtist.setString(8, _a.getProfile());
+        insArtist.addBatch();
+        artistCnt++;
 
         if(artistCnt % insertTrigger == 0) {
             insArtist.execute();
@@ -78,7 +80,11 @@ public class ArtistWriter {
     }
 
     public void disconnect() {
-
+        try {
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void finalBatchExecute() throws SQLException{
