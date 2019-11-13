@@ -166,9 +166,9 @@ public class MasterParser extends AbstractMasterParser {
                     } else if (artist && role) {
                         ma.setRole(xmlParser.getText());
                     } else if (artist && join) {
-                        ma.setRole(xmlParser.getText());
+                        ma.setJoin(xmlParser.getText());
                     } else if (artist && anv) {
-                        ma.setRole(xmlParser.getText());
+                        ma.setAnv(xmlParser.getText());
                     } else if (artist && name) {
                         ma.setName(xmlParser.getText());
                     } else if (genres && genre) {
