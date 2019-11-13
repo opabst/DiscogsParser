@@ -1,10 +1,9 @@
 package de.oliverpabst.jdp.parser.xml2db_schema;
 
 import de.oliverpabst.jdp.database.postgresql.xml2db_schema.MasterWriter;
+
 import de.oliverpabst.jdp.model.Image;
-import de.oliverpabst.jdp.model.jdp_schema.master.MasterArtist;
-import de.oliverpabst.jdp.model.jdp_schema.master.MasterEntity;
-import de.oliverpabst.jdp.model.jdp_schema.master.MasterVideo;
+import de.oliverpabst.jdp.model.xml2db_schema.master.*;
 import de.oliverpabst.jdp.parser.AbstractMasterParser;
 
 import javax.xml.stream.XMLInputFactory;
@@ -77,9 +76,13 @@ public class MasterParser extends AbstractMasterParser {
 
         XMLStreamReader xmlParser = inFactory.createXMLStreamReader(is);
 
-        MasterEntity me = null;
-        MasterArtist ma = null;
-        MasterVideo mv = null;
+        Master m = null;
+        MasterArtists ma = null;
+        MastersArtistsJoins maj = null;
+        MastersExtraartists mea = null;
+        MastersFormats mf = null;
+        MastersImages mi = null;
+        Integer masterId = Integer.MIN_VALUE;
 
         while(xmlParser.hasNext()) {
             switch(xmlParser.getEventType()) {
@@ -96,9 +99,9 @@ public class MasterParser extends AbstractMasterParser {
                         masters = true;
                     } else if (xmlParser.getLocalName().equals("master")) {
                         master = true;
-                        me = new MasterEntity();
-                        String id = xmlParser.getAttributeValue(null, "id");
-                        me.setId(id);
+                        m = new Master();
+                        masterId = Integer.parseInt(xmlParser.getAttributeValue(null, "id"));
+                        m.setId(masterId);
                     } else if (xmlParser.getLocalName().equals("main_release")) {
                         mainRelease = true;
                     } else if (xmlParser.getLocalName().equals("images")) {
@@ -107,13 +110,14 @@ public class MasterParser extends AbstractMasterParser {
                         String height = xmlParser.getAttributeValue(null, "height");
                         String type = xmlParser.getAttributeValue(null, "type");
                         String uri = xmlParser.getAttributeValue(null, "uri");
-                        String uri150 = xmlParser.getAttributeValue(null, "uri150");
                         String width = xmlParser.getAttributeValue(null, "width");
-                        Image image = new Image(height, width, uri, uri150, type);
-                        me.addImage(image);
+                        mi = new MastersImages();
+                        Image image = new Image(height, width, uri, type);
+                        mi.setMasterId(masterId);
+                        mi.setImage(image);
                     } else if (xmlParser.getLocalName().equals("artists")) {
                         artists = true;
-                        ma = new MasterArtist();
+                        ma = new MasterArtists();
                     } else if (xmlParser.getLocalName().equals("artist")) {
                         artist = true;
                     } else if (artist && xmlParser.getLocalName().equals("id")) {
@@ -150,7 +154,6 @@ public class MasterParser extends AbstractMasterParser {
                         String embed = xmlParser.getAttributeValue(null, "embed");
                         String source = xmlParser.getAttributeValue(null, "src");
 
-                        mv = new MasterVideo(duration, embed, source);
                     }
 
                     break;
@@ -158,27 +161,27 @@ public class MasterParser extends AbstractMasterParser {
                     // Artist, Style und Genre verarbeitet
                     String chars = xmlParser.getText();
                     if(mainRelease) {
-                        me.setMainRelease(xmlParser.getText());
+                        m.setMainRelease(Integer.parseInt(xmlParser.getText()));
                     } else if(artist && id) {
-                        ma.setId(xmlParser.getText());
+                        //ma.setMaster(Integer.parseInt(xmlParser.getText())); ignore
                     } else if (artist && role) {
-                        ma.setRole(xmlParser.getText());
+                        m.setRole(xmlParser.getText());
                     } else if (artist && join) {
-                        ma.setRole(xmlParser.getText());
+                        ma.setJoin(xmlParser.getText());
                     } else if (artist && anv) {
-                        ma.setRole(xmlParser.getText());
+                        ma.setAnv(xmlParser.getText());
                     } else if (artist && name) {
-                        ma.setName(xmlParser.getText());
+                        ma.setArtistName(xmlParser.getText());
                     } else if (genres && genre) {
-                        me.addGenre(xmlParser.getText());
+                        m.setGenres(xmlParser.getText());
                     } else if (styles && style) {
-                        me.addStyle(xmlParser.getText());
+                        m.setStyles(xmlParser.getText());
                     } else if (!videos && title) {
-                        me.setTitle(xmlParser.getText());
+                        m.setTitle(xmlParser.getText());
                     } else if (year) {
-                        me.setYear(xmlParser.getText());
+                        m.setYear(Integer.parseInt(xmlParser.getText()));
                     } else if (dataQualitiy) {
-                        me.setDataQuality(xmlParser.getText());
+                        m.setDataQuality(xmlParser.getText());
                     } else if (videos && video && title) {
                         mv.setTitle(xmlParser.getText());
                     } else if (videos && video && description) {
@@ -192,7 +195,7 @@ public class MasterParser extends AbstractMasterParser {
                     } else if (xmlParser.getLocalName().equals("master")) {
                         master = false;
                         try {
-                            writer.insertMaster(me);
+                            writer.insertMaster(m);
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
@@ -203,7 +206,11 @@ public class MasterParser extends AbstractMasterParser {
                     } else if (xmlParser.getLocalName().equals("artists")) {
                         artists = false;
                     } else if (xmlParser.getLocalName().equals("artist")) {
-                        me.addArtist(ma);
+                        try {
+                            writer.insertMasterArtists(ma);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                         artist = false;
                     } else if (xmlParser.getLocalName().equals("genre")) {
                         genre = false;
