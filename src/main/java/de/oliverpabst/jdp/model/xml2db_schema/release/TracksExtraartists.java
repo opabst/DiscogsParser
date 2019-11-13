@@ -38,11 +38,11 @@ public class TracksExtraartists {
         return artist_name;
     }
 
-    private void setAnv(String _anv) {
+    public void setAnv(String _anv) {
         anv = _anv;
     }
 
-    private String getAnv() {
+    public String getAnv() {
         return anv;
     }
 
